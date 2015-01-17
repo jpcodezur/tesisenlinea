@@ -1,114 +1,77 @@
-Apigility Skeleton Application
-==============================
+ZendSkeletonApplication
+=======================
 
-Requirements
+Introduction
 ------------
-  
-Please see the [composer.json](composer.json) file.
+This is a simple, skeleton application using the ZF2 MVC layer and module
+systems. This application is meant to be used as a starting place for those
+looking to get their feet wet with ZF2.
 
 Installation
 ------------
 
-### Via release tarball
+Using Composer (recommended)
+----------------------------
+The recommended way to get a working copy of this project is to clone the repository
+and use `composer` to install dependencies using the `create-project` command:
 
-Grab the latest release via the [Apigility website](http://apigility.org/)
-and/or the [releases page](https://github.com/zfcampus/zf-apigility-skeleton/releases).
-At the time of this writing, that URI is:
+    curl -s https://getcomposer.org/installer | php --
+    php composer.phar create-project -sdev --repository-url="https://packages.zendframework.com" zendframework/skeleton-application path/to/install
 
-- https://github.com/zfcampus/zf-apigility-skeleton/releases/download/0.9.1/zf-apigility-skeleton-0.9.1.tgz
+Alternately, clone the repository and manually invoke `composer` using the shipped
+`composer.phar`:
 
-Untar it:
+    cd my/project/dir
+    git clone git://github.com/zendframework/ZendSkeletonApplication.git
+    cd ZendSkeletonApplication
+    php composer.phar self-update
+    php composer.phar install
 
-```bash
-tar xzf zf-apigility-skeleton-0.9.1.tgz
-```
+(The `self-update` directive is to ensure you have an up-to-date `composer.phar`
+available.)
 
-### Via Composer (create-project)
+Another alternative for downloading the project is to grab it via `curl`, and
+then pass it to `tar`:
 
-You can use the `create-project` command from [Composer](http://getcomposer.org/)
-to create the project in one go:
+    cd my/project/dir
+    curl -#L https://github.com/zendframework/ZendSkeletonApplication/tarball/master | tar xz --strip-components=1
 
-```bash
-curl -s https://getcomposer.org/installer | php --
-php composer.phar create-project -sdev zfcampus/zf-apigility-skeleton path/to/install
-```
+You would then invoke `composer` to install dependencies per the previous
+example.
 
-### Via Git (clone)
+Using Git submodules
+--------------------
+Alternatively, you can install using native git submodules:
 
-First, clone the repository:
+    git clone git://github.com/zendframework/ZendSkeletonApplication.git --recursive
 
-```bash
-git clone https://github.com/zfcampus/zf-apigility-skeleton.git # optionally, specify the directory in which to clone
-cd path/to/install
-```
+Web Server Setup
+----------------
 
-At this point, you need to use [Composer](https://getcomposer.org/) to install
-dependencies. Assuming you already have Composer:
+### PHP CLI Server
 
-```bash
-composer.phar install
-```
+The simplest way to get started if you are using PHP 5.4 or above is to start the internal PHP cli-server in the root directory:
 
-### All methods
+    php -S 0.0.0.0:8080 -t public/ public/index.php
 
-Once you have the basic installation, you need to put it in development mode:
+This will start the cli-server on port 8080, and bind it to all network
+interfaces.
 
-```bash
-cd path/to/install
-php public/index.php development enable # put the skeleton in development mode
-```
+**Note: ** The built-in CLI server is *for development only*.
 
-Now, fire it up! Do one of the following:
+### Apache Setup
 
-- Create a vhost in your web server that points the DocumentRoot to the
-  `public/` directory of the project
-- Fire up the built-in web server in PHP (5.4.8+) (**note**: do not use this for
-  production!)
+To setup apache, setup a virtual host to point to the public/ directory of the
+project and you should be ready to go! It should look something like below:
 
-In the latter case, do the following:
-
-```bash
-cd path/to/install
-php -S 0.0.0.0:8080 -t public public/index.php
-```
-
-You can then visit the site at http://localhost:8080/ - which will bring up a
-welcome page and the ability to visit the dashboard in order to create and
-inspect your APIs.
-
-### NOTE ABOUT USING THE PHP BUILT-IN WEB SERVER
-
-PHP's built-in web server did not start supporting the `PATCH` HTTP method until
-5.4.8. Since the admin API makes use of this HTTP method, you must use a version
-&gt;= 5.4.8 when using the built-in web server.
-
-### NOTE ABOUT USING APACHE
-
-Apache forbids the character sequences `%2F` and `%5C` in URI paths. However, the Apigility Admin
-API uses these characters for a number of service endpoints. As such, if you wish to use the
-Admin UI and/or Admin API with Apache, you will need to configure your Apache vhost/project to
-allow encoded slashes:
-
-```apache
-AllowEncodedSlashes On
-```
-
-This change will need to be made in your server's vhost file (it cannot be added to `.htaccess`).
-
-### NOTE ABOUT OPCACHE
-
-**Disable all opcode caches when running the admin!**
-
-The admin cannot and will not run correctly when an opcode cache, such as APC or
-OpCache, is enabled. Apigility does not use a database to store configuration;
-instead, it uses PHP configuration files. Opcode caches will cache these files
-on first load, leading to inconsistencies as you write to them, and will
-typically lead to a state where the admin API and code become unusable.
-
-The admin is a **development** tool, and intended for use a development
-environment. As such, you should likely disable opcode caching, regardless.
-
-When you are ready to deploy your API to **production**, however, you can
-disable development mode, thus disabling the admin interface, and safely run an
-opcode cache again. Doing so is recommended for production due to the tremendous
-performance benefits opcode caches provide.
+    <VirtualHost *:80>
+        ServerName zf2-tutorial.localhost
+        DocumentRoot /path/to/zf2-tutorial/public
+        SetEnv APPLICATION_ENV "development"
+        <Directory /path/to/zf2-tutorial/public>
+            DirectoryIndex index.php
+            AllowOverride All
+            Order allow,deny
+            Allow from all
+        </Directory>
+    </VirtualHost>

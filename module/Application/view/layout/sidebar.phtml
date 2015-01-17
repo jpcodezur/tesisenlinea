@@ -1,0 +1,248 @@
+<div id="sidebar" class="sidebar">
+    <div id="sidebar-shortcuts" class="sidebar-shortcuts">
+        <div id="sidebar-shortcuts-large" class="sidebar-shortcuts-large">
+            
+        </div>
+
+        <div id="sidebar-shortcuts-mini" class="sidebar-shortcuts-mini">
+            <span class="btn btn-success"></span>
+
+            <span class="btn btn-info"></span>
+
+            <span class="btn btn-warning"></span>
+
+            <span class="btn btn-danger"></span>
+        </div>
+    </div><!--#sidebar-shortcuts-->
+
+    <ul class="nav nav-list">
+        <li class="active">
+            <a href="<?php echo $this->url("usuarios",array("controller"=>"index","action"=>"index")) ?>">
+                <i class="icon-dashboard"></i>
+                <span class="menu-text"> Dashboard </span>
+            </a>
+        </li>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:usuario","index")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-group"></i>
+                <span class="menu-text"> Users </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"list")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        List
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"add")) ?>">
+                        <i class="icon-double-angle-right"></i>
+                        New
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <?php endif; ?>
+        
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:campania","index")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-file-text"></i>
+                <span class="menu-text"> Form Pages </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"campania","action"=>"list")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        List
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"Campania","action"=>"add")) ?>">
+                        <i class="icon-double-angle-right"></i>
+                        New
+                    </a>
+                </li>
+                
+            </ul>
+        
+        </li>
+        <?php endif; ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:categoria","index")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-sitemap"></i>
+                <span class="menu-text"> Form Groups </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"categoria","action"=>"list")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        List
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"categoria","action"=>"add")) ?>">
+                        <i class="icon-double-angle-right"></i>
+                        New
+                    </a>
+                </li>
+                
+            </ul>
+        
+        </li>
+        <?php endif; ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:topico","index")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-comment"></i>
+                <span class="menu-text"> Form Questions </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"topico","action"=>"list")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        List
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"topico","action"=>"add")) ?>">
+                        <i class="icon-double-angle-right"></i>
+                        New
+                    </a>
+                </li>
+                
+            </ul>
+        
+        </li>
+        <?php endif; ?>
+        
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:mensaje","msgs")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-envelope"></i>
+                <span class="menu-text"> Messages </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"mensaje","action"=>"new")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        Redactar
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"mensaje","action"=>"msgs")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        Recibidos
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"mensaje","action"=>"msgsenviados")) ?>">
+                        <i class="icon-double-angle-right"></i>
+                        Enviados
+                    </a>
+                </li>
+                
+            </ul>
+        
+        </li>
+        <?php endif; ?>
+        
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","index")): ?>
+        <li>
+            <a class="dropdown-toggle" href="">
+                <i class="icon-bar-chart"></i>
+                <span class="menu-text"> reports </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"reporte","action"=>"byagents")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        By Agents
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"reporte","action"=>"byagents")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        By Campaigns
+                    </a>
+                </li>
+                
+            </ul>
+        </li>
+        <?php endif; ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","index")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-edit"></i>
+                <span class="menu-text"> Evaluations </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+
+            <ul class="submenu">
+                <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","list")): ?>
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"list")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        List
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","mylist")): ?>
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"mylist")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        My Evaluations
+                    </a>
+                </li>
+                <?php endif; ?>
+                <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","add")): ?>
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"add")) ?>">
+                        <i class="icon-double-angle-right"></i>
+                        New
+                    </a>
+                </li>
+                <?php endif; ?>
+            </ul>
+        </li>
+        <?php endif; ?>
+    </ul><!--/.nav-list-->
+
+    <div id="sidebar-collapse" class="sidebar-collapse">
+        <i class="icon-double-angle-left"></i>
+    </div>
+</div>
