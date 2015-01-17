@@ -4,8 +4,6 @@ namespace Usuarios\Model;
 
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable as AuthAdapter;
-use Zend\Authentication\Result;
-use Zend\Session\Container;
 /**
  * Description of Login
  *

@@ -5,7 +5,7 @@ namespace Usuarios\Model\Dao;
 use Usuarios\Model\Connect;
 use \Usuarios\Model\Entity\Alerta;
 
-class AlertaDao extends BaseDao implements ICampaniaDao {
+class AlertaDao extends BaseDao {
 
     private $listaCampanias;
     protected $tableGateway;

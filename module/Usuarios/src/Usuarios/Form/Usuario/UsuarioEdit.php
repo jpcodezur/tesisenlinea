@@ -16,10 +16,6 @@ class UsuarioEdit extends Form {
 
         $tipos = $usuario->getTipos();
         
-        $campanias = $usuario->getCampanias();
-        
-        $selected_campanias = $usuario->getSelectedCampanias($id_usuario);
-
         /****************************************/
         
         $this->add(array(
@@ -65,20 +61,6 @@ class UsuarioEdit extends Form {
         $selectLevel->setValueOptions($tipos);
         $this->add($selectLevel);
         
-        $this->add(array(
-                'type' => 'Zend\Form\Element\Select',
-                'name' => 'campaign-user',
-                'RegisterInArrayValidator' => false,
-                'options' => array(
-                        'multiple' => true, //  'Which is your mother tongue?',
-                       'disable_inarray_validator' => true,
-                        'value_options' => $campanias,
-                ),
-                'attributes' => array(
-                    'value' => $selected_campanias //set selected to 
-                )
-        ));
-
         $file = new Element\File('avatar-user');
         $file->setAttribute('id', 'id-input-file-3')
                 ->setAttribute('multiple', true);

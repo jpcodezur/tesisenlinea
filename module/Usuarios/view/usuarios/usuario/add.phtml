@@ -118,32 +118,6 @@ $form->setAttribute('method', 'post')
             </div>
         </div>
             
-        <?php $mensaje = $this->formElementErrors($form->get('id-callcenter-user')); ?>
-        <div class="control-group <?php if (!empty($mensaje)): ?>error<?php endif; ?>">
-            <label for="form-field-1" class="control-label">ID Call Center</label>
-            <div class="controls">
-                <?php echo $this->formInput($form->get('id-callcenter-user')); ?>
-                <span class="help-inline"><?php echo $mensaje ?></span>
-                <i class="green icon-question-sign"></i>
-                <span class="help-callcenter" style="display:none">Id call center help</span>
-            </div>
-        </div>
-            
-        <?php $mensaje = $this->formElementErrors($form->get('campaign-user')); ?>
-       
-            <div class="row-fluid control-group  <?php if (!empty($mensaje)): ?>error<?php endif; ?>">
-                <label for="form-field-2" class="control-label">Campaign</label>
-            <div class="controls">
-        <?php echo $this->formSelect($form->get('campaign-user')
-                ->setAttribute('multiple', 'multiple')
-                ->setAttribute("class","chzn-select")
-                ->setAttribute("id","form-field-select-4")
-                ->setAttribute("data-placeholder","Choose a Topic...")
-        ); ?>
-                <span class="help-inline"><?php echo $mensaje ?></span>
-            </div>
-        </div>
-            
 <?php $mensaje = $this->formElementErrors($form->get('avatar-user')); ?>
         <div class="control-group <?php if (!empty($mensaje)): ?>error<?php endif; ?>">
             <label for="form-field-1" class="control-label">Avatar</label>

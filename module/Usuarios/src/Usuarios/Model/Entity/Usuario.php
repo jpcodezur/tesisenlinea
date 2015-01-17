@@ -11,10 +11,7 @@ class Usuario {
     private $clave;
     private $avatar;
     private $tipo;
-    private $campanias;
-    private $idCallCenter;
     private $alertas;
-    private $porcentaje = 0;
 
     public function __construct($id = null, $nombre = null, $apellido = null, $email = null, $clave = null) {
         $this->id = $id;
@@ -22,23 +19,6 @@ class Usuario {
         $this->apellido = $apellido;
         $this->email = $email;
         $this->clave = $clave;
-    }
-
-    public function setPorcentaje($p){
-        $this->porcentaje = $p;
-    }
-    
-    public function getPorcentaje(){
-        return $this->porcentaje;
-    }
-    
-    public function setEvaluaciones($evaluaciones){
-        $this->evaluaciones = $evaluaciones;
-    }
-    
-    
-    public function getEvaluaciones(){
-        return $this->evaluaciones;
     }
     
     public function getId() {
@@ -57,11 +37,6 @@ class Usuario {
         return $this->email;
     }
     
-    public function getIdCallCenter() {
-        return $this->idCallCenter;
-    }
-
-    
     public function getAvatar(){
         return $this->avatar;
     }
@@ -74,10 +49,6 @@ class Usuario {
         return $this->clave;
     }
     
-    public function getCampanias(){
-        return $this->campanias;
-    }
-    
     public function getAlertas(){
         return $this->alertas;
     }
@@ -88,10 +59,6 @@ class Usuario {
 
     public function setApellido($param) {
         $this->apellido = $param;
-    }
-    
-    public function setIdCallCenter($param) {
-        $this->idCallCenter = $param;
     }
     
     public function setTipo($param) {
@@ -116,10 +83,6 @@ class Usuario {
     
     public function setClave($param){
         $this->clave = $param;
-    }
-    
-    public function setCampanias($param){
-        $this->campanias = $param;
     }
     
 }

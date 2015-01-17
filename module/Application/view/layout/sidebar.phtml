@@ -25,7 +25,7 @@
         <?php if( $this->acl->isAllowed($this->role,"usuarios:usuario","index")): ?>
         <li>
             <a class="dropdown-toggle" href="#">
-                <i class="icon-user"></i>
+                <i class="icon-group"></i>
                 <span class="menu-text"> Users </span>
 
                 <b class="arrow icon-angle-down"></b>
@@ -49,38 +49,12 @@
             </ul>
         </li>
         <?php endif; ?>
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:servidor","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-cloud"></i>
-                <span class="menu-text"> Servers </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"servidor","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"servidor","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <?php endif; ?>
+        
         <?php if( $this->acl->isAllowed($this->role,"usuarios:campania","index")): ?>
         <li>
             <a class="dropdown-toggle" href="#">
-                <i class="icon-group"></i>
-                <span class="menu-text"> Campaign </span>
+                <i class="icon-file-text"></i>
+                <span class="menu-text"> Form Pages </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
@@ -109,7 +83,7 @@
         <li>
             <a class="dropdown-toggle" href="#">
                 <i class="icon-sitemap"></i>
-                <span class="menu-text"> Categories </span>
+                <span class="menu-text"> Form Groups </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
@@ -137,8 +111,8 @@
         <?php if( $this->acl->isAllowed($this->role,"usuarios:topico","index")): ?>
         <li>
             <a class="dropdown-toggle" href="#">
-                <i class="icon-bullhorn"></i>
-                <span class="menu-text"> Topics </span>
+                <i class="icon-comment"></i>
+                <span class="menu-text"> Form Questions </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
@@ -266,61 +240,6 @@
             </ul>
         </li>
         <?php endif; ?>
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:llamada","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-phone"></i>
-                <span class="menu-text"> Calls Library </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu">
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-
-            </ul>
-        </li>
-        <?php endif; ?>
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:library","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-book"></i>
-                <span class="menu-text"> Library </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu">
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                <?php if( $this->acl->isAllowed($this->role,"usuarios:library","add")): ?>
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-                <?php endif; ?>
-            </ul>
-        </li>
-        <?php endif; ?>
-        
     </ul><!--/.nav-list-->
 
     <div id="sidebar-collapse" class="sidebar-collapse">

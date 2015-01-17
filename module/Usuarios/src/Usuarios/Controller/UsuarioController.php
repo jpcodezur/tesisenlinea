@@ -105,20 +105,16 @@ class UsuarioController extends AbstractActionController {
                 }
 
                 $nombre = $this->getRequest()->getPost('first-name-user', null);
-                $id_callcenter = $this->getRequest()->getPost('id-callcenter-user', null);
                 $apellido = $this->getRequest()->getPost('last-name-user', null);
                 $password = $this->getRequest()->getPost('pass-user', null);
                 $tipo = $this->getRequest()->getPost('level-user', null);
-                $campanias = $this->getRequest()->getPost('campaign-user', null);
 
                 $user->setEmail($email);
                 $user->setNombre($nombre);
-                $user->setIdCallCenter($id_callcenter);
                 $user->setApellido($apellido);
                 $user->setClave($password);
                 $user->setAvatar($avatar);
                 $user->setTipo($tipo);
-                $user->setCampanias($campanias);
 
                 if ($this->usuarioDao->guardar($user)) {
                     return new ViewModel(array(
@@ -142,7 +138,7 @@ class UsuarioController extends AbstractActionController {
         if ($this->request->isGet()) {
             $id = $this->request->getQuery('id');
         
-            $usuario = UsuarioDao::getUsuario($id);
+            $usuario = $this->usuarioDao->getUsuario($id);
 
             $form = new UsuarioEdit("UsuarioEdit", $usuario, $this->adapter,$id);
 
@@ -152,7 +148,7 @@ class UsuarioController extends AbstractActionController {
         
         if ($this->request->isPost()) {
             $id = $this->getRequest()->getPost('id-user', null);
-            $usuario = UsuarioDao::getUsuario($id);
+            $usuario = $this->usuarioDao->getUsuario($id);
             $userValidator = new UsuarioValidator();
             $form = new UsuarioEdit("UsuarioEdit", $usuario, $this->adapter,$id);
             $form->setInputFilter($userValidator);
@@ -182,8 +178,6 @@ class UsuarioController extends AbstractActionController {
                 $apellido = $this->getRequest()->getPost('last-name-user', null);
                 $password = $this->getRequest()->getPost('pass-user', null);
                 $tipo = $this->getRequest()->getPost('level-user', null);
-                $campanias = $this->getRequest()->getPost('campaign-user', null);
-                $id_callcenter = $this->getRequest()->getPost('id-callcenter-user', null);
                 
                 $user->setId($id);
                 $user->setEmail($email);
@@ -192,8 +186,6 @@ class UsuarioController extends AbstractActionController {
                 $user->setClave($password);
                 $user->setAvatar($avatar);
                 $user->setTipo($tipo);
-                $user->setCampanias($campanias);
-                $user->setIdCallCenter($id_callcenter);
 
                 $result = $this->usuarioDao->update($user);
                 
@@ -206,7 +198,6 @@ class UsuarioController extends AbstractActionController {
                     return new ViewModel(array(
                         "form" => $form,
                         "save" => false,
-                        "campania"=>$campania,
                         "error" => array("mensaje" => $result["mensaje"])));
                 }
             }
