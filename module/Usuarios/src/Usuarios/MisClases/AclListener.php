@@ -57,27 +57,23 @@ class AclListener implements ListenerAggregateInterface{
             ->addResource(new Resource('usuarios:index'))
             ->addResource(new Resource('usuarios:alerta'))
             ->addResource(new Resource('usuarios:mensaje'))
-            ->addResource(new Resource('usuarios:reporte'))
-            ->addResource(new Resource('usuarios:servidor'))
             ->addResource(new Resource('usuarios:login'))
             ->addResource(new Resource('usuarios:usuario'))
-            ->addResource(new Resource('usuarios:campania'))
-            ->addResource(new Resource('usuarios:categoria'))
-            ->addResource(new Resource('usuarios:evaluacion'))
-            ->addResource(new Resource('usuarios:topico'))
-            ->addResource(new Resource('usuarios:llamada'))
-            ->addResource(new Resource('usuarios:library'))
+            ->addResource(new Resource('usuarios:pagina'))
             //->allow('agente', 'usuarios:index', array('index'))
             ->allow('admin')
             //->allow('agente')
-            ->allow('agente',array('usuarios:index','usuarios:reporte','usuarios:alerta','usuarios:mensaje','usuarios:library','usuarios:login','usuarios:evaluacion','login:index','login:login','login:logout'),array('index','mylist','view','alerts','myreport','setvistos','msgs','msgsenviados','send','new','username'))
+            ->allow('agente',array('usuarios:index',
+                'usuarios:alerta',
+                'usuarios:mensaje',
+                'usuarios:login',
+                'login:index',
+                'login:login',
+                'login:logout'),
+                    array('index'))
             
             
-            ->deny('admin',array('usuarios:index'),array('list','add'))
-            ->deny('admin',array('usuarios:evaluacion'),array('mylist'))
-            ->deny('admin',array('usuarios:reporte'),array('myreport'))
-        
-            ->deny('agente',array('usuarios:library'),array('add'));
+            ->deny('admin',array('usuarios:index'),array('list','add'));
         
         $application = $e->getApplication();
         $services = $application->getServiceManager();

@@ -8,6 +8,7 @@ return array(
             'Usuarios\Controller\Login' => 'Usuarios\Controller\LoginController',
             'Usuarios\Controller\Alerta' => 'Usuarios\Controller\AlertaController',
             'Usuarios\Controller\Mensaje' => 'Usuarios\Controller\MensajeController',
+            'Usuarios\Controller\Pagina' => 'Usuarios\Controller\PaginaController',
         ),
     ),
     'db' => array(

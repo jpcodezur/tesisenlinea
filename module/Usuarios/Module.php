@@ -112,11 +112,17 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'MensajeDao'=>function($sm){
                     return $this->getEntidadDao($sm,"MensajeTableGateway","Usuarios\Model\Dao\MensajeDao");
                 },
-                
                 'UsuarioDao' => function($sm) {
                     return $this->getEntidadDao($sm,"UsuarioTableGateway","Usuarios\Model\Dao\UsuarioDao");
                 },
+                'PaginaDao' => function($sm) {
+                    return $this->getEntidadDao($sm,"PaginaTableGateway","Usuarios\Model\Dao\PaginaDao");
+                },
                 #TableGAteways
+                'PaginaTableGateway' => function ($sm) {
+                    $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Pagina");
+                    return new TableGateway('paginas', $result["dbAdapter"], null, $result["resultSetPrototype"]);
+                },
                 'UsuarioTableGateway' => function ($sm) {
                     $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Usuario");
                     return new TableGateway('usuarios', $result["dbAdapter"], null, $result["resultSetPrototype"]);
@@ -151,13 +157,8 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'Usuarios\Controller\Index' => function ($instance, $sm) {
                     if ($instance instanceof \Usuarios\Controller\IndexController) {
                         $locator = $sm->getServiceLocator();
-                        //$config = $locator->get('ConfigIni');
-                        //$instance->getConfig($config);
                         $instance->setTableGateway($locator->get('UsuarioTableGateway'));
                         $instance->setUsuarioDao($locator->get('UsuarioDao'));
-                        $adapter = $this->getAdapter($locator);
-                        $instance->setAdapter($adapter);
-                        $instance->setEvaluacionDao($locator->get('EvaluacionDao'));
                     }
                 },
                 'Usuarios\Controller\Usuario' => function ($instance, $sm) {
@@ -182,6 +183,12 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                         $locator = $sm->getServiceLocator();
                         $instance->setMensajeDao($locator->get('MensajeDao'));
                         $instance->setUsuarioDao($locator->get('UsuarioDao'));
+                    }
+                },
+                'Usuarios\Controller\Pagina' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\PaginaController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setDao($locator->get('PaginaDao'));
                     }
                 },
             )
