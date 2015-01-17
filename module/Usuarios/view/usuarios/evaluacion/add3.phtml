@@ -1,0 +1,264 @@
+<script src="<?php echo $this->basePath() ?>/assets/js/audiojs/audiojs/audio.min.js"></script>
+<?php if(isset($_SESSION["miSession"]["usuario"])) $usuario = $_SESSION["miSession"]["usuario"]; ?>
+<?php
+$form = $this->form;
+$form->prepare();
+?>
+
+<?php $form->setAttribute('action', $this->url('usuarios', array('controller' => 'evaluacion', 'action' => 'add4'))); ?>
+<?php
+    $form
+    ->setAttribute('method', 'post')
+    ->setAttribute('id', 'form-add-evaluacion')
+    ->setAttribute('class', 'form-horizontal')
+    ->setAttribute('enctype', 'multipart/form-data');
+	
+	$categorias = array();
+	foreach($this->topicos as $topico){
+		$cat = $topico->getCategoria();
+		if(!in_array($cat,$categorias))
+			$categorias[] = $cat;
+	}
+	
+	
+	$categorias_all = array();
+	foreach($categorias as $c){
+		foreach($this->topicos as $topico){
+			if(trim($c) == trim($topico->getCategoria())){
+				$categorias_all[$c][] = $topico;
+			}
+		}
+		
+	}
+	
+?>
+<div class="page-header position-relative">
+    <div data-target="#step-container" class="row-fluid hide" id="fuelux-wizard" style="display: block;">
+        <ul class="wizard-steps">
+            <li class="" data-target="#step1" style="min-width: 25%; max-width: 25%;">
+                <span class="step">1</span>
+                <span class="title">Select Agent/Campaign</span>
+            </li>
+
+            <li class="" data-target="#step2" style="min-width: 25%; max-width: 25%;">
+                <span class="step">2</span>
+                <span class="title">Chose Agent record</span>
+            </li>
+
+            <li class="active" data-target="#step3" style="min-width: 25%; max-width: 25%;">
+                <span class="step">3</span>
+                <span class="title">Evaluate topics</span>
+            </li>
+
+            <li data-target="#step4" style="min-width: 25%; max-width: 25%;">
+                <span class="step">4</span>
+                <span class="title">Send Evaluatin</span>
+            </li>
+        </ul>
+    </div>
+</div><!--/.page-header-->
+
+<div class="row-fluid">
+    
+    <div class="span12">
+        <?php echo $this->form()->openTag($form); ?>
+            <!--Player -->
+            <div class="player-preview"></div>
+            <!--<audio controls="" style="width: 100%;">
+                <source type="audio/mpeg" src="/proyecto-zf2/public/records/Lautaro-Carbajal_First-Beat-Media_2014-05-30_08-23-29.mp3" ></source>
+                Your browser does not support the audio element.
+            </audio>-->
+            <!-- Player-->
+        
+            <!-- Barra Porcentaje -->
+            <div data-percent="25%" class="progress progress-success progress-striped active">
+                    <div style="width: 25%;" class="bar"></div>
+            </div>
+            <!-- Fin Barra Porcentaje -->
+            
+            <?php if ($this->save): ?>
+                <div class="alert alert-block alert-success">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="icon-remove"></i>
+                    </button>
+                    <i class="icon-ok green"></i>
+                    Evaluation Save
+                </div>
+                <script>
+                    $(document).ready(function() {
+                        $("input[name=nombre-categoria],input[orden-categoria]").val("");
+                    })
+                </script>
+            <?php endif; ?>
+        
+            <!--table-->
+            <!--SQL SERGIO-->
+            <!-- select cat.nombre,t.nombre from topico_campania tc,topicos t, categorias cat where tc.id_topico=t.id and t.id_categoria=cat.id and tc.id_campania=1 -->
+            <?php foreach($categorias_all as $key => $categoria ): ?>
+			
+                <h3><?php echo $key; ?></h3>
+                <table class="table table-striped table-bordered table-hover dataTable" id="sample-table-2" aria-describedby="sample-table-2_info">
+                    <thead>
+                        <tr role="row">
+                            <th class="center sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 51px;" aria-label=""><label>Name</label></th>
+                            <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample-table-2" rowspan="1" colspan="1" style="width: 154px;" aria-label="Domain: activate to sort column ascending">Points</th>
+                            <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample-table-2" rowspan="1" colspan="1" style="width: 111px;" aria-label="Price: activate to sort column ascending">Total</th>
+                            <th class="hidden-480 sorting" role="columnheader" tabindex="0" aria-controls="sample-table-2" rowspan="1" colspan="1" style="width: 121px;" aria-label="Clicks: activate to sort column ascending">Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody role="alert" aria-live="polite" aria-relevant="all">
+                        <?php foreach($categoria as $topico): ?>
+                        <tr class="">
+                            <td class="center  sorting_1" style="width: 200px;"><?php echo $topico->getNombre() ?></td>
+                            
+                            <td class=" ">
+                                
+                                <select name="puntaje[<?php echo $topico->getId() ?>]">
+                                    <?php for($i=1;$i<=$topico->getPuntaje();$i++): ?>
+                                    <option <?php if($i==$topico->getPuntaje()) echo "selected='selected'"?>  value="<?php echo $i ?>"><?php echo $i ?>
+                                    <?php endfor; ?>
+                                    <option value="-1">N/A</option>
+                                </select>
+                            </td>
+                            <td class=" ">5</td>
+                            <td class=" "><textarea name="comentarios[<?php echo $topico->getId() ?>]"></textarea></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endforeach; ?>
+            <!--endtable-->
+            <hr>
+            
+            <input type="hidden" name="campania-evaluacion" value="<?php echo $this->evaluacion->getCampania() ?>">
+            <input type="hidden" name="agentes-evaluacion" value="<?php echo $this->evaluacion->getAgente() ?>">
+            <input type="hidden" name="audio-agent-evaluacion" value="<?php echo $this->evaluacion->getUrlAudio() ?>">
+            <input type="hidden" name="url-audio-agent-evaluacion" value="">
+            <input type="hidden" name="fecha-evaluacion" value="<?php echo $this->evaluacion->getFechaEvaluacion() ?>">
+            <input type="hidden" name="fecha-llamada" value="<?php echo $this->evaluacion->getFechaLlamada() ?>">
+            <input type="hidden" name="evaluador-evaluacion" value="<?php echo $this->evaluacion->getEvaluador() ?>">
+            <input type="hidden" name ="id-evaluador-evaluacion" id="id-evaluador-evaluacion" value="<?php echo $this->evaluacion->getEvaluador()?>">
+            
+            <input type="hidden" name="accion-evaluacion" value="">
+            
+            <input type="hidden" name="campania-evaluacion-aprobacion" value="<?php echo $this->evaluacion->getPuntajeCampaniaAprobacion() ?>">
+            <input type="hidden" name="campania-evaluacion-reprobacion" value="<?php echo $this->evaluacion->getPuntajeCampaniaReprobacion() ?>">
+            <!-- Barra Porcentaje -->
+            <div data-percent="25%" class="progress progress-success progress-striped active">
+                    <div style="width: 25%;" class="bar"></div>
+            </div>
+            <!-- Fin Barra Porcentaje -->
+            <div class="form-actions">
+                <button id="back" class="btn btn-prev">
+                    <i class="icon-arrow-left"></i>
+                    Prev
+                </button>
+                <?php echo $this->formButton()->openTag($form->get('send-evaluacion')) . '<i class="icon-arrow-right icon-on-right"></i>Next' . $this->formButton()->closeTag(); ?>
+            </div>
+
+        <?php echo $this->form()->closeTag() ?>
+
+    </div>
+</div><!--PAGE CONTENT ENDS-->
+<div class="modal-loading" style="display: none"></div>
+<script>
+    var total=0,
+        aprobacion = $("input[name=campania-evaluacion-aprobacion]").val(),
+        reprobacion = $("input[name=campania-evaluacion-reprobacion]").val();
+        
+    $(document).ready(function(){
+        $(".bar").css("width","0%");
+            
+        $("#form-add-evaluacion").find("select").each(function(){
+            total += parseInt($(this).find("option:last").prev().val());
+        });
+        
+        calcularPorcentaje();
+        
+        $("#form-add-evaluacion select").change(function(){
+            calcularPorcentaje();
+        })
+        $("#back").click(function(e){
+            e.preventDefault();
+            history.back(1)
+         });
+         
+        /* Load Agent Record*/
+        var
+                calldate = "<?php echo $_POST["hora-llamada"] ?>",
+                campania = "<?php echo $_POST["campania-evaluacion"] ?>",
+                agente = "<?php echo $_POST["agentes-evaluacion"] ?>",
+                filename = "<?php echo $_POST["audio-agent-evaluacion"] ?>",
+                idCampania = "<?php echo $_POST["campania-evaluacion"] ?>";
+
+        $.ajax({
+            url: "<?php echo $this->url("usuarios", array("controller" => "evaluacion", "action" => "getRecord")) ?>",
+            async: false,
+            data: {
+                calldate: calldate,
+                idCampania: idCampania,
+                campania: campania,
+                agente: agente,
+                filename: filename
+            },
+            success: function(data) {
+                $(".player-preview").html(data.html);
+                var urlFile =data.html;
+                urlFile = $(urlFile);
+                urlFile = urlFile[1];
+                urlFile = urlFile.currentSrc;
+                $("input[name=url-audio-agent-evaluacion]").val(urlFile);
+            }
+        })
+        $('#test_modal').modal({
+            escapeClose: false,
+            clickClose: false,
+            fadeDuration: 1000,
+            fadeDelay: 0.10,
+        });
+            
+        /* End Load Agent Record*/
+    });
+    
+    function calcularPorcentaje(){
+        porcentaje = 0;
+        $("#form-add-evaluacion").find("select").each(function(){
+            porcentaje += parseInt($(this).find("option:selected").val());
+        });
+
+        porcentaje = 100-((total-porcentaje)*(total/100));
+
+        $(".bar").css("width",porcentaje+"%");
+        $(".bar").parent().attr("data-percent",Math.round(porcentaje)+"%");
+        
+        if(porcentaje >= aprobacion){
+            $(".bar").css("background-color","limegreen");
+        }
+        
+        if(porcentaje < aprobacion && porcentaje >= reprobacion){
+            $(".bar").css("background-color","goldenrod");    
+        }
+        
+        if(porcentaje < reprobacion){
+            $(".bar").css("background-color","tomato");
+        }
+    }
+</script>
+<style>
+    .form-actions{
+        text-align: right;
+    }
+    .btn-success{
+        padding: 5px 15px 6px;
+    }
+    .form-horizontal .form-actions{
+        padding-left: 0 !important;
+    }
+    .audiojs{
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .audiojs .scrubber{
+        width: 83%;
+    }
+</style>
