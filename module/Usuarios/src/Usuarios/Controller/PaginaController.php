@@ -18,11 +18,15 @@ class PaginaController extends AbstractActionController {
             "entity" => "Usuarios\Model\Entity\Pagina",
             "attrs" => array("id", "titulo", "orden", "estado"),
             "add_attrs" => array("titulo", "orden"),
+            "list_attrs" => array("titulo","orden",
+                array("estado" => array(
+                        "true" => '<span class="label label-success">%value%</span>',
+                        "false"=>'<span class="label label-danger">%value%</span>'))),
             "validate" => array(
                 "save" => array(
                     "strExist" => array("titulo"),
                     "strlen" => array("titulo" => array(
-                            "min" => "8",
+                            "min" => "5",
                             "max" => "-1")),
                     "numeric" => array("orden")
                 )
