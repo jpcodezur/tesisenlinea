@@ -50,7 +50,7 @@
         </li>
         <?php endif; ?>
         
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:campania","index")): ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:pagina","index")): ?>
         <li>
             <a class="dropdown-toggle" href="#">
                 <i class="icon-file-text"></i>
@@ -62,14 +62,14 @@
             <ul class="submenu">
                 
                 <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"campania","action"=>"list")) ?>/">
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"pagina","action"=>"list")) ?>/">
                         <i class="icon-double-angle-right"></i>
                         List
                     </a>
                 </li>
                 
                 <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"Campania","action"=>"add")) ?>">
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"pagina","action"=>"add")) ?>">
                         <i class="icon-double-angle-right"></i>
                         New
                     </a>
@@ -79,64 +79,7 @@
         
         </li>
         <?php endif; ?>
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:categoria","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-sitemap"></i>
-                <span class="menu-text"> Form Groups </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"categoria","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"categoria","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-                
-            </ul>
         
-        </li>
-        <?php endif; ?>
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:topico","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-comment"></i>
-                <span class="menu-text"> Form Questions </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"topico","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"topico","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-                
-            </ul>
-        
-        </li>
-        <?php endif; ?>
         
         <?php if( $this->acl->isAllowed($this->role,"usuarios:mensaje","msgs")): ?>
         <li>
@@ -175,71 +118,6 @@
         </li>
         <?php endif; ?>
         
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="">
-                <i class="icon-bar-chart"></i>
-                <span class="menu-text"> reports </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"reporte","action"=>"byagents")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        By Agents
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"reporte","action"=>"byagents")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        By Campaigns
-                    </a>
-                </li>
-                
-            </ul>
-        </li>
-        <?php endif; ?>
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-edit"></i>
-                <span class="menu-text"> Evaluations </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-
-            <ul class="submenu">
-                <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","list")): ?>
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                <?php endif; ?>
-                <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","mylist")): ?>
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"mylist")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        My Evaluations
-                    </a>
-                </li>
-                <?php endif; ?>
-                <?php if( $this->acl->isAllowed($this->role,"usuarios:evaluacion","add")): ?>
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"evaluacion","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-                <?php endif; ?>
-            </ul>
-        </li>
-        <?php endif; ?>
     </ul><!--/.nav-list-->
 
     <div id="sidebar-collapse" class="sidebar-collapse">
