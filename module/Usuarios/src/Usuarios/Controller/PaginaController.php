@@ -18,13 +18,20 @@ class PaginaController extends AbstractActionController {
             "entity" => "Usuarios\Model\Entity\Pagina",
             "attrs" => array("id", "titulo", "orden", "estado"),
             "add_attrs" => array("titulo", "orden"),
-            "list_attrs" => array("titulo","orden",
+            "edit_attrs" => array("titulo", "orden"),
+            "list_attrs" => array("titulo", "orden",
                 array("estado" => array(
                         "true" => '<span class="label label-success">%value%</span>',
-                        "false"=>'<span class="label label-danger">%value%</span>'))),
+                        "false" => '<span class="label label-danger">%value%</span>'))),
             "validate" => array(
                 "save" => array(
                     "strExist" => array("titulo"),
+                    "strlen" => array("titulo" => array(
+                            "min" => "5",
+                            "max" => "-1")),
+                    "numeric" => array("orden")
+                ),
+                "edit" => array(
                     "strlen" => array("titulo" => array(
                             "min" => "5",
                             "max" => "-1")),
@@ -90,26 +97,27 @@ class PaginaController extends AbstractActionController {
 
             $id = $this->request->getQuery('id');
 
-            $entity = $this->fetchOne($id);
-
+            $entity = $this->dao->fetchOne($id);
+            
             return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
         }
 
         if ($this->request->isPost()) {
 
-            if ($this->request->isPost()) {
+            $id = $this->getRequest()->getPost('id', null);
+            
+            $entity = $this->dao->fetchOne($id);
+            
+            /*echo "<pre>";
+            print_r($entity);
+            die();*/
 
-                $id = $this->getRequest()->getPost('id-user', null);
-
-                $entity = $this->fetchOne($id);
-
-                foreach ($this->params["attrs"] as $attr) {
-                    $set = "set" . ucwords($attr);
-                    $entity->$set($this->getRequest()->getPost($attr, null));
-                }
-
-                $response = $this->dao->update($entity);
+            foreach ($this->params["edit_attrs"] as $attr) {
+                $set = "set" . ucwords($attr);
+                $entity->$set($this->getRequest()->getPost($attr, null));
             }
+
+            $response = $this->dao->update($entity);
         }
 
         return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
