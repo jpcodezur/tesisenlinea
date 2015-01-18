@@ -92,12 +92,12 @@ class PaginaController extends AbstractActionController {
     public function editAction() {
 
         $response = new \Usuarios\MisClases\Respuesta();
-
+        
         if ($this->request->isGet()) {
-
+            
             $id = $this->request->getQuery('id');
 
-            $entity = $this->dao->fetchOne($id);
+            $entity = $this->dao->fetchOne(array("id" => $id));
             
             return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
         }
@@ -106,11 +106,7 @@ class PaginaController extends AbstractActionController {
 
             $id = $this->getRequest()->getPost('id', null);
             
-            $entity = $this->dao->fetchOne($id);
-            
-            /*echo "<pre>";
-            print_r($entity);
-            die();*/
+            $entity = $this->dao->fetchOne(array("id" => $id));
 
             foreach ($this->params["edit_attrs"] as $attr) {
                 $set = "set" . ucwords($attr);
@@ -140,7 +136,7 @@ class PaginaController extends AbstractActionController {
             }
 
             return $this->forward()->dispatch(
-                            'Usuarios\Controller\Pagina', array(
+                            'Usuarios\Controller\\'.$this->params["controller"], array(
                         'action' => 'list',
                         'response' => $response
             ));

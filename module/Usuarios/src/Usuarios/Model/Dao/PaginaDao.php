@@ -61,7 +61,7 @@ class PaginaDao {
 
             $unaEntity = new $this->params["entity"]();
             
-            foreach ($this->params["add_attrs"] as $attr) {
+            foreach ($this->params["attrs"] as $attr) {
                 $set = "set" . ucwords($attr);
                 $unaEntity->$set($entity[$attr]);
             }
@@ -81,7 +81,9 @@ class PaginaDao {
             $data[$attr] = $unaEntity->$get();
         }
         
-        $validate = new \Usuarios\Model\Dao\Validators\SavePagina($this->tableGateway, $this, $this->params);
+        $saveValidator = "\Usuarios\Model\Dao\Validators\Save" . $this->params["controller"];
+        
+        $validate = new $saveValidator($this->tableGateway, $this, $this->params);
         
         $respuesta = $validate->validate($unaEntity);
         
@@ -105,12 +107,14 @@ class PaginaDao {
         
         $data = array();
         
-        foreach ($this->params["attrs"] as $attr) {
+        foreach ($this->params["edit_attrs"] as $attr) {
             $get = "get" . ucwords($attr);
             $data[$attr] = $unaEntity->$get();
         }
         
-        $validate = new \Usuarios\Model\Dao\Validators\EditPagina($this->tableGateway, $this, $this->params);
+        $editValidator = "\Usuarios\Model\Dao\Validators\Edit" . $this->params["controller"];
+        
+        $validate = new $editValidator($this->tableGateway, $this, $this->params);
         
         $respuesta = $validate->validate($unaEntity);
         

@@ -8,18 +8,18 @@
     <div class="span12">
         <!--PAGE CONTENT BEGINS-->
         <?php if($this->response->getError() !== null): ?>
-            <div class="alert alert-block alert-<?php echo (!$this->response->getError())?"error":"success" ?>">
+            <div class="alert alert-block alert-<?php echo ($this->response->getError())?"error":"success" ?>">
                 <button type="button" class="close" data-dismiss="alert">
                     <i class="icon-remove"></i>
                 </button>
-                <i class="icon-ok green"></i>
+                <i class="icon-<?php echo ($this->response->getError()) ? "remove red" : "ok green" ?> "></i>
                 <?php echo $this->response->getMensaje() ?>
             </div>
         <?php endif; ?>
         
     <form method="post" action="<?php echo $this->url('usuarios', array('controller' => $this->params["controller"], 'action' => 'edit')); ?>">
         
-        <?php foreach($this->params["edit_attrs"] as $attr): ?>
+        <?php foreach($this->params["add_attrs"] as $attr): ?>
         <div class="control-group ">
             <label for="<?php echo $attr ?>" class="control-label"><?php echo ucwords($attr) ?></label>
             <div class="controls">
