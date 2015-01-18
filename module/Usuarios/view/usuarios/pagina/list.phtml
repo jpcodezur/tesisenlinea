@@ -39,7 +39,13 @@
                     </label>
                 </th>
 
-                <?php foreach ($this->params["attrs"] as $param): ?>
+                <?php foreach ($this->params["list_attrs"] as $param): ?>
+                    <?php
+                    if(is_array($param)){
+                        $param = array_keys($param);
+                        $param = $param[0];
+                    }
+                    ?>
                     <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample-table-2" rowspan="1" colspan="1" style="width: 154px;" aria-label="Domain: activate to sort column ascending"><?php echo ucwords($param) ?></th>
                 <?php endforeach; ?>
                 <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 146px;" aria-label=""></th>
@@ -60,11 +66,28 @@
                                 <span class="lbl"></span>
                             </label>
                         </td>
-                        <?php foreach ($this->params["attrs"] as $param): ?>
+                        <?php foreach ($this->params["list_attrs"] as $param): ?>
+                        <?php
+                        
+                        if(is_array($param)):
+                            $arr = array_keys($param);
+                            $true = str_replace("%value%","enabled",$param[$arr[0]]["true"]);
+                            $false = str_replace("%value%","disable",$param[$arr[0]]["false"]);
+                            $get = "get" . ucwords($arr[0]);
+                            ?>
+                        <td class=" ">
+                            <?php if($entity->$get()):?>
+                                <a href="#"><?php echo $true; ?></a>
+                            <?php else: ?>
+                                <a href="#"><?php echo $false; ?></a>
+                            <?php endif; ?>
+                        </td>
+                        <?php else: ?>
                             <td class=" ">
                                 <?php $get = "get" . ucwords($param); ?>
                                 <a href="#"><?php echo $entity->$get(); ?></a>
                             </td>
+                        <?php endif; ?>
                         <?php endforeach; ?>
 
                         <td class="td-actions ">
