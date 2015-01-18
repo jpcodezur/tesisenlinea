@@ -74,8 +74,6 @@ class PaginaDao {
 
     public function guardar($unaEntity) {
         
-        $respuesta = new Respuesta();
-        
         $data = array();
         
         foreach ($this->params["add_attrs"] as $attr) {
@@ -96,34 +94,40 @@ class PaginaDao {
 
             if (!$result) {
                 $respuesta->setError(true);
-                $respuesta->setMensaje("Error deleting ".$this->params["singular"]);
+                $respuesta->setMensaje("Error creating ".$this->params["singular"]);
             }
         }
 
         return $respuesta;
     }
 
-    public function update($user) {
-        $result = false;
+    public function update($unaEntity) {
+        
+        $data = array();
+        
+        foreach ($this->params["attrs"] as $attr) {
+            $get = "get" . ucwords($attr);
+            $data[$attr] = $unaEntity->$get();
+        }
+        
+        $validate = new \Usuarios\Model\Dao\Validators\EditPagina($this->tableGateway, $this, $this->params);
+        
+        $respuesta = $validate->validate($unaEntity);
+        
+        if($respuesta->getError() === false){
 
-        $data = array(
-            "nombre" => $user->getNombre(),
-            "apellido" => $user->getApellido(),
-            "email" => $user->getEmail(),
-            "tipo" => $user->getTipo(),
-        );
+            $result = $this->tableGateway->update($data, array("id" => $unaEntity->getId()));
 
-        if ($user->getAvatar()) {
-            $data["avatar"] = $user->getAvatar();
+            $respuesta->setError(false);
+            $respuesta->setMensaje(ucwords($this->params["singular"])." saved successfully");
+
+            if (!$result) {
+                $respuesta->setError(true);
+                $respuesta->setMensaje("Error saving ".$this->params["singular"]);
+            }
         }
 
-        $result = $this->tableGateway->update($data, array("id" => $user->getId()));
-
-        if ($result) {
-            return array("error" => "0", "usuario" => $user);
-        }
-
-        return array("error" => "1", "usuario" => $user);
+        return $respuesta;
     }
 
     public function delete($id) {

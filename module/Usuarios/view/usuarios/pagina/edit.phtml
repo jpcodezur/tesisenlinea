@@ -17,20 +17,22 @@
             </div>
         <?php endif; ?>
         
-    <form action="<?php echo $this->url('usuarios', array('controller' => $this->params["controller"], 'action' => 'edit')); ?>">
+    <form method="post" action="<?php echo $this->url('usuarios', array('controller' => $this->params["controller"], 'action' => 'edit')); ?>">
         
-        <?php foreach($this->params["add_attrs"] as $attr): ?>
+        <?php foreach($this->params["edit_attrs"] as $attr): ?>
         <div class="control-group ">
             <label for="<?php echo $attr ?>" class="control-label"><?php echo ucwords($attr) ?></label>
             <div class="controls">
                 <?php $get = "get".  ucwords($attr); ?>
-                <input type="text" name="<?php echo $this->entity->$get() ?>" value="">
+                <input type="text" name="<?php echo $attr ?>" value="<?php echo $this->entity->$get() ?>">
             </div>
         </div>
         <?php endforeach; ?>
-
+        
+        <input type="hidden" name="id" value="<?php echo $this->entity->getId() ?>">
+        
         <div class="form-actions">
-            <button class="btn" type=submit>Save<button>
+            <button class="btn" type=submit>Save</button>
         </div>
 
     </form>
@@ -304,88 +306,6 @@
         $("#submit-user").attr("Value", "Submit")
                 .css("padding", "7px 14px 10px 26px").append("<i class='icon-ok bigger-110'></i>")
 
-    });
-
-    $(document).ready(function() {
-        //Globals
-        var email,
-                emailValido = "<?php echo $formValid; ?>";
-
-        (function() {
-            //Validar Email con ajax
-            $("input[name=email-user]").focusout(function() {
-                
-                var inputEmail = $(this),
-                        pEMail = inputEmail.val();
-                
-                if (email != pEMail) {
-                    
-                    emailValido = true;
-
-                    if (pEMail == "") {
-                        inputEmail.parent().parent().addClass("error");
-                        inputEmail.next().text("Ingrese un email");
-                        emailValido = false;
-                        return;
-                    }
-
-                    if (!emailNoExiste(pEMail)) {
-                        inputEmail.parent().parent().addClass("error");
-                        inputEmail.next().text("El email no es valido");
-                        emailValido = false;
-                        return;
-                    }
-
-
-                    var loading = "<?php echo $this->basePath('assets/img/loading.gif') ?>";
-                    inputEmail.parent().append("<img id='loading-gif' src='" + loading + "'>");
-                    $.get("<?php echo $this->url("usuarios", array("controller" => "usuario", "action" => "validarEmail")) ?>"
-                        ,{email: pEMail}
-                        , function(data) {
-                        if (data == "0") {
-                            emailValido = false;
-                            inputEmail.parent().parent().removeClass("success");
-                            inputEmail.parent().parent().addClass("error");
-                            inputEmail.next().text("El email ya esta registrado");
-                        }
-                        if (data == "1") {
-                            inputEmail.parent().parent().removeClass("error");
-                            inputEmail.parent().parent().addClass("success");
-                            inputEmail.next().text("");
-                            emailValido = true;
-                        }
-                        $(document).find("#loading-gif").remove();
-                        email = pEMail;
-                    });
-                }
-
-            })
-            $("input[name=email-user],input[name=first-name-user],input[name=last-name-user],input[name=pass-user],input[name=repass-user]")
-                .keyup(function() {
-                    $(this).parent().parent().removeClass("error");
-                    $(this).next().text("");
-            });
-            //Validar Password
-            $("#pass-user").focusout(function(){
-                
-            })
-        })();
-        
-        
-
-        //Submit
-        $("*[name=send-user]").click(function() {
-            if (emailValido) {
-                $("#form-add-user").submit();
-            }
-        });
-        $(".icon-question-sign").click(function(){
-            $(".help-callcenter").toggle();
-        })
-        
-        $(".icon-question-sign").blur(function(){
-            $(".help-callcenter").hide();
-        })
     });
 </script>
 <style>
