@@ -13,6 +13,7 @@ class PreguntaController extends AbstractActionController {
 
     public function __construct() {
         $this->params = array(
+            "table" => "preguntas",
             "plural" => "Preguntas",
             "singular" => "Pregunta",
             "controller" => "pregunta",

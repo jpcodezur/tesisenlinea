@@ -13,6 +13,13 @@ class GrupoController extends AbstractActionController {
 
     public function __construct() {
         $this->params = array(
+            "table" => "grupos",
+            "join" => array(
+                        "alias" => array('pa' => 'paginas'),
+                        "on" => 'pa.id = grupos.id_pagina',
+                        "alias_field" => array('Pagina' => 'titulo'),
+                        "type" => "", //empty = inner
+                        "orden"),
             "plural" => "Grupos",
             "singular" => "Grupo",
             "controller" => "grupo",
@@ -46,6 +53,7 @@ class GrupoController extends AbstractActionController {
     public function setPaginaDao($paginaDao){
         $this->paginaDao = $paginaDao;
         $this->paginaDao->setParams(array(
+            "table" => "paginas",
             "plural" => "Form Pages",
             "singular" => "Form Page",
             "controller" => "pagina",
@@ -53,7 +61,7 @@ class GrupoController extends AbstractActionController {
             "attrs" => array("id", "titulo", "orden", "estado"),
             "add_attrs" => array("titulo", "orden"),
             "edit_attrs" => array("titulo", "orden"),
-            "list_attrs" => array("titulo", "orden",
+            "list_attrs" => array("titulo", "orden","Pagina",
                 array("estado" => array(
                         "true" => '<span class="label label-success">%value%</span>',
                         "false" => '<span class="label label-danger">%value%</span>'))),

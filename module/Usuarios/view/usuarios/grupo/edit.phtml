@@ -24,7 +24,7 @@
                 <select id="form-field-select-1" name="id_pagina">
                     <option value="">Select</option>
                     <?php foreach($this->pages as $page):?>
-                    <option value="<?php echo $page->getId(); ?>"><?php echo $page->getId(); ?></option>
+                    <option value="<?php echo $page->getId(); ?>"><?php echo $page->getTitulo(); ?></option>
                     <?php endforeach; ?>
                 </select>
         </div>

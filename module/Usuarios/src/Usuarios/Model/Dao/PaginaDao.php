@@ -25,7 +25,7 @@ class PaginaDao {
 
         $select = $this->tableGateway->getSql()->select();
 
-        $select->where(array("estado" => "1"));
+        $select->where(array(strtolower($this->params["table"]).".estado" => "1"));
 
         $select->order('id ASC');
 

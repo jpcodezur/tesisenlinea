@@ -12,6 +12,7 @@ class PaginaController extends AbstractActionController {
 
     public function __construct() {
         $this->params = array(
+            "table" => "paginas",
             "plural" => "Form Pages",
             "singular" => "Form Page",
             "controller" => "pagina",
