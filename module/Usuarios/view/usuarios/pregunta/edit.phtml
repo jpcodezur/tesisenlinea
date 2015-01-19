@@ -24,7 +24,7 @@
                 <select id="form-field-select-1" name="id_grupo">
                     <option value="">Select</option>
                     <?php foreach($this->pages as $page):?>
-                    <option value="<?php echo $page->getId(); ?>"><?php echo $page->getId(); ?></option>
+                    <option value="<?php echo $page->getId(); ?>"><?php echo $page->getTitulo(); ?></option>
                     <?php endforeach; ?>
                 </select>
         </div>
@@ -43,9 +43,7 @@
         
         <input type="hidden" name="id" value="<?php echo $this->entity->getId() ?>">
         
-        <div class="form-actions">
-            <button class="btn" type=submit>Save</button>
-        </div>
+        <div class="form-actions"><button class="btn" type=submit>Save</button></div>
 
     </form>
 

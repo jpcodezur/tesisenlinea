@@ -38,7 +38,7 @@
                         <span class="lbl"></span>
                     </label>
                 </th>
-
+                <th class="sorting" role="columnheader" tabindex="0" aria-controls="sample-table-2" rowspan="1" colspan="1" style="width: 154px;" aria-label="Domain: activate to sort column ascending">Grupo</th>
                 <?php foreach ($this->params["list_attrs"] as $param): ?>
                     <?php
                     if(is_array($param)){
@@ -66,6 +66,7 @@
                                 <span class="lbl"></span>
                             </label>
                         </td>
+                        <td class=" "><a href="#"><?php echo $entity->Grupo; ?></a></td>
                         <?php foreach ($this->params["list_attrs"] as $param): ?>
                         <?php
                         

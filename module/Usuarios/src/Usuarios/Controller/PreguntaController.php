@@ -14,6 +14,12 @@ class PreguntaController extends AbstractActionController {
     public function __construct() {
         $this->params = array(
             "table" => "preguntas",
+            "join" => array(
+                        "alias" => array('gr' => 'grupos'),
+                        "on" => 'gr.id = preguntas.id_grupo',
+                        "alias_field" => array('Grupo' => 'titulo'),
+                        "type" => "", //empty = inner
+                        "orden"),
             "plural" => "Preguntas",
             "singular" => "Pregunta",
             "controller" => "pregunta",
@@ -92,10 +98,9 @@ class PreguntaController extends AbstractActionController {
 
     public function ListAction() {
         $response = new \Usuarios\MisClases\Respuesta();
-
         $resp_temp = $this->params()->fromRoute('response');
 
-        if ($resp_temp) {
+        if ($resp_temp == true) {
             $response = $resp_temp;
         }
 
