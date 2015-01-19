@@ -10,6 +10,7 @@ return array(
             'Usuarios\Controller\Mensaje' => 'Usuarios\Controller\MensajeController',
             'Usuarios\Controller\Pagina' => 'Usuarios\Controller\PaginaController',
             'Usuarios\Controller\Grupo' => 'Usuarios\Controller\GrupoController',
+            'Usuarios\Controller\Pregunta' => 'Usuarios\Controller\PreguntaController',
         ),
     ),
     'db' => array(
