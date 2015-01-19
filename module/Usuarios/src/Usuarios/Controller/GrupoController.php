@@ -5,13 +5,47 @@ namespace Usuarios\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class PaginaController extends AbstractActionController {
+class GrupoController extends AbstractActionController {
 
     private $dao;
+    private $paginaDao;
     private $params;
 
     public function __construct() {
         $this->params = array(
+            "plural" => "Grupos",
+            "singular" => "Grupo",
+            "controller" => "grupo",
+            "entity" => "Usuarios\Model\Entity\Grupo",
+            "exceptions_add" => array("id_pagina"),
+            "attrs" => array("id", "titulo", "orden", "estado","id_pagina"),
+            "add_attrs" => array("titulo", "orden","id_pagina"),
+            "edit_attrs" => array("titulo", "orden"),
+            "list_attrs" => array("titulo", "orden",
+                array("estado" => array(
+                        "true" => '<span class="label label-success">%value%</span>',
+                        "false" => '<span class="label label-danger">%value%</span>'))),
+            "validate" => array(
+                "save" => array(
+                    "strExist" => array("titulo"),
+                    "strlen" => array("titulo" => array(
+                            "min" => "5",
+                            "max" => "-1")),
+                    "numeric" => array("orden")
+                ),
+                "edit" => array(
+                    "strlen" => array("titulo" => array(
+                            "min" => "5",
+                            "max" => "-1")),
+                    "numeric" => array("orden")
+                )
+            )
+        );
+    }
+    
+    public function setPaginaDao($paginaDao){
+        $this->paginaDao = $paginaDao;
+        $this->paginaDao->setParams(array(
             "plural" => "Form Pages",
             "singular" => "Form Page",
             "controller" => "pagina",
@@ -38,7 +72,7 @@ class PaginaController extends AbstractActionController {
                     "numeric" => array("orden")
                 )
             )
-        );
+        ));
     }
 
     public function setTableGateway($tableGateway) {
@@ -73,7 +107,9 @@ class PaginaController extends AbstractActionController {
     public function addAction() {
 
         $response = new \Usuarios\MisClases\Respuesta();
-
+        
+        $pages = $this->paginaDao->fetchAll();
+        
         if ($this->request->isPost()) {
 
             $entity = new $this->params["entity"]();
@@ -86,12 +122,14 @@ class PaginaController extends AbstractActionController {
             $response = $this->dao->guardar($entity);
         }
 
-        return new ViewModel(array("params" => $this->params, "response" => $response));
+        return new ViewModel(array("pages" => $pages["entities"],"params" => $this->params, "response" => $response));
     }
 
     public function editAction() {
 
         $response = new \Usuarios\MisClases\Respuesta();
+        
+        $pages = $this->paginaDao->fetchAll();
         
         if ($this->request->isGet()) {
             
@@ -99,7 +137,7 @@ class PaginaController extends AbstractActionController {
 
             $entity = $this->dao->fetchOne(array("id" => $id));
             
-            return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
+            return new ViewModel(array("pages" => $pages["entities"],"params" => $this->params, "response" => $response, "entity" => $entity));
         }
 
         if ($this->request->isPost()) {

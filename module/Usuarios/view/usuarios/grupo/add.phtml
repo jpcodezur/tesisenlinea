@@ -17,19 +17,28 @@
             </div>
         <?php endif; ?>
         
-    <form method="post" action="<?php echo $this->url('usuarios', array('controller' => $this->params["controller"], 'action' => 'edit')); ?>">
+    <form method="post" action="<?php echo $this->url('usuarios', array('controller' => $this->params["controller"], 'action' => 'add')); ?>">
+        
+        <div class="control-group ">
+                <label for="form-field-select-1">Form Page</label>
+                <select id="form-field-select-1" name="id_pagina">
+                    <option value="">Select</option>
+                    <?php foreach($this->pages as $page):?>
+                    <option value="<?php echo $page->getId(); ?>"><?php echo $page->getId(); ?></option>
+                    <?php endforeach; ?>
+                </select>
+        </div>
         
         <?php foreach($this->params["add_attrs"] as $attr): ?>
+        <?php if(!in_array($attr, $this->params["exceptions_add"])) :?>
         <div class="control-group ">
             <label for="<?php echo $attr ?>" class="control-label"><?php echo ucwords($attr) ?></label>
             <div class="controls">
-                <?php $get = "get".  ucwords($attr); ?>
-                <input type="text" name="<?php echo $attr ?>" value="<?php echo $this->entity->$get() ?>">
+                <input type="text" name="<?php echo $attr ?>">
             </div>
         </div>
+        <?php endif; ?>
         <?php endforeach; ?>
-        
-        <input type="hidden" name="id" value="<?php echo $this->entity->getId() ?>">
         
         <div class="form-actions">
             <button class="btn" type=submit>Save</button>
@@ -307,6 +316,7 @@
                 .css("padding", "7px 14px 10px 26px").append("<i class='icon-ok bigger-110'></i>")
 
     });
+
 </script>
 <style>
     label, .lbl {

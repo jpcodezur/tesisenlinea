@@ -9,6 +9,7 @@ return array(
             'Usuarios\Controller\Alerta' => 'Usuarios\Controller\AlertaController',
             'Usuarios\Controller\Mensaje' => 'Usuarios\Controller\MensajeController',
             'Usuarios\Controller\Pagina' => 'Usuarios\Controller\PaginaController',
+            'Usuarios\Controller\Grupo' => 'Usuarios\Controller\GrupoController',
         ),
     ),
     'db' => array(
