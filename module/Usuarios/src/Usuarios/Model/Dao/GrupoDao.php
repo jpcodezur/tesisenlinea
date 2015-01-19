@@ -4,7 +4,7 @@ namespace Usuarios\Model\Dao;
 
 use Usuarios\MisClases\Respuesta;
 
-class PaginaDao {
+class GrupoDao {
 
     protected $tableGateway;
     protected $params;
@@ -35,7 +35,7 @@ class PaginaDao {
         //$salida = $select->getSqlString();
         
         foreach ($this->tableGateway->selectWith($select) as $entity) {
-            
+
             $unaEntity = new $this->params["entity"]();
             
             foreach ($this->params["attrs"] as $attr) {

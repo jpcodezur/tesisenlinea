@@ -80,6 +80,36 @@
         </li>
         <?php endif; ?>
         
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:grupo","index")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-file-text"></i>
+                <span class="menu-text"> Groups Question </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"grupo","action"=>"list")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        List
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"grupo","action"=>"add")) ?>">
+                        <i class="icon-double-angle-right"></i>
+                        New
+                    </a>
+                </li>
+                
+            </ul>
+        
+        </li>
+        <?php endif; ?>
+        
         
         <?php if( $this->acl->isAllowed($this->role,"usuarios:mensaje","msgs")): ?>
         <li>

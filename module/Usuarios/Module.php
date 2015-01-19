@@ -118,7 +118,14 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'PaginaDao' => function($sm) {
                     return $this->getEntidadDao($sm,"PaginaTableGateway","Usuarios\Model\Dao\PaginaDao");
                 },
+                'GrupoDao' => function($sm) {
+                    return $this->getEntidadDao($sm,"GrupoTableGateway","Usuarios\Model\Dao\GrupoDao");
+                },
                 #TableGAteways
+                'GrupoTableGateway' => function ($sm) {
+                    $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Grupo");
+                    return new TableGateway('grupos', $result["dbAdapter"], null, $result["resultSetPrototype"]);
+                },
                 'PaginaTableGateway' => function ($sm) {
                     $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Pagina");
                     return new TableGateway('paginas', $result["dbAdapter"], null, $result["resultSetPrototype"]);
@@ -189,6 +196,13 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                     if ($instance instanceof \Usuarios\Controller\PaginaController) {
                         $locator = $sm->getServiceLocator();
                         $instance->setDao($locator->get('PaginaDao'));
+                    }
+                },
+                'Usuarios\Controller\Grupo' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\GrupoController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setDao($locator->get('GrupoDao'));
+                        $instance->setPaginaDao($locator->get('PaginaDao'));
                     }
                 },
             )
