@@ -119,7 +119,8 @@ INSERT INTO `preguntas` (`id`, `id_grupo`, `nombre`, `titulo`, `orden`, `estado`
 (5,	0,	'',	'prueba5',	5,	1),
 (6,	4,	'',	'sadfasdf2',	1,	0),
 (7,	3,	'',	'asdfasdf',	1,	0),
-(8,	7,	'nombre',	'nombre',	1,	1);
+(8,	7,	'nombre',	'nombre',	1,	1),
+(9,	0,	'saludo',	'como estas @nombre? ',	2,	1);
 
 DROP TABLE IF EXISTS `tipos_usuario`;
 CREATE TABLE `tipos_usuario` (
@@ -200,4 +201,4 @@ INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `email`, `md5`, `tipo`, `fec
 (72,	'Juan',	'Barla',	'juanbarla@hotmail.com',	'f77538d26d37221483971c3323d5f050',	4,	'0000-00-00 00:00:00',	1,	NULL,	NULL),
 (77,	'Hector',	'Cabrera',	'hcabrera@telecomnetworks.net',	'4297f44b13955235245b2497399d7a93',	4,	'0000-00-00 00:00:00',	1,	NULL,	NULL);
 
--- 2015-01-20 03:43:23
+-- 2015-01-20 21:26:02
