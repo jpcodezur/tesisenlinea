@@ -80,6 +80,32 @@ class PreguntaDao {
         
         return array("entities" => $enties, "paginator" => $paginator);
     }
+    
+    public function fetchOneLike($query){
+        $select = $this->tableGateway->getSql()->select();
+        
+        $select->where->like('nombre', "%".$query."%");
+
+        $entities = $this->tableGateway->selectWith($select);
+        
+        foreach ($entities as $entity) {
+            /*'id'    : 1,
+            'name'  : 'Kenneth Auchenberg',
+            'avatar': 'http://cdn0.4dots.com/i/customavatars/avatar7112_1.gif',
+            'icon'  : 'icon-16 icon-person',
+            'type'  : 'contact'*/
+
+            return array(
+                "id" => $entity["id"],
+                "name" => $entity["nombre"],
+                "avatar" => "",
+                "icon" => "",
+                "type" => "contact",
+            );
+        }
+
+        return false;
+    }
 
     public function fetchOne($param) {
 

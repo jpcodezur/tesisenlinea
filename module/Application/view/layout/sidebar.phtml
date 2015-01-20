@@ -140,6 +140,28 @@
         </li>
         <?php endif; ?>
         
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario","wizard")): ?>
+        <li>
+            <a class="dropdown-toggle" href="#">
+                <i class="icon-file-text"></i>
+                <span class="menu-text"> Tesis Wizard </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            
+            <ul class="submenu">
+                
+                <li>
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario","action"=>"wizard")) ?>/">
+                        <i class="icon-double-angle-right"></i>
+                        Wizard
+                    </a>
+                </li>
+            </ul>
+        
+        </li>
+        <?php endif; ?>
+        
         
         <?php if( $this->acl->isAllowed($this->role,"usuarios:mensaje","msgs")): ?>
         <li>

@@ -219,6 +219,14 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                         $instance->setGrupoDao($locator->get('GrupoDao'));
                     }
                 },
+                        'Usuarios\Controller\Formulario' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\FormularioController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setPreguntaDao($locator->get('PreguntaDao'));
+                        $instance->setPaginaDao($locator->get('PaginaDao'));
+                    }
+                },
+                        
             )
         );
     } 
