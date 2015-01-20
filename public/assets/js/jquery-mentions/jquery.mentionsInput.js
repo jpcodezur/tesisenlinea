@@ -33,7 +33,7 @@
       autocompleteListItemIcon   : _.template('<div class="icon <%= icon %>"></div>'),
       mentionsOverlay            : _.template('<div class="mentions"><div></div></div>'),
       mentionItemSyntax          : _.template('@[<%= value %>](<%= type %>:<%= id %>)'),
-      mentionItemHighlight       : _.template('<strong><span><%= value %></span></strong>')
+      mentionItemHighlight       : _.template('<strong><span>@<%= value %></span></strong>')
     }
   };
 
@@ -199,6 +199,7 @@
 
       // See if there's the same mention in the list
       if( !_.find(mentionsCollection, function (object) { return object.id == mention.id; }) ) {
+          //mention.name = "@"+mention.name;
         mentionsCollection.push(mention);//Add the mention to mentionsColletions
       }
 
@@ -208,7 +209,7 @@
       hideAutoComplete();
 
       // Mentions and syntax message
-      var updatedMessageText = start + mention.value + ' ' + end;
+      var updatedMessageText = start + "@"+ mention.value + ' ' + end;
       elmInputBox.val(updatedMessageText); //Set the value to the txt area
 	  elmInputBox.trigger('mention');
       updateValues();

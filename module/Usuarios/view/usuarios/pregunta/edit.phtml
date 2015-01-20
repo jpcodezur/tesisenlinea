@@ -325,6 +325,21 @@
     
     $(document).ready(function(){
        $("select[name=id_grupo]").val("<?php echo $this->entity->getId_pagina() ?>").change(); 
+    
+        $(function () {
+            $('textarea.mention').mentionsInput({
+                onDataRequest: function (mode, query, callback) {
+                    var strquery = 'query='+query;
+                    $.getJSON("<?php echo $this->url("usuarios", array("controller" => "pregunta", "action" => "getPreguntas")) ?>",strquery , function (responseData) {
+                        responseData = _.filter(responseData, function (item) {
+                            return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+                        });
+                        callback.call(this, responseData);
+                    });
+                }
+            });
+
+        });
     });
 </script>
 <style>
@@ -355,6 +370,7 @@
         padding: 10px;
         position: absolute;
     }
+
     .mentions-input-box .mentions {
         bottom: 0;
         color: #fff;
@@ -367,4 +383,11 @@
         white-space: pre-wrap;
         word-wrap: break-word;
     }
+    textarea.mention{
+        /*width: 400px;
+        height: 100px;*/
+    }
+.mentions-input-box .mentions > div > strong {
+    margin-left: -12px;
+}
 </style>
