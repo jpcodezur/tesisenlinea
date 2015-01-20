@@ -11,6 +11,7 @@ return array(
             'Usuarios\Controller\Pagina' => 'Usuarios\Controller\PaginaController',
             'Usuarios\Controller\Grupo' => 'Usuarios\Controller\GrupoController',
             'Usuarios\Controller\Pregunta' => 'Usuarios\Controller\PreguntaController',
+            'Usuarios\Controller\Formulario' => 'Usuarios\Controller\FormularioController',
         ),
     ),
     'db' => array(

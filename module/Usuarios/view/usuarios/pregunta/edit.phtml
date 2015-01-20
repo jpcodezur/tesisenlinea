@@ -35,7 +35,12 @@
             <label for="<?php echo $attr ?>" class="control-label"><?php echo ucwords($attr) ?></label>
             <div class="controls">
                 <?php $get = "get".  ucwords($attr); ?>
-                <input type="text" name="<?php echo $attr ?>" value="<?php echo $this->entity->$get() ?>">
+                
+                <?php if($attr == "titulo"): ?>
+                    <textarea name="<?php echo $attr ?>" class='mention'><?php echo $this->entity->$get() ?></textarea>
+                <?php else:?>
+                    <input type="text" name="<?php echo $attr ?>" value="<?php echo $this->entity->$get() ?>">
+                <?php endif;?>
             </div>
         </div>
         <?php endif; ?>
@@ -349,5 +354,17 @@
         margin-top: -12px;
         padding: 10px;
         position: absolute;
+    }
+    .mentions-input-box .mentions {
+        bottom: 0;
+        color: #fff;
+        font-size: 10.21pt;
+        left: 1px;
+        overflow: hidden;
+        padding: 9px;
+        position: absolute;
+        top: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 </style>

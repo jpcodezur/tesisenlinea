@@ -6,6 +6,7 @@ class Pregunta {
 
     private $id;
     private $id_grupo;
+    private $nombre;
     private $titulo;
     private $orden;
     private $estado;
@@ -16,6 +17,10 @@ class Pregunta {
 
     function getId_grupo() {
         return $this->id_grupo;
+    }
+
+    function getNombre() {
+        return $this->nombre;
     }
 
     function getTitulo() {
@@ -38,6 +43,10 @@ class Pregunta {
         $this->id_grupo = $id_grupo;
     }
 
+    function setNombre($nombre) {
+        $this->nombre = $nombre;
+    }
+
     function setTitulo($titulo) {
         $this->titulo = $titulo;
     }
@@ -53,4 +62,3 @@ class Pregunta {
 
     
 }
-

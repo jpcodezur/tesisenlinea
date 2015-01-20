@@ -4,6 +4,7 @@ namespace Usuarios\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Usuarios\Controller\Params\PaginaParams;
 
 class PaginaController extends AbstractActionController {
 
@@ -11,35 +12,8 @@ class PaginaController extends AbstractActionController {
     private $params;
 
     public function __construct() {
-        $this->params = array(
-            "table" => "paginas",
-            "plural" => "Form Pages",
-            "singular" => "Form Page",
-            "controller" => "pagina",
-            "entity" => "Usuarios\Model\Entity\Pagina",
-            "attrs" => array("id", "titulo", "orden", "estado"),
-            "add_attrs" => array("titulo", "orden"),
-            "edit_attrs" => array("titulo", "orden"),
-            "list_attrs" => array("titulo", "orden",
-                array("estado" => array(
-                        "true" => '<span class="label label-success">%value%</span>',
-                        "false" => '<span class="label label-danger">%value%</span>'))),
-            "validate" => array(
-                "save" => array(
-                    "strExist" => array("titulo"),
-                    "strlen" => array("titulo" => array(
-                            "min" => "5",
-                            "max" => "-1")),
-                    "numeric" => array("orden")
-                ),
-                "edit" => array(
-                    "strlen" => array("titulo" => array(
-                            "min" => "5",
-                            "max" => "-1")),
-                    "numeric" => array("orden")
-                )
-            )
-        );
+        $paginaParams = new PaginaParams();
+        $this->params = $paginaParams->getParams();
     }
 
     public function setTableGateway($tableGateway) {

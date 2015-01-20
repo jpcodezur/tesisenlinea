@@ -62,20 +62,23 @@ class AclListener implements ListenerAggregateInterface{
             ->addResource(new Resource('usuarios:pagina'))
             ->addResource(new Resource('usuarios:grupo'))
             ->addResource(new Resource('usuarios:pregunta'))
+            ->addResource(new Resource('usuarios:formulario'))
             //->allow('agente', 'usuarios:index', array('index'))
             ->allow('admin')
             //->allow('agente')
-            ->allow('agente',array('usuarios:index',
+            ->allow('agente',array(
+                'usuarios:index',
+                'usuarios:formulario',
                 'usuarios:alerta',
                 'usuarios:mensaje',
                 'usuarios:login',
                 'login:index',
                 'login:login',
                 'login:logout'),
-                    array('index'))
+                    array('index','wizard','msgs'))
             
             
-            ->deny('admin',array('usuarios:index'),array('list','add'));
+            ->deny('admin',array('usuarios:index','usuarios:formulario'),array('list','add','wizard'));
         
         $application = $e->getApplication();
         $services = $application->getServiceManager();

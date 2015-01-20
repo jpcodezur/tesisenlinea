@@ -17,6 +17,34 @@ class PreguntaDao {
         $this->params = $params;
     }
 
+    public function setJoin($select) {
+        if (isset($this->params["join"])) {
+            $attr = $this->params["join"];
+            if (is_array($attr)) {
+                $select->join(
+                        $attr["alias"], $attr["on"], $attr["alias_field"], $attr["type"]
+                );
+            }
+        }
+
+        return $select;
+    }
+
+    public function setJoinFields($obj,$unaEntity) {
+        if (isset($this->params["join"])) {
+            $attr = $this->params["join"];
+            foreach ($attr["alias_field"] as $key  => $value) {
+                foreach($obj as $k => $p){
+                    if($key == $k){
+                        $unaEntity->$key = $obj[$k];
+                    }
+                }
+            }
+        }
+
+        return $unaEntity;
+    }
+
     public function fetchAll() {
 
         $enties = array();
@@ -25,28 +53,58 @@ class PreguntaDao {
 
         $select = $this->tableGateway->getSql()->select();
 
-        $select->where(array(strtolower($this->params["table"]).".estado" => "1"));
+        $select->where(array(strtolower($this->params["table"]) . ".estado" => "1"));
+
+        $select = $this->setJoin($select);
 
         $select->order('id ASC');
 
         $adapter = new \Zend\Paginator\Adapter\DbSelect($select, $sql);
         $paginator = new \Zend\Paginator\Paginator($adapter);
-        
+
         //$salida = $select->getSqlString();
-        
+
         foreach ($this->tableGateway->selectWith($select) as $entity) {
-            
+
             $unaEntity = new $this->params["entity"]();
-            
+
             foreach ($this->params["attrs"] as $attr) {
                 $set = "set" . ucwords($attr);
                 $unaEntity->$set($entity[$attr]);
             }
 
+            $unaEntity = $this->setJoinFields($entity,$unaEntity);
+
             $enties[] = $unaEntity;
         }
-
+        
         return array("entities" => $enties, "paginator" => $paginator);
+    }
+    
+    public function fetchOneLike($query){
+        $select = $this->tableGateway->getSql()->select();
+        
+        $select->where->like('nombre', "%".$query."%");
+
+        $entities = $this->tableGateway->selectWith($select);
+        
+        foreach ($entities as $entity) {
+            /*'id'    : 1,
+            'name'  : 'Kenneth Auchenberg',
+            'avatar': 'http://cdn0.4dots.com/i/customavatars/avatar7112_1.gif',
+            'icon'  : 'icon-16 icon-person',
+            'type'  : 'contact'*/
+
+            return array(
+                "id" => $entity["id"],
+                "name" => $entity["nombre"],
+                "avatar" => "",
+                "icon" => "",
+                "type" => "contact",
+            );
+        }
+
+        return false;
     }
 
     public function fetchOne($param) {
