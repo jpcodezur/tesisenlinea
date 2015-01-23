@@ -124,6 +124,9 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'PreguntaDao' => function($sm) {
                     return $this->getEntidadDao($sm,"PreguntaTableGateway","Usuarios\Model\Dao\PreguntaDao");
                 },
+                'FormularioDao' => function($sm) {
+                    return $this->getAdapter($sm);
+                },
                 #TableGAteways
                 'PreguntaTableGateway' => function ($sm) {
                     $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Pregunta");
@@ -219,11 +222,12 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                         $instance->setGrupoDao($locator->get('GrupoDao'));
                     }
                 },
-                        'Usuarios\Controller\Formulario' => function ($instance, $sm) {
+                'Usuarios\Controller\Formulario' => function ($instance, $sm) {
                     if ($instance instanceof \Usuarios\Controller\FormularioController) {
                         $locator = $sm->getServiceLocator();
                         $instance->setPreguntaDao($locator->get('PreguntaDao'));
                         $instance->setPaginaDao($locator->get('PaginaDao'));
+                        $instance->setDao($locator->get('FormularioDao'));
                     }
                 },
                         

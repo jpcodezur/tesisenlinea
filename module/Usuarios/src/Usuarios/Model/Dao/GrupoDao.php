@@ -16,6 +16,10 @@ class GrupoDao {
     public function setParams($params) {
         $this->params = $params;
     }
+    
+    public function addParams($params){
+        $this->params[] = $params;
+    }
 
     public function setJoin($select) {
         if (isset($this->params["join"])) {

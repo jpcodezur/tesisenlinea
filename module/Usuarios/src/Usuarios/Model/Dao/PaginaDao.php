@@ -48,6 +48,51 @@ class PaginaDao {
 
         return array("entities" => $enties, "paginator" => $paginator);
     }
+    
+    public function fetchAllWizard() {
+
+        $enties = array();
+
+        $sql = $this->tableGateway->getSql();
+
+        $select = $this->tableGateway->getSql()->select();
+        
+        $select->where(array(strtolower($this->params["table"]).".estado" => "1"));
+        
+        $select->join(
+                array('gr' => 'grupos'), 'gr.id_pagina = paginas.id', array('tituloGrupo' => 'titulo','idGrupo' => 'id')
+        );
+        
+        $select->join(
+                array('pre' => 'preguntas'), 'gr.id = pre.id_grupo', array('nombrePregunta' => 'nombre','tituloPregunta' => 'titulo','idPregunta' => 'id')
+        );
+        
+        //$select = $this->setJoin($select);
+        
+        
+        $select->order('id ASC');
+
+        $adapter = new \Zend\Paginator\Adapter\DbSelect($select, $sql);
+        $paginator = new \Zend\Paginator\Paginator($adapter);
+        
+        //$salida = $select->getSqlString();
+        
+        foreach ($this->tableGateway->selectWith($select) as $entity) {
+            
+            $unaEntity = new $this->params["entity"]();
+            
+            foreach ($this->params["attrs"] as $attr) {
+                $set = "set" . ucwords($attr);
+                $unaEntity->$set($entity[$attr]);
+            }
+            
+            //$unaEntity = $this->setJoinFields($entity,$unaEntity);
+
+            $enties[] = $unaEntity;
+        }
+
+        return array("entities" => $enties, "paginator" => $paginator);
+    }
 
     public function fetchOne($param) {
 
