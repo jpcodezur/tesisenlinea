@@ -13,8 +13,16 @@ class PreguntaDao {
         $this->tableGateway = $tableGateway;
     }
     
+    public function getTableGateway(){
+        return $this->tableGateway;
+    }
+    
     public function setParams($params){
         $this->params = $params;
+    }
+    
+    public function addParams($params){
+        $this->params[] = $params;
     }
 
     public function setJoin($select) {

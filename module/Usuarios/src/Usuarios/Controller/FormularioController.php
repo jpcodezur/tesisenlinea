@@ -13,6 +13,7 @@ class FormularioController extends AbstractActionController {
     private $preguntaDao;
     private $paginaDao;
     private $paginaParams;
+    private $dao;
 
     public function __construct() {
         $paginaParams = new PaginaParams();
@@ -21,6 +22,10 @@ class FormularioController extends AbstractActionController {
 
     public function setPreguntaDao($dao) {
         $this->preguntaDao = $dao;
+    }
+    
+    public function setDao($dao) {
+        $this->dao = new \Usuarios\Model\Dao\FormularioDao($dao);
     }
     
     public function setPaginaDao($dao) {
@@ -33,8 +38,51 @@ class FormularioController extends AbstractActionController {
     }
 
     public function wizardAction(){
-        $paginas = $this->paginaDao->fetchAll();
-        return array("paginas" => $paginas["entities"]);
+        
+        $paginas = array();
+        
+        $formulario = null;
+        
+        if(isset($_SESSION["miSession"]["usuario"])){
+            $usuario = $_SESSION["miSession"]["usuario"]; 
+        
+            $pagina = $this->dao->getLastPage($usuario->getId());
+
+            $paginas = $this->dao->getPaginas(false);
+            
+            $formulario = $this->dao->getFormulario($pagina);
+        
+        }
+        
+        return array("paginas" => $paginas,"formulario" => $formulario);
     }
+    
+    public function nextAction(){
+        
+        $idPagina = $this->request->getQuery('id_pagina');
+        
+        $formulario = $this->dao->getFormulario($idPagina);
+        
+        $view = new JsonModel(array($formulario));
+
+        $view->setTerminal(true);
+
+        return $view;
+    }
+    
+    public function prevAction(){
+        
+        $idPagina = $this->request->getQuery('id_pagina');
+        
+        $formulario = $this->dao->getFormulario($idPagina);
+        
+        $view = new JsonModel(array($formulario));
+
+        $view->setTerminal(true);
+
+        return $view;
+    }
+    
+    
     
 }
