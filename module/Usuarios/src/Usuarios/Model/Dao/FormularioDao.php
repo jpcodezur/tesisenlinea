@@ -14,7 +14,40 @@ class FormularioDao {
         $this->adapter = $adapter;
     }
     
-    public function getPaginas(){
+    public function getLastPage($idUsuario){
+        $sql = "select id_ultima_pagina_completa,terminado from usuario_formulario WHERE id_usuario = $idUsuario";
+        
+        $res = $this->adapter->query($sql);
+        
+        if($res){
+           $result = $res->execute();
+           foreach($result as $r){
+               if(!$r["terminado"]){
+                   return $r["id_ultima_pagina_completa"];
+               }
+           }
+        }
+        
+        return false;
+    }
+    
+    public function savePaginaCompletada($idUsuario,$idPagina,$terminado = false){
+        if($this->getLastPage($idUsuario)){
+            $sql = "UPDATE TABLE usuario_formulario, set id_ultima_pagina_completa=$idPagina,terminado=$terminado  WHERE id_usuario = $idUsuario";
+        }else{
+            $sql = "INSERT INTO usuario_formulario (id_usuario,id_ultima_pagina_completa,terminado) VALUES ($idUsuario,$idPagina,$terminado";
+        }
+        
+        $res = $this->adapter->query($sql);
+        return $res->execute();
+    }
+
+
+    public function getFormulario($idPagina){
+        
+    }
+    
+    public function getPaginas($getGrupo = true){
         
         $sql = "select * from paginas WHERE estado = 1";
         
@@ -27,7 +60,9 @@ class FormularioDao {
                 $unaPagina = new Pagina();
                 $unaPagina->setId($r["id"]);
                 $unaPagina->setTitulo($r["titulo"]);
-                $unaPagina->grupos = $this->getGruposPorPagina($r["id"]);
+                if($getGrupo){
+                    $unaPagina->grupos = $this->getGruposPorPagina($r["id"]);
+                }
                 $paginas[] = $unaPagina;
             }
         }
