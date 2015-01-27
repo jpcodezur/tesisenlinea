@@ -50,7 +50,7 @@ class EditBasico {
 
                     $mensaje = ucwords($key) . " must have a minimum of " . $value["min"];
 
-                    if ($value["max"] != -1) {
+                    if ($value["max"] !== -1) {
                         $mensaje .= "and a maximum of " . $value["max"];
                     }
                 }
