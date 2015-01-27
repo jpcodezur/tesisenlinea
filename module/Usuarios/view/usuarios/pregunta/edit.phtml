@@ -46,6 +46,30 @@
         <?php endif; ?>
         <?php endforeach; ?>
         
+        <div class="control-group ">
+            <label style="float: left; width: 126px;" for="form-field-select-1">Requerido</label>
+            <div style="float: left;" class="span3">
+                <label>
+                    <input name="requerida" <?php echo ($this->entity->getRequerida())?"checked":"" ?> class="ace-switch ace-switch-2" type="checkbox" />
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div style="clear:both"></div>
+        
+        <div class="control-group ">
+            <label style="float: left; width: 126px;" for="form-field-select-1">Es pregunta</label>
+            <div style="float: left;" class="span3">
+                <label>
+                    <input name="es_pregunta" <?php echo ($this->entity->getEs_pregunta())?"checked":"" ?> class="ace-switch ace-switch-2" type="checkbox" />
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div style="clear:both"></div>
+        
         <input type="hidden" name="id" value="<?php echo $this->entity->getId() ?>">
         
         <div class="form-actions"><button class="btn" type=submit>Save</button></div>
@@ -324,7 +348,7 @@
     });
     
     $(document).ready(function(){
-       $("select[name=id_grupo]").val("<?php echo $this->entity->getId_pagina() ?>").change(); 
+       $("select[name=id_grupo]").val("1<?php //echo $this->entity->getId_pagina() ?>").change(); 
     
         $(function () {
             $('textarea.mention').mentionsInput({

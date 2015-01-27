@@ -147,6 +147,14 @@ class PreguntaDao {
             $data[$attr] = $unaEntity->$get();
         }
         
+        if($unaEntity->getRequerida() == "on"){
+            $data["requerida"] = 1;
+        }
+        
+        if($unaEntity->getEs_pregunta() == "on"){
+            $data["es_pregunta"] = 1;
+        }
+        
         $saveValidator = "\Usuarios\Model\Dao\Validators\Save" . ucwords($this->params["controller"]);
         
         $validate = new $saveValidator($this->tableGateway, $this, $this->params);
@@ -176,6 +184,14 @@ class PreguntaDao {
         foreach ($this->params["edit_attrs"] as $attr) {
             $get = "get" . ucwords($attr);
             $data[$attr] = $unaEntity->$get();
+        }
+        
+        if($unaEntity->getRequerida() == "on"){
+            $data["requerida"] = 1;
+        }
+        
+        if($unaEntity->getEs_pregunta() == "on"){
+            $data["es_pregunta"] = 1;
         }
         
         $editValidator = "\Usuarios\Model\Dao\Validators\Edit" . ucwords($this->params["controller"]);

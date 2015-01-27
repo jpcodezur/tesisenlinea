@@ -28,6 +28,22 @@ class FormularioDao {
            }
         }
         
+        return $this->getLastPageOrden();
+    }
+    
+    public function getLastPageOrden(){
+        
+        $sql = "SELECT id FROM paginas WHERE orden = (SELECT MIN(orden) as minimo FROM `paginas` WHERE estado = 1) AND estado = 1";
+        
+        $res = $this->adapter->query($sql);
+        
+        if($res){
+           $result = $res->execute();
+           foreach($result as $r){
+               return $r["id"];
+            }
+        }
+        
         return false;
     }
     
@@ -44,7 +60,8 @@ class FormularioDao {
 
 
     public function getFormulario($idPagina){
-        
+        $res = $this->getGruposPorPagina($idPagina);
+        return $res;
     }
     
     public function getPaginas($getGrupo = true){
@@ -95,7 +112,61 @@ class FormularioDao {
         return $grupos;
     }
     
-    public function getPreguntasPorGrupo($idGrupo){
+    
+    
+    public function getPreguntaPadre($string){
+        $separadores = array("?",".","!",":",";",",");
+        
+        $palabras = explode(" ", $string);
+        
+        $res = "";
+        
+        foreach($palabras as $palabra){
+            if(strpos($palabra, "@") === 0){
+                $palabra = substr($palabra, 1);
+                foreach($separadores as $separador){
+                    $pos = strpos($palabra, $separador);
+                    if($pos !== false){
+                        $palabra = substr($palabra, 0,$pos);
+                    }
+                }
+                $respuesta[$string] = $this->getRespuestaPregunta($palabra);
+            }
+        }
+        
+        foreach($respuesta as $palabra){
+            foreach($respuesta as $key => $value){
+                if($key == $palabra){
+                    $palabra = $value;
+                }
+                $res = $palabra. " ";
+            }
+        }
+        
+        
+        return $res;
+    }
+    
+    public function getRespuestaPregunta($nomPregunta,$idUsuario){
+        $sql = "SELECT p.id as preguntaId,r.respuesta as respuesta FROM preguntas as p"
+            . " INNER JOIN respuestas as r on r.id_preunta = p.id and r.id_usuario=".$idUsuario
+            . " WEHRE p.nombre = $nomPregunta AND p.estado=1 AND r.estado = 1";
+        
+        $res = $this->adapter->query($sql);
+        
+        $retorno = "";
+        
+        if($res){
+            $result = $res->execute();
+            foreach($result as $r){
+                $retorno = $r["respuesta"];
+            }
+        }
+        
+        return $retorno;
+    }
+    
+    public function getPreguntasPorGrupo($idGrupo,$idUsuario=null){
         
         $sql = "select * from preguntas WHERE estado = 1 AND id_grupo=".$idGrupo;
         

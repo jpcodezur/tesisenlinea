@@ -28,7 +28,6 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-
             <?php foreach ($this->params["add_attrs"] as $attr): ?>
                 <?php if (!in_array($attr, $this->params["exceptions_add"])) : ?>
                     <div class="control-group ">
@@ -44,6 +43,29 @@
                 <?php endif; ?>
             <?php endforeach; ?>
 
+            <div class="control-group ">
+                <label style="float: left; width: 126px;" for="form-field-select-1">Requerido</label>
+                <div style="float: left;" class="span3">
+                    <label>
+                        <input name="requerida" class="ace-switch ace-switch-2" type="checkbox" />
+                        <span class="lbl"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div style="clear:both"></div>
+            
+            <div class="control-group ">
+                <label style="float: left; width: 126px;" for="form-field-select-1">Es pregunta</label>
+                <div style="float: left;" class="span3">
+                    <label>
+                        <input name="es_pregunta" checked="checked" class="ace-switch ace-switch-2" type="checkbox" />
+                        <span class="lbl"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div style="clear:both"></div>
             <div class="form-actions"><button class="btn" type=submit>Save</button></div>
 
         </form>

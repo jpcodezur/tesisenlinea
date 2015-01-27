@@ -26,7 +26,7 @@ class PreguntaController extends AbstractActionController {
             "controller" => "pregunta",
             "entity" => "Usuarios\Model\Entity\Pregunta",
             "exceptions_add" => array("id_grupo"),
-            "attrs" => array("id", "nombre", "titulo", "orden", "estado", "id_grupo"),
+            "attrs" => array("id", "nombre", "titulo", "orden", "estado", "id_grupo","requerida","es_pregunta"),
             "add_attrs" => array("nombre", "titulo", "orden", "id_grupo"),
             "edit_attrs" => array("nombre", "titulo", "orden"),
             "list_attrs" => array("nombre", "titulo", "orden",
@@ -39,13 +39,15 @@ class PreguntaController extends AbstractActionController {
                     "strlen" => array("titulo" => array(
                             "min" => "5",
                             "max" => "-1")),
-                    "numeric" => array("orden")
+                    "numeric" => array("orden"),
+                    "required" => array("Form Page" => "id_grupo")
                 ),
                 "edit" => array(
                     "strlen" => array("titulo" => array(
                             "min" => "5",
                             "max" => "-1")),
-                    "numeric" => array("orden")
+                    "numeric" => array("orden"),
+                    "required" => array("Form Page" => "id_grupo")
                 )
             )
         );
@@ -133,6 +135,9 @@ class PreguntaController extends AbstractActionController {
                 $set = "set" . ucwords($attr);
                 $entity->$set($this->getRequest()->getPost($attr, null));
             }
+            
+            $entity->setRequerida($this->getRequest()->getPost("requerida", 0));
+            $entity->setEs_pregunta($this->getRequest()->getPost("es_pregunta", 0));
 
             $response = $this->dao->guardar($entity);
         }

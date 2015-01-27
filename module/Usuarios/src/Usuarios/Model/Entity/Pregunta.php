@@ -9,6 +9,8 @@ class Pregunta {
     private $nombre;
     private $titulo;
     private $orden;
+    private $requerida;
+    private $es_pregunta;
     private $estado;
     
     function getId() {
@@ -17,6 +19,10 @@ class Pregunta {
 
     function getId_grupo() {
         return $this->id_grupo;
+    }
+    
+    function getEs_pregunta(){
+        return $this->es_pregunta;
     }
 
     function getNombre() {
@@ -29,6 +35,10 @@ class Pregunta {
 
     function getOrden() {
         return $this->orden;
+    }
+    
+    function getRequerida() {
+        return $this->requerida;
     }
 
     function getEstado() {
@@ -57,6 +67,23 @@ class Pregunta {
 
     function setEstado($estado) {
         $this->estado = $estado;
+    }
+    
+    function setRequerida($requerida) {
+        $this->requerida = $requerida;
+    }
+    
+    function setEs_pregunta($param){
+        $this->es_pregunta = $param;
+    }
+    
+    
+    public function isRequired(){
+        if($this->requerida){
+            return true;
+        }
+        
+        return false;
     }
 
 

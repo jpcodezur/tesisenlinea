@@ -41,21 +41,23 @@
                                         <?php $count = 1; ?>
                                         <?php foreach ($this->paginas as $pagina):?>
                                         <div class="step-pane <?php echo ($count ===1 )? "active": ""?>" id="step<?php echo $count?>">
-                                            <h3 class="lighter block green"><?php echo $pagina->getTitulo() ?></h3>
-
+                                            <?php foreach($this->grupos as $grupo):?>
+                                            <h4 class="header green"><?php echo $grupo->getTitulo() ?></h4>
                                             <form class="form-horizontal" id="sample-form" >
-                                                
-                                            <div class="control-group">
-                                                <label class="control-label" for="inputWarning">Input with warning</label>
+                                                <?php foreach($grupo->preguntas as $pregunta): ?>
+                                                <div class="control-group">
+                                                    <label class="control-label" for=""><?php echo $pregunta->getTitulo() ?></label>
 
-                                                <div class="controls">
-                                                    <span class="span6 input-icon input-icon-right">
-                                                        <input class="span12" type="text" id="" />
-                                                    </span>
-                                                    <!--<span class="help-inline">Something may have gone wrong</span>-->
+                                                    <div class="controls">
+                                                        <span class="span6 input-icon input-icon-right">
+                                                            <input class="span12" type="text" id="" <?php echo $pregunta->isRequired() ?>/>
+                                                        </span>
+                                                        <!--<span class="help-inline">Something may have gone wrong</span>-->
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                <?php endforeach; ?>
                                             </form>
+                                            <?php endforeach; ?>
                                         </div>
                                         <?php $count++; ?>
                                         <?php endforeach; ?>

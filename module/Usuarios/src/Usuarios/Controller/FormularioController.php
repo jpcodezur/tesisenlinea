@@ -41,20 +41,24 @@ class FormularioController extends AbstractActionController {
         
         $paginas = array();
         
-        $formulario = null;
+        $grupos = null;
         
         if(isset($_SESSION["miSession"]["usuario"])){
             $usuario = $_SESSION["miSession"]["usuario"]; 
         
             $pagina = $this->dao->getLastPage($usuario->getId());
-
+            
+            if(!$pagina){
+                $pagina = 1;
+            }
+            
             $paginas = $this->dao->getPaginas(false);
             
-            $formulario = $this->dao->getFormulario($pagina);
+            $grupos = $this->dao->getFormulario($pagina);
         
         }
         
-        return array("paginas" => $paginas,"formulario" => $formulario);
+        return array("paginas" => $paginas,"grupos" => $grupos);
     }
     
     public function nextAction(){
