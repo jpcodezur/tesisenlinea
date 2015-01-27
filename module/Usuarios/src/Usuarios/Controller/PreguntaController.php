@@ -26,8 +26,8 @@ class PreguntaController extends AbstractActionController {
             "controller" => "pregunta",
             "entity" => "Usuarios\Model\Entity\Pregunta",
             "exceptions_add" => array("id_grupo"),
-            "attrs" => array("id", "nombre", "titulo", "orden", "estado", "id_grupo","requerida","es_pregunta"),
-            "add_attrs" => array("nombre", "titulo", "orden", "id_grupo"),
+            "attrs" => array("id", "nombre", "titulo", "orden", "estado", "id_grupo","requerida","es_pregunta","sistema_sugiere"),
+            "add_attrs" => array("nombre", "titulo", "orden", "id_grupo","numero_preguntas"),
             "edit_attrs" => array("nombre", "titulo", "orden"),
             "list_attrs" => array("nombre", "titulo", "orden",
                 array("estado" => array(

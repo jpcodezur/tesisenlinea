@@ -32,3 +32,6 @@
     text-align: right;
     width: 15%;
 }
+.label_float_left{float: left; width: 300px;}
+#form-field-select-1,textarea.mention{width: 397px !important;}
+input[name=nombre]{width: 382px;}

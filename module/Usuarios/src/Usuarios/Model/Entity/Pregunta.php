@@ -12,7 +12,16 @@ class Pregunta {
     private $requerida;
     private $es_pregunta;
     private $estado;
+    private $numero_preguntas;
     
+    function getNumero_preguntas() {
+        return $this->numero_preguntas;
+    }
+
+    function setNumero_preguntas($numero_preguntas) {
+        $this->numero_preguntas = $numero_preguntas;
+    }
+
     function getId() {
         return $this->id;
     }
@@ -43,6 +52,10 @@ class Pregunta {
 
     function getEstado() {
         return $this->estado;
+    }
+    
+    function getSistema_sugiere(){
+        return $this->sistema_sugiere;
     }
 
     function setId($id) {
@@ -77,6 +90,9 @@ class Pregunta {
         $this->es_pregunta = $param;
     }
     
+    function setSistema_sugiere($param){
+        $this->sistema_sugiere = $param;
+    }
     
     public function isRequired(){
         if($this->requerida){

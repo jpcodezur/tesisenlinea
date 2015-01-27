@@ -20,7 +20,7 @@
     <form method="post" action="<?php echo $this->url('usuarios', array('controller' => $this->params["controller"], 'action' => 'edit')); ?>">
         
         <div class="control-group ">
-                <label for="form-field-select-1">Form Page</label>
+                <label for="form-field-select-1">Grupo</label>
                 <select id="form-field-select-1" name="id_grupo">
                     <option value="">Select</option>
                     <?php foreach($this->pages as $page):?>
@@ -30,24 +30,66 @@
         </div>
         
         <?php foreach($this->params["add_attrs"] as $attr): ?>
+        <?php if($attr != "orden"): ?>
         <?php if(!in_array($attr, $this->params["exceptions_add"])) :?>
         <div class="control-group ">
             <label for="<?php echo $attr ?>" class="control-label"><?php echo ucwords($attr) ?></label>
             <div class="controls">
                 <?php $get = "get".  ucwords($attr); ?>
-                
                 <?php if($attr == "titulo"): ?>
-                    <textarea name="<?php echo $attr ?>" class='mention'><?php echo $this->entity->$get() ?></textarea>
+                    <textarea name="<?php echo $attr ?>" class='mention'></textarea>
                 <?php else:?>
                     <input type="text" name="<?php echo $attr ?>" value="<?php echo $this->entity->$get() ?>">
                 <?php endif;?>
             </div>
         </div>
         <?php endif; ?>
+        <?php endif; ?>
         <?php endforeach; ?>
         
+        <div class="control-group">
+            <label for="" class="label_float_left control-label">Orden</label>
+            <div class="span4">
+                <input type="text" name="orden" class="input-mini" id="orden" />
+                <div class="space-6"></div>
+            </div>
+        </div>
+
+        <div style="clear:both"></div>
+
         <div class="control-group ">
-            <label style="float: left; width: 126px;" for="form-field-select-1">Requerido</label>
+            <label for="" class="label_float_left control-label">Sugerido Sistema</label>
+            <div style="float: left;" class="span3">
+                <label>
+                    <input name="sistema_sugiere" class="ace-switch ace-switch-2" type="checkbox" />
+                    <span class="lbl"></span>
+                </label>
+            </div>
+        </div>
+
+        <div style="clear:both"></div>
+
+        <div class="control-group ">
+
+            <div class="controls">
+                <textarea name="sugerido" placeholder="Texto sugerido. ejemplo: @nivel_estudio en @nombre_carrera" class='mention' disabled="disabled"></textarea>
+            </div>
+        </div>
+
+        <div style="clear:both"></div>
+
+        <div class="control-group">
+            <label for="" class="label_float_left control-label">Nro preguntas requeridas</label>
+            <div class="span4">
+                <input  type="text" class="input-mini" id="numero_preguntas" />
+                <div class="space-6"></div>
+            </div>
+        </div>
+
+        <div style="clear:both"></div>
+        
+        <div class="control-group ">
+            <label class="label_float_left" for="form-field-select-1">Requerido</label>
             <div style="float: left;" class="span3">
                 <label>
                     <input name="requerida" <?php echo ($this->entity->getRequerida())?"checked":"" ?> class="ace-switch ace-switch-2" type="checkbox" />
@@ -59,7 +101,7 @@
         <div style="clear:both"></div>
         
         <div class="control-group ">
-            <label style="float: left; width: 126px;" for="form-field-select-1">Es pregunta</label>
+            <label class="label_float_left" for="form-field-select-1">Es pregunta</label>
             <div style="float: left;" class="span3">
                 <label>
                     <input name="es_pregunta" <?php echo ($this->entity->getEs_pregunta())?"checked":"" ?> class="ace-switch ace-switch-2" type="checkbox" />
@@ -348,8 +390,31 @@
     });
     
     $(document).ready(function(){
-       $("select[name=id_grupo]").val("1<?php //echo $this->entity->getId_pagina() ?>").change(); 
-    
+        
+        $('#orden').ace_spinner({value: <?php echo trim($this->entity->getOrden()) ?>, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+            .on('change', function () {
+                //alert(this.value)
+            });
+            
+            $('#numero_preguntas').ace_spinner({value: <?php echo trim($this->entity->getNumero_preguntas()) ?>, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+            .on('change', function () {
+                //alert(this.value)
+            });
+       
+       $("input[name=nombre]").attr("placeholder", "Nombre del campo sin espacios, ejemplo: nivel_estudio");
+
+        $("input[name=sistema_sugiere]").change(function () {
+            if ($(this).is(":checked")) {
+                $("textarea[name=sugerido]").attr("disabled", false);
+                console.log("a")
+            } else {
+                $("textarea[name=sugerido]").attr("disabled", true);
+                console.log("b")
+            }
+        });
+       
+       $("select[name=id_grupo]").change().val("<?php echo $this->entity->getId_grupo() ?>");
+       
         $(function () {
             $('textarea.mention').mentionsInput({
                 onDataRequest: function (mode, query, callback) {
@@ -362,7 +427,7 @@
                     });
                 }
             });
-
+            $("textarea[name=titulo]").val("<?php echo $this->entity->getTitulo() ?>");
         });
     });
 </script>
