@@ -8,7 +8,17 @@ class Pagina {
     private $titulo;
     private $orden;
     private $estado;
+    private $inputs;
     
+    function getInputs() {
+        return $this->inputs;
+    }
+
+    function setInputs($inputs) {
+        $this->inputs = $inputs;
+    }
+
+        
     public function __construct(){
         
     }

@@ -1,29 +1,27 @@
 <?php
 
-namespace Usuarios\Controller;
+namespace Usuarios\Controller\Inputs;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Usuarios\Controller\Params\PaginaParams;
 use Zend\View\Model\JsonModel;
+use Usuarios\Model\Dao\InputDao;
+use Usuarios\Model\Entity\Input;
 
-class PaginaController extends AbstractActionController {
+class InputController extends AbstractActionController {
 
     private $dao;
-    private $params;
 
     public function __construct() {
-        $paginaParams = new PaginaParams();
-        $this->params = $paginaParams->getParams();
+        
     }
 
     public function setTableGateway($tableGateway) {
         $this->tableGateway = $tableGateway;
     }
 
-    public function setDao($dao) {
-        $this->dao = $dao;
-        $this->dao->setParams($this->params);
+    public function setDao($dao){
+        $this->dao = new InputDao($dao);
     }
 
     public function IndexAction() {
@@ -32,10 +30,9 @@ class PaginaController extends AbstractActionController {
 
     public function ListAction() {
         $response = new \Usuarios\MisClases\Respuesta();
-
         $resp_temp = $this->params()->fromRoute('response');
 
-        if ($resp_temp) {
+        if ($resp_temp == true) {
             $response = $resp_temp;
         }
 
@@ -49,40 +46,62 @@ class PaginaController extends AbstractActionController {
     public function addAction() {
 
         $response = new \Usuarios\MisClases\Respuesta();
-
+        
         if ($this->request->isPost()) {
 
-            $entity = new $this->params["entity"]();
+            $unaEntity = new Input();
+            
+            $unaEntity->setNombre($this->getRequest()->getPost("nombre", null));
+            $unaEntity->setLabel($this->getRequest()->getPost("label", null));
+            $unaEntity->setRequired($this->getRequest()->getPost("obligatorio", null));
+            $unaEntity->setTipo($this->getRequest()->getPost("tipo", null));
+            $unaEntity->setEstado(1);
+            $unaEntity->setOrden(null);
+            $unaEntity->setIdPagina($this->getRequest()->getPost("id_pagina", null));
+            
+            $id = $this->dao->save($unaEntity);
+            
+            switch ($unaEntity->getTipo()) {
+                case "texto":
+                    $this->saveTexto(array(
+                        
+                    ));
+                    break;
 
-            foreach ($this->params["attrs"] as $attr) {
-                $set = "set" . ucwords($attr);
-                $entity->$set($this->getRequest()->getPost($attr, null));
+                default:
+                    break;
             }
-
-            $response = $this->dao->guardar($entity);
+            
+            $response = $this->dao->save();
+            
         }
-
-        return new ViewModel(array("params" => $this->params, "response" => $response));
         
+        $view = new JsonModel(array( "response" => $response));
+
+        $view->setTerminal(true);
+
+        return $view;
     }
 
     public function editAction() {
 
         $response = new \Usuarios\MisClases\Respuesta();
-        
+
+        $pages = $this->grupoDao->fetchAll();
+
         if ($this->request->isGet()) {
-            
+
             $id = $this->request->getQuery('id');
 
             $entity = $this->dao->fetchOne(array("id" => $id));
-            
-            return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
+
+            return new ViewModel(array("pages" => $pages["entities"], "params" => $this->params, "response" => $response, "entity" => $entity));
         }
 
         if ($this->request->isPost()) {
 
             $id = $this->getRequest()->getPost('id', null);
-            
+
             $entity = $this->dao->fetchOne(array("id" => $id));
 
             foreach ($this->params["edit_attrs"] as $attr) {
@@ -113,11 +132,24 @@ class PaginaController extends AbstractActionController {
             }
 
             return $this->forward()->dispatch(
-                            'Usuarios\Controller\\'.$this->params["controller"], array(
+                            'Usuarios\Controller\\' . $this->params["controller"], array(
                         'action' => 'list',
                         'response' => $response
             ));
         }
+    }
+
+    public function getInputsJsonAction() {
+        
+        $query = $this->request->getQuery('query');
+        
+        $result = $this->dao->fetchOneLike($query);
+
+        $view = new JsonModel(array($result));
+
+        $view->setTerminal(true);
+
+        return $view;
     }
 
 }

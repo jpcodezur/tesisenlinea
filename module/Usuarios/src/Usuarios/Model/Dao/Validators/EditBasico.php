@@ -8,7 +8,7 @@ class EditBasico {
     protected $dao;
     protected $params;
 
-    public function __construct($tableGateway, $dao, $params) {
+    public function __construct($tableGateway="", $dao, $params) {
         $this->tableGateway = $tableGateway;
         $this->dao = $dao;
         $this->params = $params;

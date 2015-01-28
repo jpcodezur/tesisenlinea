@@ -1,0 +1,61 @@
+<div class="">
+    <h3>Nuevo Control</h3>
+    <div>
+        <input type="text" name="nombre" placeholder="Nombre">
+        <textarea name="nombre" placeholder="Etiqueta" class='mention'></textarea>
+        <div class="">
+        <label class="popup-label">Obligatorio</label>
+        <label>
+                <input name="obligatorio" class="ace-switch ace-switch-2" type="checkbox" />
+                <span class="lbl"></span>
+        </label>
+        </div>
+    </div>
+    <div>
+        <label>Tipo de control</label>
+    </div>
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active">
+                <a data-toggle="tab" href="#home" tipo="texto">
+                    Texto
+                </a>
+            </li>
+
+            <li>
+                <a data-toggle="tab" href="#profile" tipo="dropdown">
+                    Dropdown
+                </a>
+            </li>
+
+            <li class="dropdown">
+                <a data-toggle="tab" href="#" tipo="imagen">
+                    Imagen
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="home" class="tab-pane in active">
+                <div class="widget-main">
+                    <label>Respuestas requeridas</label>
+                    <input type="text" class="input-mini" id="numero-respuestas" />
+                    <div class="space-6"></div>
+                </div>
+            </div>
+
+            <div id="profile" class="tab-pane">
+                <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+            </div>
+
+            <div id="dropdown1" class="tab-pane">
+                <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+            </div>
+
+            <div id="dropdown2" class="tab-pane">
+                <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin.</p>
+            </div>
+        </div>
+    </div>
+    <button id="close-modal" class="btn  btn-primary">Save</button>
+</div>

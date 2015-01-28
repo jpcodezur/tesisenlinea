@@ -9,9 +9,10 @@ return array(
             'Usuarios\Controller\Alerta' => 'Usuarios\Controller\AlertaController',
             'Usuarios\Controller\Mensaje' => 'Usuarios\Controller\MensajeController',
             'Usuarios\Controller\Pagina' => 'Usuarios\Controller\PaginaController',
-            'Usuarios\Controller\Grupo' => 'Usuarios\Controller\GrupoController',
+            'Usuarios\Controller\Input' => 'Usuarios\Controller\Inputs\InputController',
             'Usuarios\Controller\Pregunta' => 'Usuarios\Controller\PreguntaController',
             'Usuarios\Controller\Formulario' => 'Usuarios\Controller\FormularioController',
+            'Usuarios\Controller\FormularioEdit' => 'Usuarios\Controller\FormularioEditController',
         ),
     ),
     'db' => array(
@@ -125,6 +126,14 @@ return array(
         ),
     ),
     'view_manager' => array(
+        'display_not_found_reason' => true,
+        'display_exceptions'       => true,
+        'doctype'                  => 'HTML5',
+        'not_found_template'       => 'error/404',
+        'exception_template'       => 'error/index',
+        'template_map' => array(
+            'formulario-edit/popup'  => __DIR__ . '/../view/usuarios/formulario-edit/popup.phtml',
+        ),
         'template_path_stack' => array(
             'Usuarios' => __DIR__ . '/../view',
         ),

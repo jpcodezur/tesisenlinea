@@ -1,0 +1,276 @@
+<div class="page-content">
+    <div class="page-header position-relative">
+        <h1>
+            Asistente para la confeccion de la Tesis
+            <button id="save" class="save-formulario btn btn-primary">Save</button>
+        </h1>
+    </div><!--/.page-header-->
+
+    <div class="row-fluid">
+        <div class="span12">
+            <!--PAGE CONTENT BEGINS-->
+
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-blue widget-header-flat">
+                            <h4 class="lighter h4-action-paginas">Pasos
+                                <div class="action-paginas hidden-phone visible-desktop action-buttons">
+                                    <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "edit")) ?>" class="green">
+                                        <i class="icon-pencil bigger-130"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>/id_pagina" class="red remove">
+                                        <i class="icon-trash bigger-130"></i>
+                                    </a>
+                                    <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>/id_pagina" class="red remove">
+                                        <i class="icon-plus-sign bigger-130"></i>
+                                    </a>
+                                </div>
+                            </h4>
+
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="row-fluid">
+                                    <div id="fuelux-wizard" class="row-fluid hide" data-target="#step-container">
+                                        <ul class="wizard-steps">
+                                            <?php $count = 1; ?>
+                                            <?php foreach ($this->formulario->getPaginas() as $pagina): ?>
+                                            <li id_page="<?php echo $pagina->getId() ?>" data-target="#step<?php echo $count ?>" class="<?php echo ($count === 1 ) ? "active" : "" ?>">
+                                                    <span class="step"><?php echo $count; ?></span>
+                                                    <span class="title"><?php echo $pagina->getTitulo() ?></span>
+                                                </li>
+                                                <?php $count++; ?>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+
+                                    <hr />
+                                    <div class="step-content row-fluid position-relative" id="step-container">
+
+                                        <div class="widget-header widget-header-blue widget-header-flat">
+                                            <h4 class="lighter h4-action-paginas">Controles 
+                                                <div class="action-paginas hidden-phone visible-desktop action-buttons">
+                                                    <a id="add-input" class="red remove">
+                                                        <i class="icon-plus-sign bigger-130"></i>
+                                                    </a>
+                                                </div>
+                                            </h4>
+                                        </div>
+
+                                        <?php $count = 1; ?>
+                                        <?php foreach ($this->formulario->getPaginas() as $pagina): ?>
+
+                                            <div class="step-pane <?php echo ($count === 1 ) ? "active" : "" ?>" id="step<?php echo $count ?>">
+
+                                                <form class="form-horizontal" id="sample-form" >
+                                                    <?php foreach ($pagina->getInputs() as $input): ?>
+                                                        <div class="control-group">
+                                                            <label class="control-label" for=""><?php echo $input->getLabel() ?></label>
+
+                                                            <div class="controls">
+                                                                <span class="span6 input-icon input-icon-right">
+
+                                                                </span>
+
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </form>
+                                            </div>
+                                            <?php $count++; ?>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <hr />
+                                    <div class="row-fluid wizard-actions">
+                                        <button class="btn btn-prev">
+                                            <i class="icon-arrow-left"></i>
+                                            Prev
+                                        </button>
+
+                                        <button class="btn btn-success btn-next" data-last="Finish ">
+                                            Next
+                                            <i class="icon-arrow-right icon-on-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div><!--/widget-main-->
+                        </div><!--/widget-body-->
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-wizard" class="modal hide">
+                <div class="modal-header" data-target="#modal-step-contents">
+                    <ul class="wizard-steps clearfix">
+                        <li data-target="#modal-step1" class="active">
+                            <span class="step">1</span>
+                            <span class="title">Validation states</span>
+                        </li>
+
+                        <li data-target="#modal-step2">
+                            <span class="step">2</span>
+                            <span class="title">Alerts</span>
+                        </li>
+
+                        <li data-target="#modal-step3">
+                            <span class="step">3</span>
+                            <span class="title">Payment Info</span>
+                        </li>
+
+                        <li data-target="#modal-step4">
+                            <span class="step">4</span>
+                            <span class="title">Other Info</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="modal-body step-content" id="modal-step-contents">
+                    <div class="step-pane active" id="modal-step1">
+                        <div class="center">
+                            <h4 class="blue">Step 1</h4>
+                        </div>
+                    </div>
+
+                    <div class="step-pane" id="modal-step2">
+                        <div class="center">
+                            <h4 class="blue">Step 2</h4>
+                        </div>
+                    </div>
+
+                    <div class="step-pane" id="modal-step3">
+                        <div class="center">
+                            <h4 class="blue">Step 3</h4>
+                        </div>
+                    </div>
+
+                    <div class="step-pane" id="modal-step4">
+                        <div class="center">
+                            <h4 class="blue">Step 4</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer wizard-actions">
+                    <button class="btn btn-small btn-prev">
+                        <i class="icon-arrow-left"></i>
+                        Prev
+                    </button>
+
+                    <button class="btn btn-success btn-small btn-next" data-last="Finish ">
+                        Next
+                        <i class="icon-arrow-right icon-on-right"></i>
+                    </button>
+
+                    <button class="btn btn-danger btn-small pull-left" data-dismiss="modal">
+                        <i class="icon-remove"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div><!--PAGE CONTENT ENDS-->
+        </div><!--/.span-->
+    </div><!--/.row-fluid-->
+    <div class="page-header position-relative">
+        <h1>
+
+            <button id="save" class="btn  btn-primary">Save</button>
+        </h1>
+    </div><!--/.page-header-->
+</div><!--/.page-content-->
+<style>
+    .save-formulario{
+        margin-right: -8px;
+    }   
+    #save{
+        float: right;
+    }
+    .tab-content {
+        border: 1px solid #c5d0dc;
+        padding: 19px 12px;
+        position: relative;
+        z-index: 11;
+    }
+    .modal-body input{
+        /*width: 384px;*/
+    }
+    .span6 {
+        width: auto;
+    }
+    #add-input{
+        cursor:pointer
+    }
+    textarea.mention {
+        width: calc(100% - 12px);
+    }
+    .modal-body h3{
+        margin:0 5px 0 5px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#add-input").on(ace.click_event, function (e) {
+            e.preventDefault();
+            bootbox.dialog({});
+            $.ajax({
+                url:"popup",
+                data:"",
+                success:function(data){
+                    $(".bootbox .modal-body").html(data);
+                    $('#numero-respuestas')
+                        .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                        .on('change', function () {
+                    });
+            
+                     $(function () {
+                        $('textarea.mention').mentionsInput({
+                            onDataRequest: function (mode, query, callback) {
+                                var strquery = 'query=' + query;
+                                $.getJSON("<?php echo $this->url("usuarios", array("controller" => "input", "action" => "getInputsJson")) ?>", strquery, function (responseData) {
+                                    responseData = _.filter(responseData, function (item) {
+                                        return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+                                    });
+                                    callback.call(this, responseData);
+                                });
+                            }
+                        });
+
+                    });
+                }
+            })
+        });    
+        $(document).on("click","#close-modal",function(){
+            $('.bootbox').modal('toggle');
+            var 
+                id_pagina = $(".wizard-steps li.active").attr("id_page"),
+                nombre = $("input[name=nombre]").val(),
+                label = $(".mention").val(),
+                obligatorio = ($("input[name=obligatorio]").is("checked"))?"true":"false",
+                tipo = $("#myTab li.active a").attr("tipo"),
+                
+                input_data = {};
+                
+                if(tipo == "texto"){
+                    input_data.respuestas_requeridas = $("#numero-respuestas").val();
+                }
+                
+            $.ajax({
+                url:"<?php echo $this->url("usuarios", array("controller" => "input", "action" => "add")) ?>",
+                type:"post",
+                data:{
+                    id_pagina:id_pagina,
+                    nombre:nombre,
+                    label:label,
+                    obligatorio:obligatorio,
+                    tipo:tipo,
+                    input_data:input_data
+                },
+                success:function(data){
+                    
+                }
+            })
+        })
+    });
+</script>

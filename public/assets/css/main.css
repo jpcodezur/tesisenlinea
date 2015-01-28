@@ -35,3 +35,25 @@
 .label_float_left{float: left; width: 300px;}
 #form-field-select-1,textarea.mention{width: 397px !important;}
 input[name=nombre]{width: 382px;}
+.h4-action-paginas{
+    width: 100%;
+}
+.action-paginas{
+    float: right;
+    margin-right: 5px;
+}
+.popup-label{
+    float: left;
+    margin-right:10px;
+}
+#close-modal{
+    margin-top:10px;
+}
+.mentions-input-box .mentions > div > strong {
+    background: none repeat scroll 0 0 steelblue;
+    border: 1px solid silver;
+    border-radius: 4px;
+    font-weight: normal;
+    
+    margin-left: -7px;
+}
