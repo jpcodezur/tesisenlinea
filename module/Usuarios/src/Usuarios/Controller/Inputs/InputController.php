@@ -133,11 +133,11 @@ class InputController extends AbstractActionController {
                 $response = $this->dao->delete($id);
             }
 
-            return $this->forward()->dispatch(
-                            'Usuarios\Controller\\' . $this->params["controller"], array(
-                        'action' => 'list',
-                        'response' => $response
-            ));
+            $view = new JsonModel(array($response));
+
+            $view->setTerminal(true);
+
+            return $view;
         }
     }
 

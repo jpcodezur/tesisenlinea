@@ -106,21 +106,21 @@ class PaginaController extends AbstractActionController {
 
         if ($this->request->isGet()) {
 
-            $id = (int) $this->getEvent()->getRouteMatch()->getParam('id', null);
+            $id = (int) $this->getEvent()->getRouteMatch()->getParam('idpagina', null);
 
             if (!$id) {
-                $id = $this->request->getQuery('id');
+                $id = $this->request->getQuery('idpagina');
             }
 
             if ($id) {
                 $response = $this->dao->delete($id);
             }
 
-            return $this->forward()->dispatch(
-                            'Usuarios\Controller\\'.$this->params["controller"], array(
-                        'action' => 'list',
-                        'response' => $response
-            ));
+            $view = new JsonModel(array($response));
+
+            $view->setTerminal(true);
+
+            return $view;
         }
     }
 
