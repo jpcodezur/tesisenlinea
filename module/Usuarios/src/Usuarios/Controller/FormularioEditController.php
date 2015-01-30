@@ -32,4 +32,10 @@ class FormularioEditController extends AbstractActionController {
         return $view;
     }
     
+    public function popupPaginaAction(){
+        $view = new ViewModel();
+        $view->setTerminal(true);
+        return $view;
+    }
+    
 }

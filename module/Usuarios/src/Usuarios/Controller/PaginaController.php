@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Usuarios\Controller\Params\PaginaParams;
 use Zend\View\Model\JsonModel;
+use Usuarios\Model\Entity\Pagina;
 
 class PaginaController extends AbstractActionController {
 
@@ -52,17 +53,20 @@ class PaginaController extends AbstractActionController {
 
         if ($this->request->isPost()) {
 
-            $entity = new $this->params["entity"]();
-
-            foreach ($this->params["attrs"] as $attr) {
-                $set = "set" . ucwords($attr);
-                $entity->$set($this->getRequest()->getPost($attr, null));
-            }
+            $entity = new Pagina();
+            
+            $entity->setTitulo($this->getRequest()->getPost("nombre", null));
+            $entity->setOrden($this->getRequest()->getPost("orden", null));
+            $entity->setEstado(1);
 
             $response = $this->dao->guardar($entity);
         }
+        
+        $view = new JsonModel(array($response));
 
-        return new ViewModel(array("params" => $this->params, "response" => $response));
+        $view->setTerminal(true);
+
+        return $view;
         
     }
 

@@ -37,8 +37,8 @@ class FormularioEditDao {
         return $paginas;
     }
     
-    public function getInputs(){
-        $sql = "SELECT * FROM inputs WHERE estado = 1 ORDER BY orden ASC";
+    public function getInputs($idPagina){
+        $sql = "SELECT * FROM inputs WHERE estado = 1 AND id_pagina = $idPagina ORDER BY orden ASC";
         
         $inputs = array();
         
@@ -53,6 +53,7 @@ class FormularioEditDao {
                $unInput->setLabel($r["label"]);
                $unInput->setEstado($r["estado"]);
                $unInput->setOrden($r["orden"]);
+               $unInput->setNombre($r["nombre"]);
                $unInput->setRequired($r["required"]);
                $unInput->setTipo($r["tipo_input"]);
                

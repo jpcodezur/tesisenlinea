@@ -12,7 +12,27 @@ class Input {
     private $estado;
     private $required;
     private $tipo;
+    private $control;
+    private $respuesta;
+    
+    function getRespuesta() {
+        return $this->respuesta;
+    }
 
+    function setRespuesta($respuesta) {
+        $this->respuesta = $respuesta;
+    }
+
+        
+    function getControl() {
+        return $this->control;
+    }
+
+    function setControl($control) {
+        $this->control = $control;
+    }
+
+    
     function getNombre() {
         return $this->nombre;
     }
@@ -76,5 +96,8 @@ class Input {
     function setTipo($tipo) {
         $this->tipo = $tipo;
     }
+    
+    
+    
 
 }

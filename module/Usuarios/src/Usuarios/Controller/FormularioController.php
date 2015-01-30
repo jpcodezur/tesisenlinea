@@ -60,6 +60,23 @@ class FormularioController extends AbstractActionController {
         return array("paginas" => $paginas,"inputs" => $inputs);
     }
     
+    public function resparentAction(){
+        
+        $word = $this->getRequest()->getPost("word", null);
+        
+        $tipo = "texto";
+        
+        $usuario = $_SESSION["miSession"]["usuario"]; 
+        
+        $response =  $this->dao->getRespuestaJson($word,$usuario->getId(),$tipo);
+        
+        $view = new JsonModel($response);
+
+        $view->setTerminal(true);
+
+        return $view;
+    }
+    
     public function nextAction(){
         
         $idPagina = $this->request->getQuery('id_pagina');

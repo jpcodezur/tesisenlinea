@@ -57,3 +57,10 @@ input[name=nombre]{width: 382px;}
     
     margin-left: -7px;
 }
+.step-content .step-pane {
+    min-height: 200px;
+    padding: 10px 8px 12px;
+}
+.inputs-text-control{
+    margin-top:10px;
+}

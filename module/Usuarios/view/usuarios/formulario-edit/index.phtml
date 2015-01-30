@@ -2,7 +2,6 @@
     <div class="page-header position-relative">
         <h1>
             Asistente para la confeccion de la Tesis
-            <button id="save" class="save-formulario btn btn-primary">Save</button>
         </h1>
     </div><!--/.page-header-->
 
@@ -23,7 +22,7 @@
                                     <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>/id_pagina" class="red remove">
                                         <i class="icon-trash bigger-130"></i>
                                     </a>
-                                    <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>/id_pagina" class="red remove">
+                                    <a id="add-pagina" href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>/id_pagina" class="red remove">
                                         <i class="icon-plus-sign bigger-130"></i>
                                     </a>
                                 </div>
@@ -65,16 +64,24 @@
 
                                             <div class="step-pane <?php echo ($count === 1 ) ? "active" : "" ?>" id="step<?php echo $count ?>">
 
-                                                <form class="form-horizontal" id="sample-form" >
+                                                <form class="form-horizontal" id="inputs-collections" >
                                                     <?php foreach ($pagina->getInputs() as $input): ?>
-                                                        <div class="control-group">
-                                                            <label class="control-label" for=""><?php echo $input->getLabel() ?></label>
-
-                                                            <div class="controls">
-                                                                <span class="span6 input-icon input-icon-right">
-
-                                                                </span>
-
+                                                        <div class="control-group item-input">
+                                                            <div class="alert alert-info">
+                                                                    <button data-dismiss="alert" class="close" type="button">
+                                                                            <i class="ace-icon fa fa-times"></i>
+                                                                    </button>
+                                                                    <strong><?php echo $input->getNombre() ?></strong>
+                                                                    <?php echo $input->getLabel() ?>
+                                                                    <div class="action-paginas hidden-phone visible-desktop action-buttons">
+                                                                        <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "edit")) ?>" class="green">
+                                                                            <i class="icon-pencil bigger-130"></i>
+                                                                        </a>
+                                                                        <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>/id_pagina" class="red remove">
+                                                                            <i class="icon-trash bigger-130"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                    <br>
                                                             </div>
                                                         </div>
                                                     <?php endforeach; ?>
@@ -173,12 +180,6 @@
             </div><!--PAGE CONTENT ENDS-->
         </div><!--/.span-->
     </div><!--/.row-fluid-->
-    <div class="page-header position-relative">
-        <h1>
-
-            <button id="save" class="btn  btn-primary">Save</button>
-        </h1>
-    </div><!--/.page-header-->
 </div><!--/.page-content-->
 <style>
     .save-formulario{
@@ -207,6 +208,12 @@
     }
     .modal-body h3{
         margin:0 5px 0 5px;
+    }
+    .alert{
+        margin-bottom:0;
+    }
+    .modal-body{
+        max-height: none !important;
     }
 </style>
 <script>
@@ -241,14 +248,65 @@
                 }
             })
         });    
+        
+        $("#add-pagina").click(function(e){
+            console.log("asd");
+            e.preventDefault();
+            bootbox.dialog({});
+            $.ajax({
+                url:"popup-pagina",
+                data:"",
+                success:function(data){
+                    $(".bootbox .modal-body").html(data);
+                }
+            });
+        });
+        
+        $(document).on("click","#close-modal-pagina",function(){
+            var nombre = $("input[name=nombre]").val(),
+                orden = $(".wizard-steps li").length + 1;
+            
+            $.ajax({
+                url:"<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>",
+                type:"post",
+                data:{
+                    nombre:nombre,
+                    orden:orden
+                },
+                success:function(data){
+                    var respuesta = data[0];
+                    var div = "danger";
+                    if(respuesta.error == false){
+                        div = "success";
+                    }
+                    
+                    $(".bootbox .modal-body").prepend(
+                            '<div class="alert alert-'+div+'">'+
+                                '<button data-dismiss="alert" class="close" type="button">'+
+                                        '<i class="icon-remove"></i>'+
+                                '</button>'+
+                                respuesta.mensaje+
+                                '<br>'+
+                        '</div>');
+                
+                    if(div == "success"){
+                        setTimeout(function(){
+                                $('.bootbox').modal('toggle');
+                                window.location.reload();
+                            },2000);
+                    }
+                }
+            });
+        });
+        
         $(document).on("click","#close-modal",function(){
-            $('.bootbox').modal('toggle');
             var 
                 id_pagina = $(".wizard-steps li.active").attr("id_page"),
                 nombre = $("input[name=nombre]").val(),
                 label = $(".mention").val(),
                 obligatorio = ($("input[name=obligatorio]").is("checked"))?"true":"false",
                 tipo = $("#myTab li.active a").attr("tipo"),
+                orden = $("#inputs-collections").find(".item-input").length + 1;
                 
                 input_data = {};
                 
@@ -265,10 +323,30 @@
                     label:label,
                     obligatorio:obligatorio,
                     tipo:tipo,
-                    input_data:input_data
+                    input_data:input_data,
+                    orden:orden
                 },
                 success:function(data){
+                    var respuesta = data.response;
+                    var div = "danger";
+                    if(respuesta.error == false){
+                        div = "success";
+                    }
                     
+                    $(".bootbox .modal-body").prepend(
+                            '<div class="alert alert-'+div+'">'+
+                                '<button data-dismiss="alert" class="close" type="button">'+
+                                        '<i class="icon-remove"></i>'+
+                                '</button>'+
+                                respuesta.mensaje+
+                                '<br>'+
+                        '</div>');
+                
+                    if(div == "success"){
+                        setTimeout(function(){
+                                $('.bootbox').modal('toggle');
+                            },2000);
+                    }
                 }
             })
         })

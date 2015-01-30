@@ -56,24 +56,26 @@ class InputController extends AbstractActionController {
             $unaEntity->setRequired($this->getRequest()->getPost("obligatorio", null));
             $unaEntity->setTipo($this->getRequest()->getPost("tipo", null));
             $unaEntity->setEstado(1);
-            $unaEntity->setOrden(null);
+            $unaEntity->setOrden($this->getRequest()->getPost("orden", null));
             $unaEntity->setIdPagina($this->getRequest()->getPost("id_pagina", null));
             
-            $id = $this->dao->save($unaEntity);
+            $input_data = $this->getRequest()->getPost("input_data", null);
+            
+            $unInput = null;
             
             switch ($unaEntity->getTipo()) {
-                case "texto":
-                    $this->saveTexto(array(
-                        
-                    ));
-                    break;
+                    case "texto":
+                        $unInput = new \Usuarios\Model\Entity\Texto();
+                        $unInput->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
             }
             
-            $response = $this->dao->save();
+            $unaEntity->setControl($unInput);
             
+            $response = $this->dao->save($unaEntity);
         }
         
         $view = new JsonModel(array( "response" => $response));
