@@ -2,7 +2,7 @@
     <div class="page-header position-relative">
         <h1>
             Asistente para la confeccion de la Tesis
-            
+
         </h1>
     </div><!--/.page-header-->
 
@@ -25,40 +25,40 @@
                                     <div id="fuelux-wizard" class="row-fluid hide" data-target="#step-container">
                                         <ul class="wizard-steps">
                                             <?php $count = 1; ?>
-                                            <?php foreach ($this->paginas as $pagina):?>
-                                            <li data-target="#step<?php echo $count?>" class="<?php echo ($count ===1 )? "active": ""?>">
-                                                <span class="step"><?php echo $count; ?></span>
-                                                <span class="title"><?php echo $pagina->getTitulo() ?></span>
-                                            </li>
-                                            <?php $count++; ?>
+                                            <?php foreach ($this->paginas as $pagina): ?>
+                                                <li data-target="#step<?php echo $count ?>" class="<?php echo ($count === 1 ) ? "active" : "" ?>">
+                                                    <span class="step"><?php echo $count; ?></span>
+                                                    <span class="title"><?php echo $pagina->getTitulo() ?></span>
+                                                </li>
+                                                <?php $count++; ?>
                                             <?php endforeach; ?>
                                         </ul>
                                     </div>
 
                                     <hr />
                                     <div class="step-content row-fluid position-relative" id="step-container">
-                                        
-                                        <?php $count = 1; ?>
-                                        <?php foreach ($this->paginas as $pagina):?>
-                                        <div class="step-pane <?php echo ($count ===1 )? "active": ""?>" id="step<?php echo $count?>">
-                                            <h4 class="header green"><?php echo $pagina->getTitulo() ?></h4>
-                                            <form class="form-horizontal" id="sample-form" >
-                                                <?php foreach($pagina->getInputs() as $input):?>
-                                                <div class="control-group inputs-respuestas">
-                                                    <label id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
 
-                                                    <div class="controls">
-                                                        <span class="span6 input-icon input-icon-right">
-                                                            <input id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired())?"required":"" ?>/>
-                                                            <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
-                                                        </span>
-                                                        <!--<span class="help-inline">Something may have gone wrong</span>-->
-                                                    </div>
-                                                </div>
-                                                <?php endforeach; ?>
-                                            </form>
-                                        </div>
-                                        <?php $count++; ?>
+                                        <?php $count = 1; ?>
+                                        <?php foreach ($this->paginas as $pagina): ?>
+                                            <div class="step-pane <?php echo ($count === 1 ) ? "active" : "" ?>" id="step<?php echo $count ?>">
+                                                <h4 class="header green"><?php echo $pagina->getTitulo() ?></h4>
+                                                <form class="form-horizontal" id="sample-form" >
+                                                    <?php foreach ($pagina->getInputs() as $input): ?>
+                                                        <div class="control-group inputs-respuestas">
+                                                            <label id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
+
+                                                            <div class="controls">
+                                                                <span class="span6 input-icon input-icon-right">
+                                                                    <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required" : "" ?>/>
+                                                                    <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
+                                                                </span>
+                                                                <!--<span class="help-inline">Something may have gone wrong</span>-->
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </form>
+                                            </div>
+                                            <?php $count++; ?>
                                         <?php endforeach; ?>
                                     </div>
 
@@ -153,89 +153,110 @@
     </div><!--/.row-fluid-->
 </div><!--/.page-content-->
 <style>
-    
-.form-horizontal .control-label {
-    float: left;
-    margin-right: 10px;
-    padding-top: 5px;
-    text-align: right;
-    width: 260px;
-}
+
+    .form-horizontal .control-label {
+        float: left;
+        margin-right: 10px;
+        padding-top: 5px;
+        text-align: right;
+        width: 260px;
+    }
 </style>
 <script>
-                                                var resparent = "[]";
-                                                
-                                            function saveRes(nameInput){
-                                                var input = {},
-                                                    id_input = $("input[name="+nameInput+"]").attr("id_input"),
-                                                    tipo = $("input[name="+nameInput+"]").attr("tipo");
-                                                
-                                                switch(tipo){
-                                                    case "texto":
-                                                        input.texto = $("#"+id_input+"").val()
-                                                    break;
-                                                }
-                                                
-                                                $.ajax({
-                                                    url:"respuesta-save",
-                                                    data:{
-                                                        input:input,
-                                                        id_input:id_input,
-                                                        tipo:tipo
-                                                    },
-                                                    success:function(data){
-                                                        
-                                                    }
-                                                });
-                                                
-                                            }
-                                            
-                                            function getRespuesta(word){
-                                                $.ajax({
-                                                    async:false,
-                                                    url:"<?php echo $this->url("usuarios", array("controller" => "formulario", "action" => "resparent")) ?>",
-                                                    data:{word:word},
-                                                    type:"post",
-                                                    success:function(data){
-                                                        resparent = data.join(); 
-                                                    }
-                                                })
-                                            }
-                                            
-                                            $(document).ready(function(){
-                                                
-                                                actualizoLabels();
-                                                
-                                                $(".inputs-respuestas input[type=text]").focusout(function(){
-                                                    var valAnterior = $(this).parent().find(".hidden-response").val();
-                                                    if($(this).val()!=valAnterior){
-                                                        saveRes($(this).attr("name"));
-                                                        actualizoLabels();
-                                                        $(this).parent().find(".hidden-response").val($(this).val());
-                                                    }
-                                                });
-                                                
-                                                function actualizoLabels(){
-                                                
-                                                $(".inputs-respuestas").each(function(){
-                                                    var txt = $(this).find("label").text();
-                                                    
-                                                    words = txt.split(" ");
-                                                    
-                                                    words_res = "";
-                                                    
-                                                    for(var i = 0; i<words.length;i++){
-                                                        if(words[i].indexOf("@") === 0){
-                                                            getRespuesta(words[i]);
-                                                            words_res += resparent;
-                                                        }else{
-                                                            words_res += words[i]+" ";
-                                                        }
-                                                    }
-                                                    
-                                                    $(this).find("label").text(words_res);
-                                                    
-                                                });
-                                            }
-                                            });
-                                            </script>
+    var resparent = "[]";
+
+    function saveRes(nameInput) {
+        var input = {},
+                id_input = $("input[name=" + nameInput + "]").attr("id_input"),
+                tipo = $("input[name=" + nameInput + "]").attr("tipo");
+
+        switch (tipo) {
+            case "texto":
+                input.texto = $("#" + id_input + "").val()
+                break;
+        }
+
+        $.ajax({
+            url: "respuesta-save",
+            data: {
+                input: input,
+                id_input: id_input,
+                tipo: tipo
+            },
+            success: function (data) {
+
+            }
+        });
+
+    }
+
+    function getRespuesta(word) {
+        $.ajax({
+            async: false,
+            url: "<?php echo $this->url("usuarios", array("controller" => "formulario", "action" => "resparent")) ?>",
+            data: {word: word},
+            type: "post",
+            success: function (data) {
+                resparent = data.join();
+            }
+        })
+    }
+
+    $(document).ready(function () {
+
+        actualizoLabels();
+
+        function actualizoLabels() {
+
+            $(".inputs-respuestas").each(function () {
+                var txt = $(this).find("label").text();
+
+                words = txt.split(" ");
+
+                words_res = "";
+
+                for (var i = 0; i < words.length; i++) {
+                    if (words[i].indexOf("@") === 0) {
+                        getRespuesta(words[i]);
+                        words_res += resparent;
+                    } else {
+                        words_res += words[i] + " ";
+                    }
+                }
+
+                $(this).find("label").text(words_res);
+
+            });
+        }
+        
+        function saveRespuestas(){
+
+            respuestas = [];
+            $("#step-container .active .inputs-respuestas").each(function(){
+                respuesta = {};
+                respuesta.nombre = $(this).find("input[type=text]").attr("name");
+                respuesta.id_pagina = $(this).find("input[type=text]").attr("id_pagina");
+                respuesta.tipo = $(this).find("input[type=text]").attr("tipo");
+                respuesta.id_input = $(this).find("input[type=text]").attr("id_input");
+                respuesta.texto = $(this).find("input[type=text]").val();
+                
+                respuestas.push(respuesta);
+            });
+            
+            $.ajax({
+                url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "adds")) ?>",
+                type:"post",
+                data:{respuestas:respuestas},
+                success:function(data){
+                    actualizoLabels();
+                }
+            })
+            
+            return respuesta;
+        }
+        
+        $(".btn-next").mousedown(function(){
+            saveRespuestas();
+        })
+    });
+</script>

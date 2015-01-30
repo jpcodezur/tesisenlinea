@@ -11,6 +11,7 @@ return array(
             'Usuarios\Controller\Pagina' => 'Usuarios\Controller\PaginaController',
             'Usuarios\Controller\Input' => 'Usuarios\Controller\Inputs\InputController',
             'Usuarios\Controller\Pregunta' => 'Usuarios\Controller\PreguntaController',
+            'Usuarios\Controller\Respuesta' => 'Usuarios\Controller\RespuestaController',
             'Usuarios\Controller\Formulario' => 'Usuarios\Controller\FormularioController',
             'Usuarios\Controller\FormularioEdit' => 'Usuarios\Controller\FormularioEditController',
         ),

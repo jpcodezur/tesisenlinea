@@ -130,6 +130,9 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'FormularioEditDao' => function($sm) {
                     return $this->getAdapter($sm);
                 },
+                'RespuestaDao' => function($sm) {
+                    return $this->getAdapter($sm);
+                },
                 #TableGAteways
                 'PreguntaTableGateway' => function ($sm) {
                     $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Pregunta");
@@ -229,6 +232,12 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                     if ($instance instanceof \Usuarios\Controller\FormularioEditController) {
                         $locator = $sm->getServiceLocator();
                         $instance->setDao($locator->get('FormularioEditDao'));
+                    }
+                },
+                'Usuarios\Controller\Respuesta' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\RespuestaController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setDao($locator->get('RespuestaDao'));
                     }
                 },
                 'Usuarios\Controller\Inputs\Input' => function ($instance, $sm) {
