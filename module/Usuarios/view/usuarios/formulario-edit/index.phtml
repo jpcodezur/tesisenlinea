@@ -222,7 +222,7 @@
             e.preventDefault();
             bootbox.dialog({});
             $.ajax({
-                url: "popup",
+                url: "formulario_edit/popup",
                 data: "",
                 success: function (data) {
                     $(".bootbox .modal-body").html(data);
@@ -249,7 +249,7 @@
             })
         });
 
-        $(".del-item").click(function (e) {
+        $(document).on("click",".del-item",function (e) {
             e.preventDefault();
             var id = $(this).parent().parent().attr("id_input");
             bootbox.confirm("Desea eliminar este item?", function (result) {
@@ -341,7 +341,7 @@
             e.preventDefault();
             bootbox.dialog({});
             $.ajax({
-                url: "popup-pagina",
+                url: "formulario_edit/popup-pagina",
                 data: "",
                 success: function (data) {
                     $(".bootbox .modal-body").html(data);
@@ -398,7 +398,7 @@
                                     '<a class="green" href="/tesisenlinea/public/usuarios/pagina/edit">'+
                                             '<i class="icon-pencil bigger-130"></i>'+
                                     '</a>'+
-                                    '<a class="red remove" href="/tesisenlinea/public/usuarios/pagina/delete/id_pagina">'+
+                                    '<a class="red remove del-item" href="/tesisenlinea/public/usuarios/pagina/delete/id_pagina">'+
                                             '<i class="icon-trash bigger-130"></i>'+
                                     '</a>'+
                             '</div>'+
