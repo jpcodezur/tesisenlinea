@@ -120,7 +120,7 @@ class FormularioDao {
                 $unaPagina->setTitulo($r["titulo"]);
                 $unaPagina->setEstado($r["estado"]);
                 $unaPagina->setOrden($r["orden"]);
-                $inputs = $this->getInputs($unaPagina->getId());
+                $inputs = $this->getInputs($r["id"]);
                 $unaPagina->setInputs($inputs);
                 $paginas[] = $unaPagina;
             }
@@ -129,8 +129,8 @@ class FormularioDao {
         return $paginas;
     }
 
-    public function getInputs() {
-        $sql = "SELECT * FROM inputs WHERE estado = 1 ORDER BY orden ASC";
+    public function getInputs($idPagina) {
+        $sql = "SELECT * FROM inputs WHERE estado = 1 AND id_pagina = $idPagina ORDER BY orden ASC";
 
         $inputs = array();
 
