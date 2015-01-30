@@ -53,25 +53,17 @@
         <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario_edit","index")): ?>
         <li>
             <a class="dropdown-toggle" href="#">
-                <i class="icon-group"></i>
+                <i class="icon-edit"></i>
                 <span class="menu-text"> Form Tesis </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
             
             <ul class="submenu">
-                
                 <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario_edit","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario_edit","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario_edit","action"=>"index")) ?>">
+                        <i class="icon-edit"></i>
+                        Form
                     </a>
                 </li>
             </ul>
