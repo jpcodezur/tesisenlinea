@@ -182,7 +182,7 @@ class PaginaDao {
     public function delete($id) {
         $respuesta = new Respuesta();
 
-        $result = $this->tableGateway->update(array("estado" => "0"), array("id" => $id));
+        $result = $this->tableGateway->delete(array("id" => $id));
         
         $respuesta->setError(false);
         $respuesta->setMensaje(ucwords($this->params["singular"])." deleted successfully");

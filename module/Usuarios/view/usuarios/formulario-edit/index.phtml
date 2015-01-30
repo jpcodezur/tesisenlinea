@@ -19,7 +19,7 @@
                                     <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "edit")) ?>" class="green">
                                         <i class="icon-pencil bigger-130"></i>
                                     </a>
-                                    <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>/id_pagina" class="red remove">
+                                    <a id="del-pagina" href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>/id_pagina" class="red remove">
                                         <i class="icon-trash bigger-130"></i>
                                     </a>
                                     <a id="add-pagina" href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>/id_pagina" class="red remove">
@@ -37,7 +37,7 @@
                                         <ul class="wizard-steps">
                                             <?php $count = 1; ?>
                                             <?php foreach ($this->formulario->getPaginas() as $pagina): ?>
-                                            <li id_page="<?php echo $pagina->getId() ?>" data-target="#step<?php echo $count ?>" class="<?php echo ($count === 1 ) ? "active" : "" ?>">
+                                                <li id_page="<?php echo $pagina->getId() ?>" data-target="#step<?php echo $count ?>" class="<?php echo ($count === 1 ) ? "active" : "" ?>">
                                                     <span class="step"><?php echo $count; ?></span>
                                                     <span class="title"><?php echo $pagina->getTitulo() ?></span>
                                                 </li>
@@ -67,21 +67,21 @@
                                                 <form class="form-horizontal" id="inputs-collections" >
                                                     <?php foreach ($pagina->getInputs() as $input): ?>
                                                         <div class="control-group item-input">
-                                                            <div class="alert alert-info">
-                                                                    <button data-dismiss="alert" class="close" type="button">
-                                                                            <i class="ace-icon fa fa-times"></i>
-                                                                    </button>
-                                                                    <strong><?php echo $input->getNombre() ?></strong>
-                                                                    <?php echo $input->getLabel() ?>
-                                                                    <div class="action-paginas hidden-phone visible-desktop action-buttons">
-                                                                        <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "edit")) ?>" class="green">
-                                                                            <i class="icon-pencil bigger-130"></i>
-                                                                        </a>
-                                                                        <a href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>/id_pagina" class="red remove">
-                                                                            <i class="icon-trash bigger-130"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                    <br>
+                                                            <div class="alert alert-info" id_input="<?php echo $input->getId() ?>">
+                                                                <button data-dismiss="alert" class="close" type="button">
+                                                                    <i class="ace-icon fa fa-times"></i>
+                                                                </button>
+                                                                <strong><?php echo $input->getNombre() ?></strong>
+                                                                <?php echo $input->getLabel() ?>
+                                                                <div class="action-paginas hidden-phone visible-desktop action-buttons">
+                                                                    <a href="#" class="green">
+                                                                        <i class="icon-pencil bigger-130"></i>
+                                                                    </a>
+                                                                    <a href="#" class="red remove del-item">
+                                                                        <i class="icon-trash bigger-130"></i>
+                                                                    </a>
+                                                                </div>
+                                                                <br>
                                                             </div>
                                                         </div>
                                                     <?php endforeach; ?>
@@ -222,16 +222,16 @@
             e.preventDefault();
             bootbox.dialog({});
             $.ajax({
-                url:"popup",
-                data:"",
-                success:function(data){
+                url: "popup",
+                data: "",
+                success: function (data) {
                     $(".bootbox .modal-body").html(data);
                     $('#numero-respuestas')
-                        .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
-                        .on('change', function () {
-                    });
-            
-                     $(function () {
+                            .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                            .on('change', function () {
+                            });
+
+                    $(function () {
                         $('textarea.mention').mentionsInput({
                             onDataRequest: function (mode, query, callback) {
                                 var strquery = 'query=' + query;
@@ -247,105 +247,218 @@
                     });
                 }
             })
-        });    
+        });
+
+        $(".del-item").click(function (e) {
+            e.preventDefault();
+            var id = $(this).parent().parent().attr("id_input");
+            bootbox.confirm("Desea eliminar este item?", function (result) {
+                if (result == false) {
+                    $('.bootbox').modal('toggle');
+                } else {
+                    $.ajax({
+                        url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "delete")) ?>",
+                        type: "get",
+                        data: {
+                            id: id,
+                        },
+                        success: function (data) {
+                            var respuesta = data[0];
+                            var div = "danger";
+                            if (respuesta.error == false) {
+                                div = "success";
+                            }
+
+                            $(".bootbox .modal-body").prepend(
+                                    '<div class="alert alert-' + div + '">' +
+                                    '<button data-dismiss="alert" class="close" type="button">' +
+                                    '<i class="icon-remove"></i>' +
+                                    '</button>' +
+                                    respuesta.mensaje +
+                                    '<br>' +
+                                    '</div>');
+
+                            if (div == "success") {
+                                
+                                $("#inputs-collections").find(".item-input").each(function(){
+                                    if($(this).find(".alert-info").attr("id_input") == id){
+                                        $(this).remove();
+                                    }
+                                });
+                                
+                                setTimeout(function () {
+                                    $('.bootbox').modal('toggle');
+                                }, 2000);
+                            }
+                        }
+                    });
+                }
+            });
+        });
         
-        $("#add-pagina").click(function(e){
-            console.log("asd");
+        $("#del-pagina").click(function (e) {
+            e.preventDefault();
+            var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
+            bootbox.confirm("Desea eliminar este item?", function (result) {
+                if (result == false) {
+                    $('.bootbox').modal('toggle');
+                } else {
+                    $.ajax({
+                        url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>",
+                        type: "get",
+                        data: {
+                            idpagina: idpagina,
+                        },
+                        success: function (data) {
+                            var respuesta = data[0];
+                            var div = "danger";
+                            if (respuesta.error == false) {
+                                div = "success";
+                            }
+
+                            $(".bootbox .modal-body").prepend(
+                                    '<div class="alert alert-' + div + '">' +
+                                    '<button data-dismiss="alert" class="close" type="button">' +
+                                    '<i class="icon-remove"></i>' +
+                                    '</button>' +
+                                    respuesta.mensaje +
+                                    '<br>' +
+                                    '</div>');
+
+                            if (div == "success") {
+                                setTimeout(function () {
+                                    $('.bootbox').modal('toggle');
+                                    window.location.reload();
+                                }, 2000);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $("#add-pagina").click(function (e) {
             e.preventDefault();
             bootbox.dialog({});
             $.ajax({
-                url:"popup-pagina",
-                data:"",
-                success:function(data){
+                url: "popup-pagina",
+                data: "",
+                success: function (data) {
                     $(".bootbox .modal-body").html(data);
                 }
             });
         });
-        
-        $(document).on("click","#close-modal-pagina",function(){
+
+        $(document).on("click", "#close-modal-pagina", function () {
             var nombre = $("input[name=nombre]").val(),
-                orden = $(".wizard-steps li").length + 1;
-            
+                    orden = $(".wizard-steps li").length + 1;
+
             $.ajax({
-                url:"<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>",
-                type:"post",
-                data:{
-                    nombre:nombre,
-                    orden:orden
+                url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>",
+                type: "post",
+                data: {
+                    nombre: nombre,
+                    orden: orden
                 },
-                success:function(data){
+                success: function (data) {
                     var respuesta = data[0];
                     var div = "danger";
-                    if(respuesta.error == false){
+                    if (respuesta.error == false) {
                         div = "success";
                     }
-                    
+
                     $(".bootbox .modal-body").prepend(
-                            '<div class="alert alert-'+div+'">'+
-                                '<button data-dismiss="alert" class="close" type="button">'+
-                                        '<i class="icon-remove"></i>'+
-                                '</button>'+
-                                respuesta.mensaje+
-                                '<br>'+
-                        '</div>');
-                
-                    if(div == "success"){
-                        setTimeout(function(){
-                                $('.bootbox').modal('toggle');
-                                window.location.reload();
-                            },2000);
+                            '<div class="alert alert-' + div + '">' +
+                            '<button data-dismiss="alert" class="close" type="button">' +
+                            '<i class="icon-remove"></i>' +
+                            '</button>' +
+                            respuesta.mensaje +
+                            '<br>' +
+                            '</div>');
+
+                    if (div == "success") {
+                        setTimeout(function () {
+                            $('.bootbox').modal('toggle');
+                            window.location.reload();
+                        }, 2000);
                     }
                 }
             });
         });
         
-        $(document).on("click","#close-modal",function(){
-            var 
-                id_pagina = $(".wizard-steps li.active").attr("id_page"),
-                nombre = $("input[name=nombre]").val(),
-                label = $(".mention").val(),
-                obligatorio = ($("input[name=obligatorio]").is("checked"))?"true":"false",
-                tipo = $("#myTab li.active a").attr("tipo"),
-                orden = $("#inputs-collections").find(".item-input").length + 1;
-                
-                input_data = {};
-                
-                if(tipo == "texto"){
-                    input_data.respuestas_requeridas = $("#numero-respuestas").val();
-                }
-                
+        function addControlHtml(id,nombre,label){
+            var s = '<div class="control-group item-input">'+
+                    '<div class="alert alert-info input-control" id_input="'+id+'">'+
+                            '<button type="button" class="close" data-dismiss="alert">'+
+                                    '<i class="ace-icon fa fa-times"></i>'+
+                            '</button>'+
+                            '<strong>'+nombre+'</strong>'+
+                            ''+label+''+
+                            '<div class="action-paginas hidden-phone visible-desktop action-buttons">'+
+                                    '<a class="green" href="/tesisenlinea/public/usuarios/pagina/edit">'+
+                                            '<i class="icon-pencil bigger-130"></i>'+
+                                    '</a>'+
+                                    '<a class="red remove" href="/tesisenlinea/public/usuarios/pagina/delete/id_pagina">'+
+                                            '<i class="icon-trash bigger-130"></i>'+
+                                    '</a>'+
+                            '</div>'+
+                            '<br>'+
+                            '</div>'+
+                    '</div>';
+    
+            $("#inputs-collections").append(s);
+        }
+
+        $(document).on("click", "#close-modal", function () {
+            var
+                    id_pagina = $(".wizard-steps li.active").attr("id_page"),
+                    nombre = $("input[name=nombre]").val(),
+                    label = $(".mention").val(),
+                    obligatorio = ($("input[name=obligatorio]").is("checked")) ? "true" : "false",
+                    tipo = $("#myTab li.active a").attr("tipo"),
+                    orden = $("#inputs-collections").find(".item-input").length + 1;
+
+            input_data = {};
+
+            if (tipo == "texto") {
+                input_data.respuestas_requeridas = $("#numero-respuestas").val();
+            }
+
             $.ajax({
-                url:"<?php echo $this->url("usuarios", array("controller" => "input", "action" => "add")) ?>",
-                type:"post",
-                data:{
-                    id_pagina:id_pagina,
-                    nombre:nombre,
-                    label:label,
-                    obligatorio:obligatorio,
-                    tipo:tipo,
-                    input_data:input_data,
-                    orden:orden
+                url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "add")) ?>",
+                type: "post",
+                data: {
+                    id_pagina: id_pagina,
+                    nombre: nombre,
+                    label: label,
+                    obligatorio: obligatorio,
+                    tipo: tipo,
+                    input_data: input_data,
+                    orden: orden
                 },
-                success:function(data){
+                success: function (data) {
                     var respuesta = data.response;
+                    
+                    addControlHtml(respuesta.id,nombre,label);
+                    
                     var div = "danger";
-                    if(respuesta.error == false){
+                    if (respuesta.error == false) {
                         div = "success";
                     }
-                    
+
                     $(".bootbox .modal-body").prepend(
-                            '<div class="alert alert-'+div+'">'+
-                                '<button data-dismiss="alert" class="close" type="button">'+
-                                        '<i class="icon-remove"></i>'+
-                                '</button>'+
-                                respuesta.mensaje+
-                                '<br>'+
-                        '</div>');
-                
-                    if(div == "success"){
-                        setTimeout(function(){
-                                $('.bootbox').modal('toggle');
-                            },2000);
+                            '<div class="alert alert-' + div + '">' +
+                            '<button data-dismiss="alert" class="close" type="button">' +
+                            '<i class="icon-remove"></i>' +
+                            '</button>' +
+                            respuesta.mensaje +
+                            '<br>' +
+                            '</div>');
+
+                    if (div == "success") {
+                        setTimeout(function () {
+                            $('.bootbox').modal('toggle');
+                        }, 2000);
                     }
                 }
             })

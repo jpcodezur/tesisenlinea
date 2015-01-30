@@ -18,6 +18,22 @@ class InputDao {
         $this->params = new InputParams();
         $this->params = $this->params->getParams();
     }
+    
+    public function delete($id){
+        
+        $response = new \Usuarios\MisClases\Respuesta();
+        
+        $sql = "DELETE FROM inputs WHERE id = $id";
+        
+        $res = $this->adapter->query($sql)->execute();
+        
+        if($res){
+            $response->setError(false);
+            $response->setMensaje("Item eliminado");
+        }
+        
+        return $response;
+    }
 
     public function save($unaEntity) {
 
@@ -50,13 +66,15 @@ class InputDao {
 
             if ($result) {
 
-                $respuesta->id = $connection->getLastGeneratedValue();
+                $id = $connection->getLastGeneratedValue();
                 
                 $unInput = $unaEntity->getControl();
                 
-                $unInput->setIdInput($respuesta->id);
+                $unInput->setIdInput($id);
 
                 $respuesta = $this->saveInputType($unInput,$unaEntity->getTipo());
+                
+                $respuesta->id = $id;
 
                 if ($respuesta->getError() == true) {
                     $connection->rollback();
@@ -70,7 +88,7 @@ class InputDao {
             /* End Save */
             if ($respuesta->getError() == false) {
                 $respuesta->setError(false);
-                $respuesta->setMensaje(ucwords($this->params["singular"]) . " saved successfully");
+                $respuesta->setMensaje("Item saved successfully");
             }
             
             if (!$result) {
