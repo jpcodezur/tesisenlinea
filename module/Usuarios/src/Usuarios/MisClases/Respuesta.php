@@ -4,8 +4,8 @@ namespace Usuarios\MisClases;
 
 class Respuesta{
 
-    private $error = null;
-    private $mensaje = "Ocurrio un Error.";
+    public $error = null;
+    public $mensaje = "Ocurrio un Error.";
     
     public function __construct(){
         

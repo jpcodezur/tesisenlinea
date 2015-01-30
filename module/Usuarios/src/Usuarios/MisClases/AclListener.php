@@ -60,7 +60,8 @@ class AclListener implements ListenerAggregateInterface{
             ->addResource(new Resource('usuarios:login'))
             ->addResource(new Resource('usuarios:usuario'))
             ->addResource(new Resource('usuarios:pagina'))
-            ->addResource(new Resource('usuarios:grupo'))
+            ->addResource(new Resource('usuarios:input'))
+            ->addResource(new Resource('usuarios:formulario_edit'))
             ->addResource(new Resource('usuarios:pregunta'))
             ->addResource(new Resource('usuarios:formulario'))
             //->allow('agente', 'usuarios:index', array('index'))
@@ -75,7 +76,7 @@ class AclListener implements ListenerAggregateInterface{
                 'login:index',
                 'login:login',
                 'login:logout'),
-                    array('index','wizard','msgs'))
+                    array('index','wizard','msgs','resparent'))
             
             
             ->deny('admin',array('usuarios:index','usuarios:formulario'),array('list','add','wizard'));

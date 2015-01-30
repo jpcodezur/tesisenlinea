@@ -41,7 +41,6 @@ class FormularioController extends AbstractActionController {
         
         $paginas = array();
         
-        $grupos = null;
         
         if(isset($_SESSION["miSession"]["usuario"])){
             $usuario = $_SESSION["miSession"]["usuario"]; 
@@ -54,11 +53,28 @@ class FormularioController extends AbstractActionController {
             
             $paginas = $this->dao->getPaginas(false);
             
-            $grupos = $this->dao->getFormulario($pagina);
+            $inputs = $this->dao->getFormulario($pagina);
         
         }
         
-        return array("paginas" => $paginas,"grupos" => $grupos);
+        return array("paginas" => $paginas,"inputs" => $inputs);
+    }
+    
+    public function resparentAction(){
+        
+        $word = $this->getRequest()->getPost("word", null);
+        
+        $tipo = "texto";
+        
+        $usuario = $_SESSION["miSession"]["usuario"]; 
+        
+        $response =  $this->dao->getRespuestaJson($word,$usuario->getId(),$tipo);
+        
+        $view = new JsonModel($response);
+
+        $view->setTerminal(true);
+
+        return $view;
     }
     
     public function nextAction(){

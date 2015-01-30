@@ -50,11 +50,11 @@
         </li>
         <?php endif; ?>
         
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:pagina","index")): ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario_edit","index")): ?>
         <li>
             <a class="dropdown-toggle" href="#">
-                <i class="icon-file-text"></i>
-                <span class="menu-text"> Form Pages </span>
+                <i class="icon-group"></i>
+                <span class="menu-text"> Form Tesis </span>
 
                 <b class="arrow icon-angle-down"></b>
             </a>
@@ -62,81 +62,19 @@
             <ul class="submenu">
                 
                 <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"pagina","action"=>"list")) ?>/">
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario_edit","action"=>"list")) ?>/">
                         <i class="icon-double-angle-right"></i>
                         List
                     </a>
                 </li>
                 
                 <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"pagina","action"=>"add")) ?>">
+                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario_edit","action"=>"add")) ?>">
                         <i class="icon-double-angle-right"></i>
                         New
                     </a>
                 </li>
-                
             </ul>
-        
-        </li>
-        <?php endif; ?>
-        
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:grupo","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-file-text"></i>
-                <span class="menu-text"> Groups Question </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"grupo","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"grupo","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-                
-            </ul>
-        
-        </li>
-        <?php endif; ?>
-        
-         <?php if( $this->acl->isAllowed($this->role,"usuarios:pregunta","index")): ?>
-        <li>
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-file-text"></i>
-                <span class="menu-text"> Questions </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"pregunta","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"pregunta","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-                
-            </ul>
-        
         </li>
         <?php endif; ?>
         

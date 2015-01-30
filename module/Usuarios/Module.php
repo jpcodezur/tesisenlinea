@@ -118,8 +118,8 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'PaginaDao' => function($sm) {
                     return $this->getEntidadDao($sm,"PaginaTableGateway","Usuarios\Model\Dao\PaginaDao");
                 },
-                'GrupoDao' => function($sm) {
-                    return $this->getEntidadDao($sm,"GrupoTableGateway","Usuarios\Model\Dao\GrupoDao");
+                'InputDao' => function($sm) {
+                    return $this->getAdapter($sm);
                 },
                 'PreguntaDao' => function($sm) {
                     return $this->getEntidadDao($sm,"PreguntaTableGateway","Usuarios\Model\Dao\PreguntaDao");
@@ -127,14 +127,17 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'FormularioDao' => function($sm) {
                     return $this->getAdapter($sm);
                 },
+                'FormularioEditDao' => function($sm) {
+                    return $this->getAdapter($sm);
+                },
                 #TableGAteways
                 'PreguntaTableGateway' => function ($sm) {
                     $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Pregunta");
                     return new TableGateway('preguntas', $result["dbAdapter"], null, $result["resultSetPrototype"]);
                 },
-                'GrupoTableGateway' => function ($sm) {
-                    $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Grupo");
-                    return new TableGateway('grupos', $result["dbAdapter"], null, $result["resultSetPrototype"]);
+                'InputTableGateway' => function ($sm) {
+                    $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Input");
+                    return new TableGateway('inputs', $result["dbAdapter"], null, $result["resultSetPrototype"]);
                 },
                 'PaginaTableGateway' => function ($sm) {
                     $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Pagina");
@@ -208,26 +211,30 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                         $instance->setDao($locator->get('PaginaDao'));
                     }
                 },
-                'Usuarios\Controller\Grupo' => function ($instance, $sm) {
-                    if ($instance instanceof \Usuarios\Controller\GrupoController) {
+                'Usuarios\Controller\Input' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\InputController) {
                         $locator = $sm->getServiceLocator();
-                        $instance->setDao($locator->get('GrupoDao'));
+                        $instance->setDao($locator->get('InputDao'));
                         $instance->setPaginaDao($locator->get('PaginaDao'));
-                    }
-                },
-                'Usuarios\Controller\Pregunta' => function ($instance, $sm) {
-                    if ($instance instanceof \Usuarios\Controller\PreguntaController) {
-                        $locator = $sm->getServiceLocator();
-                        $instance->setDao($locator->get('PreguntaDao'));
-                        $instance->setGrupoDao($locator->get('GrupoDao'));
                     }
                 },
                 'Usuarios\Controller\Formulario' => function ($instance, $sm) {
                     if ($instance instanceof \Usuarios\Controller\FormularioController) {
                         $locator = $sm->getServiceLocator();
-                        $instance->setPreguntaDao($locator->get('PreguntaDao'));
                         $instance->setPaginaDao($locator->get('PaginaDao'));
                         $instance->setDao($locator->get('FormularioDao'));
+                    }
+                },
+                'Usuarios\Controller\FormularioEdit' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\FormularioEditController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setDao($locator->get('FormularioEditDao'));
+                    }
+                },
+                'Usuarios\Controller\Inputs\Input' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\Inputs\InputController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setDao($locator->get('InputDao'));
                     }
                 },
                         
