@@ -91,14 +91,16 @@ class FormularioDao {
                 . "WHERE r.id_input = $idInput "
                 . "AND r.estado = 1";
 
-        $result = array();
+        $results = array();
 
         $res = $this->adapter->query($sql);
 
         if ($res) {
             $result = $res->execute();
-            foreach ($result as $r) {
-                $result[] = $r["texto"];
+            foreach ($result as $rres) {
+                foreach ($rres as $r) {
+                    return $r;
+                }
             }
         }
 
@@ -148,7 +150,11 @@ class FormularioDao {
                 $unInput->setNombre($r["nombre"]);
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
-
+                $respuesta = $this->getRespuestaTexto($r["id"]);
+                $unInput->setRespuesta("");
+                if (is_string($respuesta)) {
+                    $unInput->setRespuesta($respuesta);
+                }
                 $inputs[] = $unInput;
             }
         }
@@ -181,7 +187,7 @@ class FormularioDao {
         return $grupos;
     }
 
-    public function getRespuestaJson($palabra,$idUsuario,$tipo) {
+    public function getRespuestaJson($palabra, $idUsuario, $tipo) {
         $separadores = array("?", ".", "!", ":", ";", ",");
 
         $res = "";
@@ -190,25 +196,27 @@ class FormularioDao {
 
         if (strpos($palabra, "@") === 0) {
             $palabra = substr($palabra, 1);
+            $separador_temp = "";
             foreach ($separadores as $separador) {
                 $pos = strpos($palabra, $separador);
                 if ($pos !== false) {
+                    $separador_temp = $separador;
                     $palabra = substr($palabra, 0, $pos);
                 }
             }
-            $respuesta[] = $this->getRespuestaPregunta($palabra, $idUsuario,$tipo);
+            $respuesta[] = $this->getRespuestaPregunta($palabra, $idUsuario, $tipo,$separador_temp);
         }
 
         return $respuesta;
     }
 
-    public function getRespuestaPregunta($nomPregunta, $idUsuario,$tipo) {
-        
-        if($tipo == "texto"){
+    public function getRespuestaPregunta($nomPregunta, $idUsuario, $tipo,$separador) {
+
+        if ($tipo == "texto") {
             $sql = "SELECT rt.texto as respuesta FROM respuesta_texto as rt "
                     . "INNER JOIN respuestas as r on r.id = rt.id_respuesta "
                     . "INNER JOIN inputs as i on i.id = r.id_input "
-                    . "WHERE r.id_usuario = $idUsuario AND i.nombre = '".$nomPregunta."'";
+                    . "WHERE r.id_usuario = $idUsuario AND i.nombre = '" . $nomPregunta . "'";
         }
 
         $res = $this->adapter->query($sql);
@@ -220,7 +228,7 @@ class FormularioDao {
             }
         }
 
-        return "[Ingresar campo ".$nomPregunta."]";
+        return $nomPregunta.$separador;
     }
 
 }
