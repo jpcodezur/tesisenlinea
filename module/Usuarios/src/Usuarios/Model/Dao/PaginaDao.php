@@ -3,6 +3,9 @@
 namespace Usuarios\Model\Dao;
 
 use Usuarios\MisClases\Respuesta;
+use Usuarios\Model\Entity\Pagina;
+use Usuarios\Model\Entity\Input;
+
 
 class PaginaDao {
 
@@ -11,10 +14,65 @@ class PaginaDao {
 
     public function __construct($tableGateway = null, $adapter = null) {
         $this->tableGateway = $tableGateway;
+        $this->adapter = $adapter;
     }
+    
     
     public function setParams($params){
         $this->params = $params;
+    }
+    
+    public function getPagina($id){
+        
+        $this->adapter = $this->tableGateway->getAdapter();
+        
+        $sql = "SELECT * FROM paginas WHERE estado = 1 AND id=$id ORDER BY orden ASC";
+        
+        $unaPagina = new Pagina;
+        
+        $res = $this->adapter->query($sql);
+        
+        if($res){
+           $result = $res->execute();
+           foreach($result as $r){
+               $unaPagina->setId($r["id"]);
+               $unaPagina->setTitulo($r["titulo"]);
+               $unaPagina->setEstado($r["estado"]);
+               $unaPagina->setOrden($r["orden"]);
+               $inputs = $this->getInputs($unaPagina->getId());
+               $unaPagina->setInputs($inputs);
+               return $unaPagina;
+            }
+        }
+        
+        return $unaPagina;
+    }
+    
+    public function getInputs($idPagina){
+        $sql = "SELECT * FROM inputs WHERE estado = 1 AND id_pagina = $idPagina ORDER BY orden ASC";
+        
+        $inputs = array();
+        
+        $res = $this->adapter->query($sql);
+        
+        if($res){
+           $result = $res->execute();
+           foreach($result as $r){
+               $unInput = new Input();
+               $unInput->setId($r["id"]);
+               $unInput->setIdPagina($r["id_pagina"]);
+               $unInput->setLabel($r["label"]);
+               $unInput->setEstado($r["estado"]);
+               $unInput->setOrden($r["orden"]);
+               $unInput->setNombre($r["nombre"]);
+               $unInput->setRequired($r["required"]);
+               $unInput->setTipo($r["tipo_input"]);
+               
+               $inputs[] = $unInput;
+            }
+        }
+        
+        return $inputs;
     }
 
     public function fetchAll() {
@@ -150,12 +208,12 @@ class PaginaDao {
 
     public function update($unaEntity) {
         
-        $data = array();
-        
-        foreach ($this->params["edit_attrs"] as $attr) {
-            $get = "get" . ucwords($attr);
-            $data[$attr] = $unaEntity->$get();
-        }
+        $data = array(
+            "id"=>$unaEntity->getId(),
+            "titulo"=>$unaEntity->getTitulo(),
+            "orden"=>$unaEntity->getOrden(),
+            "estado"=>$unaEntity->getEstado(),
+        );
         
         $editValidator = "\Usuarios\Model\Dao\Validators\Edit" . ucwords($this->params["controller"]);
         
@@ -168,11 +226,11 @@ class PaginaDao {
             $result = $this->tableGateway->update($data, array("id" => $unaEntity->getId()));
 
             $respuesta->setError(false);
-            $respuesta->setMensaje(ucwords($this->params["singular"])." saved successfully");
+            $respuesta->setMensaje("Editado correctamente");
 
             if (!$result) {
                 $respuesta->setError(true);
-                $respuesta->setMensaje("Error saving ".$this->params["singular"]);
+                $respuesta->setMensaje("Error editando item ");
             }
         }
 

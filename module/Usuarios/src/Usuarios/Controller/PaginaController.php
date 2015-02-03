@@ -26,6 +26,10 @@ class PaginaController extends AbstractActionController {
         $this->dao = $dao;
         $this->dao->setParams($this->params);
     }
+    
+    public function setAdapter($adapter){
+        $this->adapter = $adapter;
+    }
 
     public function IndexAction() {
         die("500");
@@ -54,50 +58,41 @@ class PaginaController extends AbstractActionController {
         if ($this->request->isPost()) {
 
             $entity = new Pagina();
-            
+
             $entity->setTitulo($this->getRequest()->getPost("nombre", null));
             $entity->setOrden($this->getRequest()->getPost("orden", null));
             $entity->setEstado(1);
 
             $response = $this->dao->guardar($entity);
         }
-        
+
         $view = new JsonModel(array($response));
 
         $view->setTerminal(true);
 
         return $view;
-        
     }
 
     public function editAction() {
 
         $response = new \Usuarios\MisClases\Respuesta();
+
+        $id = $this->params()->fromPost('idpagina');
+        $nombre = $this->params()->fromPost('nombre');
+        $orden = $this->params()->fromPost('orden');
         
-        if ($this->request->isGet()) {
-            
-            $id = $this->request->getQuery('id');
+        $entity = $this->dao->getPagina($id);
+        
+        $entity->setTitulo($nombre);
+        $entity->setOrden($orden);
 
-            $entity = $this->dao->fetchOne(array("id" => $id));
-            
-            return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
-        }
+        $response = $this->dao->update($entity);
 
-        if ($this->request->isPost()) {
+        $view = new JsonModel(array($response));
 
-            $id = $this->getRequest()->getPost('id', null);
-            
-            $entity = $this->dao->fetchOne(array("id" => $id));
+        $view->setTerminal(true);
 
-            foreach ($this->params["edit_attrs"] as $attr) {
-                $set = "set" . ucwords($attr);
-                $entity->$set($this->getRequest()->getPost($attr, null));
-            }
-
-            $response = $this->dao->update($entity);
-        }
-
-        return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
+        return $view;
     }
 
     public function deleteAction() {

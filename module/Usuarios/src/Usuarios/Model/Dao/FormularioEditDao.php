@@ -13,6 +13,32 @@ class FormularioEditDao {
         $this->adapter = $adapter;
     }
     
+    public function saveOrdenPaginas($paginas){
+        foreach($paginas as $pagina){
+            $sql = "UPDATE paginas set orden = ".$pagina["orden"]." WHERE id= ".$pagina["id"];
+            $res = $this->adapter->query($sql);
+            $result = $res->execute();
+            if(!$result){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public function saveOrdenItems($inputs){
+        foreach($inputs as $input){
+            $sql = "UPDATE inputs set orden = ".$input["orden"]." WHERE id= ".$input["id"];
+            $res = $this->adapter->query($sql);
+            $result = $res->execute();
+            if(!$result){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     public function getPaginas(){
         $sql = "SELECT * FROM paginas WHERE estado = 1 ORDER BY orden ASC";
         
@@ -35,6 +61,29 @@ class FormularioEditDao {
         }
         
         return $paginas;
+    }
+    
+    public function getPagina($id){
+        $sql = "SELECT * FROM paginas WHERE estado = 1 AND id=$id ORDER BY orden ASC";
+        
+        $unaPagina = new Pagina;
+        
+        $res = $this->adapter->query($sql);
+        
+        if($res){
+           $result = $res->execute();
+           foreach($result as $r){
+               $unaPagina->setId($r["id"]);
+               $unaPagina->setTitulo($r["titulo"]);
+               $unaPagina->setEstado($r["estado"]);
+               $unaPagina->setOrden($r["orden"]);
+               $inputs = $this->getInputs($unaPagina->getId());
+               $unaPagina->setInputs($inputs);
+               return $unaPagina;
+            }
+        }
+        
+        return $unaPagina;
     }
     
     public function getInputs($idPagina){

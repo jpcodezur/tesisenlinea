@@ -37,5 +37,33 @@ class FormularioEditController extends AbstractActionController {
         $view->setTerminal(true);
         return $view;
     }
+    public function popupEditAction(){
+        
+        $id = $this->params()->fromQuery('idpagina'); 
+        
+        $pagina = $this->dao->getPagina($id);
+        
+        $view = new ViewModel(array("pagina" => $pagina));
+        $view->setTerminal(true);
+        return $view;
+    }
+    
+    public function saveordenpaginasAction(){
+        $paginas = $this->params()->fromPost('paginas'); 
+        $ret = $this->dao->saveOrdenPaginas($paginas);
+        $view = new JsonModel(array($ret));
+        $view->setTerminal(true);
+        return $view;
+    }
+    
+    public function saveordenitemsAction(){
+        $inputs = $this->params()->fromPost('items'); 
+        $ret = $this->dao->saveOrdenItems($inputs);
+        $view = new JsonModel(array($ret));
+        $view->setTerminal(true);
+        return $view;
+    }
+    
+    
     
 }
