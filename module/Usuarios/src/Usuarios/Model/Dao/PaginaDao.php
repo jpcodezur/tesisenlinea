@@ -242,6 +242,10 @@ class PaginaDao {
 
         $result = $this->tableGateway->delete(array("id" => $id));
         
+        if($result){
+            $this->deleteInputsPagina($id);
+        }
+        
         $respuesta->setError(false);
         $respuesta->setMensaje(ucwords($this->params["singular"])." deleted successfully");
         
@@ -251,6 +255,36 @@ class PaginaDao {
         }
 
         return $respuesta;
+    }
+    
+    public function deleteInputsPagina($id){
+        $this->adapter = $this->tableGateway->getAdapter();
+        
+        $inputs = $this->getInputs($id);
+        
+        foreach($inputs as $input){
+            $res = $this->deleteInputTipoFromInputs($input->getId(),$input->getTipo());
+            if($res){
+                $sql = "DELETE FROM inputs WHERE id = ".$input->getId();
+                $res = $this->adapter->query($sql)->execute();
+            }
+        }
+        
+        return true;
+    }
+    
+    public function deleteInputTipoFromInputs($id,$tipo){
+        switch ($tipo) {
+            case "texto":
+                $sql = "DELETE FROM input_texto WHERE id = ".$id;
+                return $this->adapter->query($sql)->execute();
+                break;
+
+            default:
+                break;
+        }
+        
+        return false;
     }
 
 }
