@@ -537,6 +537,7 @@
         function addControlHtml(id, nombre, label) {
             var s = '<div class="control-group item-input">' +
                     '<div class="alert alert-info input-control" id_input="' + id + '">' +
+                    '<i class="icon-move bigger-130"></i>'+
                     '<button type="button" class="close" data-dismiss="alert">' +
                     '<i class="ace-icon fa fa-times"></i>' +
                     '</button>' +
@@ -626,8 +627,8 @@
         });
         
         $(function() {
-            $( "#inputs-collections" ).sortable({
-            connectWith: "#inputs-collections",
+            $( ".form-horizontal" ).sortable({
+            connectWith: ".form-horizontal",
             stop: function( ) {
                 saveOrdenItem();
             }
