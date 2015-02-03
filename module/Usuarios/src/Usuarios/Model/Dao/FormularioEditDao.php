@@ -113,4 +113,30 @@ class FormularioEditDao {
         return $inputs;
     }
     
+    public function getInput($idinput){
+        $sql = "SELECT * FROM inputs WHERE estado = 1 AND id = $idinput";
+        
+        $unInput = new Input();
+        
+        $res = $this->adapter->query($sql);
+        
+        if($res){
+           $result = $res->execute();
+           foreach($result as $r){
+               $unInput->setId($r["id"]);
+               $unInput->setIdPagina($r["id_pagina"]);
+               $unInput->setLabel($r["label"]);
+               $unInput->setEstado($r["estado"]);
+               $unInput->setOrden($r["orden"]);
+               $unInput->setNombre($r["nombre"]);
+               $unInput->setRequired($r["required"]);
+               $unInput->setTipo($r["tipo_input"]);
+               
+               return $unInput;
+            }
+        }
+        
+        return $inputs;
+    }
+    
 }

@@ -499,6 +499,29 @@
       reset : function () {
         resetInput();
       },
+      update: function() {
+        var messageText = getInputBoxValue();
+        // Strip codes
+        // add each mention to mentionsCollection
+        // And update
+
+        var mentionText = utils.htmlEncode(getInputBoxValue());
+        var re = /@\[(.*?)\]\((.*?):(.*?)\)+/g; // Searches through @[value](type:id)
+
+        var match;
+        var newMentionText = mentionText;
+        while ((match = re.exec(mentionText)) != null) {    // Find all matches in a string
+            console.log(match);
+            newMentionText = newMentionText.replace(match[0],match[1]);
+            mentionsCollection.push({   // Btw: match[0] is the complete match
+                'id': match[3],
+                'type': match[2],
+                'value': match[1]
+            });
+        }
+        elmInputBox.val(newMentionText);
+        updateValues();
+    },
 
 	  //An async method which accepts a callback function and returns a collection of mentions as hash objects as a first parameter.
       getMentions : function (callback) {
