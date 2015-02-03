@@ -100,6 +100,88 @@ class InputDao {
         return $respuesta;
     }
     
+    public function update($unaEntity) {
+
+        $validate = new EditInput("", $this, $this->params);
+
+        $unaEntity->setOrden(0);
+        
+        $respuesta = $validate->validate($unaEntity);
+
+        $respuesta->id = false;
+
+        if ($respuesta->getError() === false) {
+
+            /* Save Start */
+
+            $connection = $this->adapter->getDriver()->getConnection();
+
+            $connection->beginTransaction();
+
+            $sql = "UPDATE inputs set nombre='" . $unaEntity->getNombre() . "',label='" . $unaEntity->getLabel() . "'";
+            $sql .= " WHERE id =" . $unaEntity->getId();
+            
+            $result = $this->adapter->query($sql)->execute();
+
+            if ($result) {
+
+                $id = $unaEntity->getId();
+                
+                $unInput = $unaEntity->getControl();
+                
+                $unInput->setIdInput($id);
+
+                $respuesta = $this->updateInputType($unInput,$unaEntity->getTipo());
+                
+                $respuesta->id = $id;
+
+                if ($respuesta->getError() == true) {
+                    $connection->rollback();
+                } else {
+                    $connection->commit();
+                }
+            } else {
+                $connection->rollback();
+            }
+
+            /* End Save */
+            if ($respuesta->getError() == false) {
+                $respuesta->setError(false);
+                $respuesta->setMensaje("Item updated successfully");
+            }
+            
+            if (!$result) {
+                $respuesta->setError(true);
+                $respuesta->setMensaje("Error updating item");
+            }
+        }
+
+        return $respuesta;
+    }
+    
+    public function updateInputType($entity,$tipo){
+        $response = new \Usuarios\MisClases\Respuesta();
+        $response->setError(true);
+        $sql = "";
+        
+        switch ($tipo) {
+            case "texto":
+                $sql = "UPDATE input_texto set respuestas_requeridas='".$entity->getRespuestasRequeridas()."' WHERE id_input=".$entity->getIdInput()."";
+                
+                $result = $this->adapter->query($sql)->execute();
+                if($result){
+                    $response->setError(false);
+                }
+                
+                break;
+
+            default:
+                break;
+        }
+        
+        return $response;
+    }
+    
     public function saveInputType($entity,$tipo){
         $response = new \Usuarios\MisClases\Respuesta();
         $response->setError(true);

@@ -32,6 +32,16 @@ class FormularioEditController extends AbstractActionController {
         return $view;
     }
     
+    public function popupeditinputAction(){
+        $id = $this->params()->fromQuery('idinput'); 
+        
+        $input = $this->dao->getInput($id);
+        
+        $view = new ViewModel(array("input" => $input));
+        $view->setTerminal(true);
+        return $view;
+    }
+    
     public function popupPaginaAction(){
         $view = new ViewModel();
         $view->setTerminal(true);

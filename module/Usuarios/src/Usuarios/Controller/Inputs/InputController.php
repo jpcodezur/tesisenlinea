@@ -88,33 +88,38 @@ class InputController extends AbstractActionController {
     public function editAction() {
 
         $response = new \Usuarios\MisClases\Respuesta();
-
-        $pages = $this->grupoDao->fetchAll();
-
-        if ($this->request->isGet()) {
-
-            $id = $this->request->getQuery('id');
-
-            $entity = $this->dao->fetchOne(array("id" => $id));
-
-            return new ViewModel(array("pages" => $pages["entities"], "params" => $this->params, "response" => $response, "entity" => $entity));
-        }
-
+        
         if ($this->request->isPost()) {
 
-            $id = $this->getRequest()->getPost('id', null);
+            $unInput = new Input();
+            
+            $unInput->setId($this->getRequest()->getPost("idinput", null));
+            $unInput->setNombre($this->getRequest()->getPost("nombre", null));
+            $unInput->setLabel($this->getRequest()->getPost("label", null));
+            $unInput->setTipo($this->getRequest()->getPost("tipo", null));
+            
+            $input_data = $this->getRequest()->getPost("input_data", null);
+            
+            switch ($unInput->getTipo()) {
+                    case "texto":
+                        $unInputTexto = new \Usuarios\Model\Entity\Texto();
+                        $unInputTexto->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
+                        break;
 
-            $entity = $this->dao->fetchOne(array("id" => $id));
-
-            foreach ($this->params["edit_attrs"] as $attr) {
-                $set = "set" . ucwords($attr);
-                $entity->$set($this->getRequest()->getPost($attr, null));
+                    default:
+                        break;
             }
-
-            $response = $this->dao->update($entity);
+            
+            $unInput->setControl($unInputTexto);
+            
+            $response = $this->dao->update($unInput);
         }
+        
+        $view = new JsonModel(array($response));
 
-        return new ViewModel(array("params" => $this->params, "response" => $response, "entity" => $entity));
+        $view->setTerminal(true);
+
+        return $view;
     }
 
     public function deleteAction() {
