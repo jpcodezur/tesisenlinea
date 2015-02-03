@@ -44,6 +44,8 @@ class EditBasico {
 
         if (isset($this->params["validate"]["save"]["strlen"])) {
             foreach ($this->params["validate"]["edit"]["strlen"] as $key => $value) {
+                $mensaje = "";
+                
                 $get = "get" . ucwords($key);
                 if (!$this->strLen($value, $entity->$get())) {
                     $response->setError(true);

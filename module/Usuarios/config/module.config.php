@@ -18,7 +18,7 @@ return array(
     ),
     'db' => array(
         'driver'         =>'Pdo',
-        'dsn'            =>'mysql:dbname=tesis_en_linea;host=localhost',
+        'dsn'            =>'mysql:dbname=tu_tesis_en_linea;host=localhost',
         'username' => 'root',
         'password' => '',
         'driver_options' => array(
