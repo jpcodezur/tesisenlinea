@@ -77,6 +77,7 @@ class FormularioDao {
                 $unInput->setNombre($r["nombre"]);
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
+                $unInput->setAyuda($r["ayuda"]);
                 $unInput->setRespuesta($this->getRespuestaTexto($r["id"]));
                 $inputs[] = $unInput;
             }
@@ -150,6 +151,7 @@ class FormularioDao {
                 $unInput->setNombre($r["nombre"]);
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
+                $unInput->setAyuda($r["ayuda"]);
                 $respuesta = $this->getRespuestaTexto($r["id"]);
                 $unInput->setRespuesta("");
                 if (is_string($respuesta)) {

@@ -51,7 +51,7 @@ class InputDao {
 
             $connection->beginTransaction();
 
-            $sql = "INSERT INTO inputs (nombre,label,required,tipo_input,estado,orden,id_pagina) VALUES(";
+            $sql = "INSERT INTO inputs (nombre,label,required,tipo_input,estado,orden,id_pagina,ayuda) VALUES(";
 
             $sql .= "'" . $unaEntity->getNombre() . "',";
             $sql .= "'" . $unaEntity->getLabel() . "',";
@@ -59,7 +59,8 @@ class InputDao {
             $sql .= "'" . $unaEntity->getTipo() . "',";
             $sql .= "'" . $unaEntity->getEstado() . "',";
             $sql .= "'" . $unaEntity->getOrden() . "',";
-            $sql .= "'" . $unaEntity->getIdPagina() . "'";
+            $sql .= "'" . $unaEntity->getIdPagina() . "',";
+            $sql .= "'" . $unaEntity->getAyuda() . "'";
             $sql .= ")";
 
             $result = $this->adapter->query($sql)->execute();
@@ -118,7 +119,7 @@ class InputDao {
 
             $connection->beginTransaction();
 
-            $sql = "UPDATE inputs set nombre='" . $unaEntity->getNombre() . "',label='" . $unaEntity->getLabel() . "'";
+            $sql = "UPDATE inputs set nombre='" . $unaEntity->getNombre() . "',label='" . $unaEntity->getLabel() . "',ayuda='" . $unaEntity->getAyuda() . "'";
             $sql .= " WHERE id =" . $unaEntity->getId();
             
             $result = $this->adapter->query($sql)->execute();

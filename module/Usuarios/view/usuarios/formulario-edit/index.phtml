@@ -225,6 +225,13 @@
     select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
         margin-bottom: 20px;
     }
+    .item-input .icon-move {
+        margin-right: 5px;
+    }
+    
+    .item-input strong{
+        margin-right: 6px;
+    }
 </style>
 <script>
     $(document).ready(function () {
@@ -452,6 +459,7 @@
 
             var nombre = $("input[name=nombre]").val(),
                     idinput = $("#idinput").val(),
+                    ayuda = $("input[name=ayuda]").val(),
                     label = $("textarea.mention").val(),
                     tipo = $("ul#myTab li.active a").attr("tipo");
 
@@ -469,6 +477,7 @@
                     nombre: nombre,
                     label: label,
                     tipo: tipo,
+                    ayuda:ayuda,
                     input_data: input_data
                 },
                 success: function (data) {
@@ -544,24 +553,24 @@
         });
 
         function addControlHtml(id, nombre, label) {
-            var s = '<div class="control-group item-input">' +
-                    '<div class="alert alert-info input-control" id_input="' + id + '">' +
-                    '<i class="icon-move bigger-130"></i>' +
-                    '<button type="button" class="close" data-dismiss="alert">' +
-                    '<i class="ace-icon fa fa-times"></i>' +
-                    '</button>' +
-                    '<strong>' + nombre + '</strong>' +
-                    '' + label + '' +
-                    '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
-                    '<a class="green edit-input" href="/tesisenlinea/public/usuarios/pagina/edit">' +
-                    '<i class="icon-pencil bigger-130"></i>' +
-                    '</a>' +
-                    '<a class="red remove del-item" href="/tesisenlinea/public/usuarios/pagina/delete/id_pagina">' +
-                    '<i class="icon-trash bigger-130"></i>' +
-                    '</a>' +
-                    '</div>' +
-                    '<br>' +
-                    '</div>' +
+            var s = 
+                    '<div class="control-group item-input">' +
+                        '<div class="alert alert-info" id_input="' + id + '">' +
+                            '<i class="icon-move bigger-130"></i>' +
+                            '<button data-dismiss="alert" class="close" type="button">' +
+                                '<i class="ace-icon fa fa-times"></i>' +
+                            '</button>' +
+                            '<strong>' + nombre + '</strong>' + label +
+                            '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
+                                '<a href="#" class="green edit-input">' +
+                                    '<i class="icon-pencil bigger-130"></i>' +
+                                '</a>' +
+                                '<a href="#" class="red remove del-item">' +
+                                    '<i class="icon-trash bigger-130"></i>' +
+                                '</a>' +
+                            '</div>' +
+                            '<br>' +
+                        '</div>' +
                     '</div>';
 
             $("#step-container .active #inputs-collections").append(s);

@@ -105,6 +105,7 @@ class FormularioEditDao {
                $unInput->setNombre($r["nombre"]);
                $unInput->setRequired($r["required"]);
                $unInput->setTipo($r["tipo_input"]);
+               $unInput->setAyuda($r["ayuda"]);
                
                $inputs[] = $unInput;
             }
@@ -131,6 +132,7 @@ class FormularioEditDao {
                $unInput->setNombre($r["nombre"]);
                $unInput->setRequired($r["required"]);
                $unInput->setTipo($r["tipo_input"]);
+               $unInput->setAyuda($r["ayuda"]);
                
                return $unInput;
             }

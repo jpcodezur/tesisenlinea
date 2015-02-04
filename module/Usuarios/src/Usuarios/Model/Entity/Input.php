@@ -14,7 +14,17 @@ class Input {
     private $tipo;
     private $control;
     private $respuesta;
+    private $ayuda;
     
+    function getAyuda() {
+        return $this->ayuda;
+    }
+
+    function setAyuda($ayuda) {
+        $this->ayuda = $ayuda;
+    }
+
+        
     function getRespuesta() {
         return $this->respuesta;
     }
