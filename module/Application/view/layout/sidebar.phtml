@@ -71,7 +71,7 @@
         <?php endif; ?>
         
         <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario","wizard")): ?>
-        <li>
+        <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario"))))?"active":"" ?>">
             <a class="dropdown-toggle" href="#">
                 <i class="icon-file-text"></i>
                 <span class="menu-text"> Tesis Wizard </span>
@@ -81,7 +81,7 @@
             
             <ul class="submenu">
                 
-                <li>
+                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario","action"=>"wizard"))))?"active":"" ?>">
                     <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario","action"=>"wizard")) ?>/">
                         <i class="icon-double-angle-right"></i>
                         Wizard

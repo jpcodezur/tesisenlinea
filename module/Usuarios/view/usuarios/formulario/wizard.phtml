@@ -46,7 +46,6 @@
                                                     <?php foreach ($pagina->getInputs() as $input): ?>
                                                         <div class="control-group inputs-respuestas">
                                                             <label id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
-
                                                             <div class="controls">
                                                                 <span class="span6 input-icon input-icon-right">
                                                                     <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required" : "" ?>/>
