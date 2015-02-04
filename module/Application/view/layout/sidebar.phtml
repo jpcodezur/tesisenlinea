@@ -16,14 +16,14 @@
     </div><!--#sidebar-shortcuts-->
 
     <ul class="nav nav-list">
-        <li class="active">
+        <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"index"))))?"active":"" ?>">
             <a href="<?php echo $this->url("usuarios",array("controller"=>"index","action"=>"index")) ?>">
                 <i class="icon-dashboard"></i>
                 <span class="menu-text"> Dashboard </span>
             </a>
         </li>
         <?php if( $this->acl->isAllowed($this->role,"usuarios:usuario","index")): ?>
-        <li>
+        <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario"))))?"active":"" ?>">
             <a class="dropdown-toggle" href="#">
                 <i class="icon-group"></i>
                 <span class="menu-text"> Users </span>
@@ -33,14 +33,14 @@
             
             <ul class="submenu">
                 
-                <li>
+                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"list"))))?"active":"" ?>">
                     <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"list")) ?>/">
                         <i class="icon-double-angle-right"></i>
                         List
                     </a>
                 </li>
                 
-                <li>
+                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"add"))))?"active":"" ?>">
                     <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"add")) ?>">
                         <i class="icon-double-angle-right"></i>
                         New
@@ -51,7 +51,7 @@
         <?php endif; ?>
         
         <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario_edit","index")): ?>
-        <li>
+        <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario_edit"))))?"active":"" ?>">
             <a class="dropdown-toggle" href="#">
                 <i class="icon-edit"></i>
                 <span class="menu-text"> Form Tesis </span>
@@ -60,7 +60,7 @@
             </a>
             
             <ul class="submenu">
-                <li>
+                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario_edit","action"=>"index"))))?"active":"" ?>">
                     <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario_edit","action"=>"index")) ?>">
                         <i class="icon-edit"></i>
                         Form

@@ -33,13 +33,14 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
         $sharedEvents = $events->getSharedManager();
         $sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initAuth'), 100);
     }
-
+/*
     public function initAlerts(MvcEvent $e) {
         $application = $e->getApplication();
         
-    }
+    }*/
     
     public function initAuth(MvcEvent $e) {
+        
         $application = $e->getApplication();
         $matches = $e->getRouteMatch();
         $controller = $matches->getParam("controller");
@@ -58,6 +59,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
             $controller = $e->getTarget();
             return $controller->redirect()->toRoute('usuarios', array('controller' => 'login'));
         }
+        
     }
 
     public function getAutoloaderConfig() {
