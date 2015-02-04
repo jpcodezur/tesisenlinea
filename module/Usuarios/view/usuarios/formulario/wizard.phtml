@@ -50,6 +50,9 @@
                                                             <div class="controls">
                                                                 <span class="span6 input-icon input-icon-right">
                                                                     <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required" : "" ?>/>
+                                                                    <?php if($input->getAyuda()):?>    
+                                                                    <i class="tooltip-success icon-question-sign" data-rel="tooltip" data-placement="right" title="<?php echo $input->getAyuda(); ?>"></i>
+                                                                    <?php endif;?>
                                                                     <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
                                                                 </span>
                                                                 <!--<span class="help-inline">Something may have gone wrong</span>-->
