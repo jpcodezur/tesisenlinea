@@ -119,7 +119,7 @@ class InputDao {
 
             $connection->beginTransaction();
 
-            $sql = "UPDATE inputs set nombre='" . $unaEntity->getNombre() . "',label='" . $unaEntity->getLabel() . "',ayuda='" . $unaEntity->getAyuda() . "'";
+            $sql = "UPDATE inputs set required = '".$unaEntity->getRequired()."', nombre='" . $unaEntity->getNombre() . "',label='" . $unaEntity->getLabel() . "',ayuda='" . $unaEntity->getAyuda() . "'";
             $sql .= " WHERE id =" . $unaEntity->getId();
             
             $result = $this->adapter->query($sql)->execute();

@@ -99,6 +99,7 @@ class InputController extends AbstractActionController {
             $unInput->setLabel($this->getRequest()->getPost("label", null));
             $unInput->setTipo($this->getRequest()->getPost("tipo", null));
             $unInput->setAyuda($this->getRequest()->getPost("ayuda", null));
+            $unInput->setRequired($this->getRequest()->getPost("obligatorio", null));
             
             $input_data = $this->getRequest()->getPost("input_data", null);
             
