@@ -232,86 +232,107 @@
     .item-input strong{
         margin-right: 6px;
     }
+    .select-value-input input[type=text]{
+        background-color: #d9edf7;
+        border:none;
+        margin:0;
+    }
+    .select-value-input input[type=text]{:disabled {
+        background-color: #d9edf7 !important;
+    }
 </style>
 <script>
     $(document).ready(function () {
         
-        $(document).on("click","#input-add-header .close",function(){
+        $(document).on("click",".del-input-select-value",function(e){
+                e.preventDefault();
+                 bootbox.confirm("Desea eliminar este opción?", function (result) {
+                    if (result == false) {
+                        $('.bootbox').each(function(){
+                            var pos = $(this).find(".modal-body").text()
+                                pos = pos.indexOf("Desea eliminar este opci");
+                            if(pos!==-1){
+                                $(this).modal('toggle');
+                            }
+                        })
+                    } else {
+                        $(this).parent().parent().parent().remove();
+                    }
+                })
+            });
+            
+            $(document).on("click",".edit-input-select-value",function(e){
+                e.preventDefault();
+                $(this).parent().parent().find("input[class=value-option]").attr("disabled",false);
+            });
+
+        $(document).on("click", "#input-add-header .close", function () {
             $.ajax({
-               url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "deletetempselect")) ?>",
-               success:function(data){
-                   
-               }
+                url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "deletetempselect")) ?>",
+                success: function (data) {
+
+                }
             });
         });
-        
-        $(document).on("click","#add-select-value",function(e){
+
+        $(document).on("click", "#add-select-value", function (e) {
             e.preventDefault();
 
             var valueselect = $("input[name=select_value]").val(),
-                tipo = ($("#esmulti").is(":checked"))?"multi":"simple",
-                orden = $("#values-select .select-value-input").length+1,
-                nrespuestas = ($("#esmulti").is(":checked"))?$("#numero-respuestas-select").val():"";
-                
-            if($("input[name=select_value]").val()){
-                $.ajax({
-                    url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "addtempselect")) ?>",
-                    type: "post",
-                    data: {
-                        valueselect: valueselect,
-                        tipo: tipo,
-                        orden:orden,
-                        nrespuestas: nrespuestas,
-                    },
-                    success: function (data) {
-                        var respuesta = data.response;
+                idunput = $("#values-select .select-value-input").length + 1,
+                valor = $("input[name=select_value]").val(),
+                tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple",
+                orden = $("#values-select .select-value-input").length + 1,
+                nrespuestas = ($("#esmulti").is(":checked")) ? $("#numero-respuestas-select").val() : "";
 
-                        s = '<div class="control-group item-input select-value-input" id_input="'+respuesta.idunput+'">'+
-                                '<div class="alert alert-info" id_input="'+respuesta.idunput+'">'+
-                                    '<i class="icon-move bigger-130"></i>'+
-                                    '<button data-dismiss="alert" class="close" type="button">'+
-                                        '<i class="ace-icon fa fa-times"></i>'+
-                                    '</button>'+
-                                    '<strong>'+respuesta.valor+'</strong>'+
-                                    '<div class="action-paginas hidden-phone visible-desktop action-buttons">'+
-                                        '<a id="del-pagina" href="/tesisenlinea/public/usuarios/pagina/delete/id_pagina" class="red remove" style="">'+
-                                            '<i class="icon-trash bigger-130"></i>'+
-                                        '</a>'+
-                                        '<a class="green" href="/tesisenlinea/public/usuarios/pagina/update/id_pagina" id="edit-pagina">'+
-                                            '<i class="icon-pencil bigger-130"></i>'+
-                                        '</a>'+
-                                    '</div>'+
-                                    '<br>'+
-                                '</div>'+
-                            '</div>';
+            if ($("input[name=select_value]").val()) {
 
-                        if(respuesta.idunput != 0){
-                            $("input[name=select_value]").val("");
-                            $("#values-select").append(s);
-                            
-                            $(function () {
-                                $("#values-select").sortable({
-                                    connectWith: "#values-select",
-                                    stop: function ( ) {
-                                        saveOrdenValue();
-                                    }
-                                }).disableSelection();
-                            });
+                s = '<div class="control-group item-input select-value-input">' +
+                        '<div class="alert alert-info">' +
+                        '<i class="icon-move bigger-130"></i>' +
+                        '<button data-dismiss="alert" class="close" type="button">' +
+                        '<i class="ace-icon fa fa-times"></i>' +
+                        '</button>' +
+                        '<input id_input="'+idunput+'" name="input-select-value-' + idunput + '" id="input-select-value-' + idunput + '" class="value-option" type="text" value="' + valor + '" disabled="disabled">' +
+                        '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
+                        '<a id="" class="red remove del-input-select-value" style="">' +
+                        '<i class="icon-trash bigger-130"></i>' +
+                        '</a>' +
+                        '<a class="edit-input-select-value green" id="">' +
+                        '<i class="icon-pencil bigger-130"></i>' +
+                        '</a>' +
+                        '</div>' +
+                        '<br>' +
+                        '</div>' +
+                        '</div>';
+
+
+                $("input[name=select_value]").val("");
+                $("#values-select").append(s);
+
+                $(function () {
+                    $("#values-select").sortable({
+                        connectWith: "#values-select",
+                        stop: function ( ) {
+                            saveOrdenValue();
                         }
-                    }
+                    }).disableSelection();
+                    $('#values-select input').bind('click.sortable mousedown.sortable',function(ev){
+                    ev.target.focus();
+                  });
                 });
             }
         });
-        
+
         $("#add-input").on(ace.click_event, function (e) {
             e.preventDefault();
             bootbox.dialog({});
-            
+
             $.ajax({
                 url: "formulario_edit/popup",
                 data: "",
                 success: function (data) {
-                    
+
                     $(".bootbox .modal-body").html(data);
                     $('#numero-respuestas')
                             .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
@@ -330,7 +351,7 @@
                             $("#numero-respuestas-select").attr("disabled", true);
                         }
                     });
-                    
+
                     $(function () {
                         $('textarea.mention').mentionsInput({
                             onDataRequest: function (mode, query, callback) {
@@ -359,16 +380,24 @@
                 success: function (data) {
                     $(".bootbox .modal-body").html(data);
 
-
-
                     $('#numero-respuestas')
                             .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                             .on('change', function () {
                             });
-                    $('#numero-respuestas-select')
+                    
+                     $('#numero-respuestas-select')
                             .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                             .on('change', function () {
                             });
+
+                    $(document).on("change", "#esmulti", function () {
+
+                        if ($(this).is(":checked")) {
+                            $("#numero-respuestas-select").attr("disabled", false);
+                        } else {
+                            $("#numero-respuestas-select").attr("disabled", true);
+                        }
+                    });
                     $(function () {
                         $('textarea.mention').mentionsInput({
                             onDataRequest: function (mode, query, callback) {
@@ -555,7 +584,7 @@
             if (tipo == "texto") {
                 input_data.respuestas_requeridas = $("#numero-respuestas").val();
             }
-            
+
             if (tipo == "dropdown") {
                 //input_data.respuestas_requeridas = $("#numero-respuestas").val();
             }
@@ -642,6 +671,7 @@
                     }
                 }
             });
+            
         });
 
         function addControlHtml(id, nombre, label) {
@@ -682,11 +712,23 @@
             if (tipo == "texto") {
                 input_data.respuestas_requeridas = $("#numero-respuestas").val();
             }
-            
+
             if (tipo == "dropdown") {
                 input_data.select = {};
                 input_data.select.respuestas_requeridas = $("#numero-respuestas-select").val();
-                input_data.select.tipo = ($("#esmulti").is(":checked"))?"multi":"simple";
+                input_data.select.tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple";
+
+                values = [];
+                
+                $("#values-select .select-value-input").each(function(i){
+                    value = {};
+                    value.id = $(this).find(".value-option").attr("id_input");
+                    value.value = $(this).find(".value-option").val();
+                    value.orden = i+1;
+                    values.push(value);
+                })
+                
+                input_data.select.values = values; 
             }
 
             $.ajax({
@@ -773,7 +815,7 @@
             }
         });
     }
-    
+
     function saveOrdenItem() {
         var items = [];
 

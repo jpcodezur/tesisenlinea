@@ -79,11 +79,47 @@ class FormularioDao {
                 $unInput->setTipo($r["tipo_input"]);
                 $unInput->setAyuda($r["ayuda"]);
                 $unInput->setRespuesta($this->getRespuestaTexto($r["id"]));
+                
+                switch ($unInput->getTipo()) {
+                    case "dropdown":
+                        $select = new \Usuarios\Model\Entity\Select();
+                        $values = $this->getValuesSelect($unInput->getId());
+                        $select->setValues($values);
+                        $unInput->setControl($select);
+                        break;
+
+                    default:
+                        break;
+                }
+                
                 $inputs[] = $unInput;
             }
         }
 
         return $inputs;
+    }
+    
+    public function getValuesSelect($idInput){
+        $sql = " SELECT * FROM select_collections as sc  
+                INNER JOIN input_select as iss      
+                on sc.id_input = iss.id_input 
+                WHERE iss.id_input =  $idInput";
+        
+        $results = array();
+
+        $res = $this->adapter->query($sql);
+
+        if ($res) {
+            $result = $res->execute();
+            foreach ($result as $res) {
+                $selectValue = new \Usuarios\Model\Entity\SelectValues();
+                $selectValue->setId($res["id"]);
+                $selectValue->setValue($res["value"]);
+                $results[] = $selectValue;
+            }
+        }
+
+        return $results;
     }
 
     public function getRespuestaTexto($idInput) {
@@ -125,6 +161,7 @@ class FormularioDao {
                 $unaPagina->setOrden($r["orden"]);
                 $inputs = $this->getInputs($r["id"]);
                 $unaPagina->setInputs($inputs);
+                
                 $paginas[] = $unaPagina;
             }
         }
@@ -156,6 +193,17 @@ class FormularioDao {
                 $unInput->setRespuesta("");
                 if (is_string($respuesta)) {
                     $unInput->setRespuesta($respuesta);
+                }
+                switch ($unInput->getTipo()) {
+                    case "dropdown":
+                        $select = new \Usuarios\Model\Entity\Select();
+                        $values = $this->getValuesSelect($unInput->getId());
+                        $select->setValues($values);
+                        $unInput->setControl($select);
+                        break;
+
+                    default:
+                        break;
                 }
                 $inputs[] = $unInput;
             }

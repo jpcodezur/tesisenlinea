@@ -7,6 +7,7 @@ class Select{
     private $id;
     private $idInput;
     private $tipo;
+    private $values;
     private $respuestasRequeridas;
 
     function getId() {
@@ -35,6 +36,14 @@ class Select{
 
     function setTipo($tipo) {
         $this->tipo = $tipo;
+    }
+    
+    function setValues($p){
+        $this->values = $p;
+    }
+    
+    function getValues(){
+        return $this->values;
     }
 
     function setRespuestasRequeridas($respuestasRequeridas) {

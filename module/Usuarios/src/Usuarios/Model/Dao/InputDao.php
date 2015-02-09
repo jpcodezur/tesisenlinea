@@ -19,7 +19,7 @@ class InputDao {
         $this->params = $this->params->getParams();
     }
     
-    public function deleteTempSelectValue($idUsuario){
+    public function deleteSelectValue($idUsuario){
         $response = new \Usuarios\MisClases\Respuesta();
         
         $sql = "DELETE FROM input_select_temp WHERE id_input=".$idUsuario;
@@ -76,7 +76,7 @@ class InputDao {
         return $response;
     }
     
-    public function searchInputTemp($idInput){
+    /*public function searchInputTemp($idInput){
         $sql = "SELECT COUNT(*) as total FROM input_select_temp WHERE id_input = ".$idInput;
         $res = $this->adapter->query($sql);
         $total = 0;
@@ -89,55 +89,55 @@ class InputDao {
         
         return $total;
         
-    }
+    }*/
     
-    public function insertTempSelectValue($idUsuario,$value,$tipo,$nrespuestas,$orden){
-        $response = new \Usuarios\MisClases\Respuesta();
-        
-        $response->valor = $value;
-        
-        if(!$this->searchInputTemp($idUsuario)){
-        
-            $sql = "INSERT INTO input_select_temp (id_input,tipo,respuestas_requeridas) VALUES (";
-            $sql .= "'".$idUsuario."',";
-            $sql .= "'".$tipo."',";
-            $sql .= "'".$nrespuestas."'";
-            $sql .= ")";
-
-            $response->setError(true);            
-
-            $res = $this->adapter->query($sql)->execute();
-
-            if($res){
-                $response->setError(false);
-                $response->setMensaje("");
-            }
-        
-        }
-        
-        $idSelect = $orden;//$this->getIdSelect($idUsuario);
-        
-        if(!$idSelect){
-            $idSelect = 0;
-        }
-                
-        $sql = "INSERT INTO select_collections_temp (id_input,id_select,value) VALUES (";
-        $sql .= "'".$idUsuario."',";
-        $sql .= "'".($idSelect)."',";
-        $sql .= "'".$value."'";
-        $sql .= ")";
-
-        $res = $this->adapter->query($sql)->execute();
-
-        if($res){
-            $response->idunput = $this->adapter->getDriver()->getLastGeneratedValue();
-            $response->setError(false);
-            $response->setMensaje("");
-        }
-        
-        
-        return $response;
-    }
+//    public function insertTempSelectValue($idUsuario,$value,$tipo,$nrespuestas,$orden){
+//        $response = new \Usuarios\MisClases\Respuesta();
+//        
+//        $response->valor = $value;
+//        
+//        if(!$this->searchInputTemp($idUsuario)){
+//        
+//            $sql = "INSERT INTO input_select_temp (id_input,tipo,respuestas_requeridas) VALUES (";
+//            $sql .= "'".$idUsuario."',";
+//            $sql .= "'".$tipo."',";
+//            $sql .= "'".$nrespuestas."'";
+//            $sql .= ")";
+//
+//            $response->setError(true);            
+//
+//            $res = $this->adapter->query($sql)->execute();
+//
+//            if($res){
+//                $response->setError(false);
+//                $response->setMensaje("");
+//            }
+//        
+//        }
+//        
+//        $idSelect = $orden;//$this->getIdSelect($idUsuario);
+//        
+//        if(!$idSelect){
+//            $idSelect = 0;
+//        }
+//                
+//        $sql = "INSERT INTO select_collections_temp (id_input,id_select,value) VALUES (";
+//        $sql .= "'".$idUsuario."',";
+//        $sql .= "'".($idSelect)."',";
+//        $sql .= "'".$value."'";
+//        $sql .= ")";
+//
+//        $res = $this->adapter->query($sql)->execute();
+//
+//        if($res){
+//            $response->idunput = $this->adapter->getDriver()->getLastGeneratedValue();
+//            $response->setError(false);
+//            $response->setMensaje("");
+//        }
+//        
+//        
+//        return $response;
+//    }
     
     public function saveOrdenValues($inputs){
         foreach($inputs as $input){
@@ -162,15 +162,42 @@ class InputDao {
         return 0;
     }*/
     
+    
+    
     public function delete($id){
         
         $response = new \Usuarios\MisClases\Respuesta();
+        
+        $input = $this->fetchOne(array("id" => $id));
+        
+        if($input){
+            $tipo = $input[0]->getTipo();
+        }
         
         $sql = "DELETE FROM inputs WHERE id = $id";
         
         $res = $this->adapter->query($sql)->execute();
         
         if($res){
+            
+            switch ($tipo) {
+                case "texto":
+                    $sql = "DELETE FROM input_texto WHERE id_input = $id";
+                    $res = $this->adapter->query($sql)->execute();
+                    break;
+                case "dropdown":
+                    $sql = "DELETE FROM input_select WHERE id_input = $id";
+                    $res = $this->adapter->query($sql)->execute();
+                    if($res){
+                        $sql = "DELETE FROM select_collections WHERE id_input = $id";
+                        $res = $this->adapter->query($sql)->execute();
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            
             $response->setError(false);
             $response->setMensaje("Item eliminado");
         }
@@ -260,9 +287,9 @@ class InputDao {
                 $select->respuestas_requeridas = $s["respuestas_requeridas"];
                 
                 $sql = "INSERT INTO input_select (id_input,tipo,respuestas_requeridas) VALUES (";
-                $sql .= "'".$select->id_input."',";
-                $sql .= "'".$select->tipo."',";
-                $sql .= "'".$select->respuestas_requeridas."'";
+                $sql .= "'" . $select->id_input . "',";
+                $sql .= "'" . $select->tipo . "',";
+                $sql .= "'" . $select->respuestas_requeridas . "'";
                 $sql .= ")";
                 $resS = $this->adapter->query($sql)->execute();
             }
@@ -378,6 +405,26 @@ class InputDao {
                 $result = $this->adapter->query($sql)->execute();
                 if($result){
                     $response->setError(false);
+                }
+                
+                break;
+            case "dropdown":
+                $sql = "INSERT INTO input_select (id_input,tipo,respuestas_requeridas) ";
+                $sql .= "VALUES ('".$entity->getIdInput()."','".$entity->getTipo()."','".$entity->getRespuestasRequeridas()."')";
+                $result = $this->adapter->query($sql)->execute();
+                if($result){
+                    foreach($entity->getValues() as $value){
+                        $a = $value;
+                        $sql = "INSERT INTO select_collections (id_input,id_select,value,orden) VALUES(";
+                        $sql .= "'".$entity->getIdInput()."',";
+                        $sql .= "'".$value["id"]."',";
+                        $sql .= "'".$value["value"]."',";
+                        $sql .= "'".$value["orden"]."'";
+                        $sql .= ")";
+                        $result = $this->adapter->query($sql)->execute();
+                    }
+                    $response->setError(false);
+                    $response->setMensaje("");
                 }
                 
                 break;
