@@ -71,7 +71,10 @@ class InputController extends AbstractActionController {
                         break;
                     case "dropdown":
                         $unInput = new \Usuarios\Model\Entity\Select();
-                        //$unInput->setSelect($input_data["respuestas_requeridas"]);
+                        $select = $input_data["select"];
+                        $unInput->setRespuestasRequeridas($select["respuestas_requeridas"]);
+                        $unInput->setTipo($select["tipo"]);
+                        $unInput->setValues($select["values"]);
                         break;
                     default:
                         break;
@@ -80,12 +83,6 @@ class InputController extends AbstractActionController {
             $unaEntity->setControl($unInput);
             
             $response = $this->dao->save($unaEntity);
-            
-            if($response->getError() !== false){
-                $idusuario = $_SESSION["miSession"]["usuario"]->getId();
-                $select = $input_data["select"];
-                $this->dao->saveSelect($idusuario,$select["respuestas_requeridas"],$select["tipo"]);
-            }
         }
         
         $view = new JsonModel(array( "response" => $response));
@@ -95,7 +92,7 @@ class InputController extends AbstractActionController {
         return $view;
     }
     
-    public function deletetempselectAction(){
+    /*public function deletetempselectAction(){
         
         $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
         
@@ -106,7 +103,7 @@ class InputController extends AbstractActionController {
         $view->setTerminal(true);
 
         return $view;
-    }
+    }*/
     
     public function deleteitemtempselectAction(){
         
@@ -129,7 +126,7 @@ class InputController extends AbstractActionController {
         return $view;
     }
     
-    public function addtempselectAction(){
+    /*public function addtempselectAction(){
         
         $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
         
@@ -145,7 +142,7 @@ class InputController extends AbstractActionController {
         $view->setTerminal(true);
 
         return $view;
-    }
+    }*/
 
     public function editAction() {
 
