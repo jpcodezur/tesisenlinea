@@ -2,18 +2,23 @@
 
 namespace Usuarios\Model\Entity;
 
-class Texto{
+class Select{
 
     private $id;
     private $idInput;
+    private $tipo;
     private $respuestasRequeridas;
-    
+
     function getId() {
         return $this->id;
     }
 
     function getIdInput() {
         return $this->idInput;
+    }
+
+    function getTipo() {
+        return $this->tipo;
     }
 
     function getRespuestasRequeridas() {
@@ -28,18 +33,13 @@ class Texto{
         $this->idInput = $idInput;
     }
 
+    function setTipo($tipo) {
+        $this->tipo = $tipo;
+    }
+
     function setRespuestasRequeridas($respuestasRequeridas) {
         $this->respuestasRequeridas = $respuestasRequeridas;
     }
-    
-    function setSelect($s){
-        $this->select = $s;
-    }
-    
-    function getSelect($s){
-        return $this->select;
-    }
 
 
-    
 }

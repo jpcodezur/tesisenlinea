@@ -69,6 +69,10 @@ class InputController extends AbstractActionController {
                         $unInput = new \Usuarios\Model\Entity\Texto();
                         $unInput->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
                         break;
+                    case "dropdown":
+                        $unInput = new \Usuarios\Model\Entity\Select();
+                        //$unInput->setSelect($input_data["respuestas_requeridas"]);
+                        break;
                     default:
                         break;
             }
@@ -79,7 +83,8 @@ class InputController extends AbstractActionController {
             
             if($response->getError() !== false){
                 $idusuario = $_SESSION["miSession"]["usuario"]->getId();
-                $this->dao->saveSelect($idusuario,$response->id);
+                $select = $input_data["select"];
+                $this->dao->saveSelect($idusuario,$select["respuestas_requeridas"],$select["tipo"]);
             }
         }
         
@@ -116,6 +121,14 @@ class InputController extends AbstractActionController {
         return $view;
     }
     
+    public function saveordenvalueAction(){
+        $inputs = $this->params()->fromPost('items'); 
+        $ret = $this->dao->saveOrdenValues($inputs);
+        $view = new JsonModel(array($ret));
+        $view->setTerminal(true);
+        return $view;
+    }
+    
     public function addtempselectAction(){
         
         $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
@@ -123,8 +136,9 @@ class InputController extends AbstractActionController {
         $value = $this->getRequest()->getPost("valueselect", null);
         $tipo = $this->getRequest()->getPost("tipo", null);
         $nrespuestas = $this->getRequest()->getPost("nrespuestas", null);
+        $orden = $this->getRequest()->getPost("orden", null);
         
-        $response = $this->dao->insertTempSelectValue($idUsuario,$value,$tipo,$nrespuestas);
+        $response = $this->dao->insertTempSelectValue($idUsuario,$value,$tipo,$nrespuestas,$orden);
         
         $view = new JsonModel(array( "response" => $response));
 

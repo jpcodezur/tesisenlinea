@@ -250,6 +250,7 @@
 
             var valueselect = $("input[name=select_value]").val(),
                 tipo = ($("#esmulti").is(":checked"))?"multi":"simple",
+                orden = $("#values-select .select-value-input").length+1,
                 nrespuestas = ($("#esmulti").is(":checked"))?$("#numero-respuestas-select").val():"";
                 
             if($("input[name=select_value]").val()){
@@ -259,13 +260,14 @@
                     data: {
                         valueselect: valueselect,
                         tipo: tipo,
+                        orden:orden,
                         nrespuestas: nrespuestas,
                     },
                     success: function (data) {
                         var respuesta = data.response;
 
-                        s = '<div class="control-group item-input select-value-input" id_input="'+respuesta.valor+'">'+
-                                '<div class="alert alert-info" id_input="33">'+
+                        s = '<div class="control-group item-input select-value-input" id_input="'+respuesta.idunput+'">'+
+                                '<div class="alert alert-info" id_input="'+respuesta.idunput+'">'+
                                     '<i class="icon-move bigger-130"></i>'+
                                     '<button data-dismiss="alert" class="close" type="button">'+
                                         '<i class="ace-icon fa fa-times"></i>'+
@@ -286,6 +288,15 @@
                         if(respuesta.idunput != 0){
                             $("input[name=select_value]").val("");
                             $("#values-select").append(s);
+                            
+                            $(function () {
+                                $("#values-select").sortable({
+                                    connectWith: "#values-select",
+                                    stop: function ( ) {
+                                        saveOrdenValue();
+                                    }
+                                }).disableSelection();
+                            });
                         }
                     }
                 });
@@ -300,6 +311,7 @@
                 url: "formulario_edit/popup",
                 data: "",
                 success: function (data) {
+                    
                     $(".bootbox .modal-body").html(data);
                     $('#numero-respuestas')
                             .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
@@ -672,7 +684,9 @@
             }
             
             if (tipo == "dropdown") {
-                //input_data.respuestas_requeridas = $("#numero-respuestas").val();
+                input_data.select = {};
+                input_data.select.respuestas_requeridas = $("#numero-respuestas-select").val();
+                input_data.select.tipo = ($("#esmulti").is(":checked"))?"multi":"simple";
             }
 
             $.ajax({
@@ -737,9 +751,29 @@
             }).disableSelection();
         });
 
-
-
     });
+    function saveOrdenValue() {
+        var items = [];
+
+        $("#values-select .select-value-input").each(function (i) {
+            var unInput = {};
+            unInput.id = $(this).find(".alert-info:first").attr("id_input");
+            unInput.orden = i + 1;
+            items.push(unInput);
+        })
+
+        $.ajax({
+            url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "saveordenvalue")) ?>",
+            type: "post",
+            data: {
+                items: items
+            },
+            success: function (data) {
+
+            }
+        });
+    }
+    
     function saveOrdenItem() {
         var items = [];
 
