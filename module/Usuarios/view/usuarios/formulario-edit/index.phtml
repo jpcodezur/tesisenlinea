@@ -228,16 +228,74 @@
     .item-input .icon-move {
         margin-right: 5px;
     }
-    
+
     .item-input strong{
         margin-right: 6px;
     }
 </style>
 <script>
     $(document).ready(function () {
+        
+        $(document).on("click","#input-add-header .close",function(){
+            $.ajax({
+               url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "deletetempselect")) ?>",
+               success:function(data){
+                   
+               }
+            });
+        });
+        
+        $(document).on("click","#add-select-value",function(e){
+            e.preventDefault();
+
+            var valueselect = $("input[name=select_value]").val(),
+                tipo = ($("#esmulti").is(":checked"))?"multi":"simple",
+                nrespuestas = ($("#esmulti").is(":checked"))?$("#numero-respuestas-select").val():"";
+                
+            if($("input[name=select_value]").val()){
+                $.ajax({
+                    url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "addtempselect")) ?>",
+                    type: "post",
+                    data: {
+                        valueselect: valueselect,
+                        tipo: tipo,
+                        nrespuestas: nrespuestas,
+                    },
+                    success: function (data) {
+                        var respuesta = data.response;
+
+                        s = '<div class="control-group item-input select-value-input" id_input="'+respuesta.valor+'">'+
+                                '<div class="alert alert-info" id_input="33">'+
+                                    '<i class="icon-move bigger-130"></i>'+
+                                    '<button data-dismiss="alert" class="close" type="button">'+
+                                        '<i class="ace-icon fa fa-times"></i>'+
+                                    '</button>'+
+                                    '<strong>'+respuesta.valor+'</strong>'+
+                                    '<div class="action-paginas hidden-phone visible-desktop action-buttons">'+
+                                        '<a id="del-pagina" href="/tesisenlinea/public/usuarios/pagina/delete/id_pagina" class="red remove" style="">'+
+                                            '<i class="icon-trash bigger-130"></i>'+
+                                        '</a>'+
+                                        '<a class="green" href="/tesisenlinea/public/usuarios/pagina/update/id_pagina" id="edit-pagina">'+
+                                            '<i class="icon-pencil bigger-130"></i>'+
+                                        '</a>'+
+                                    '</div>'+
+                                    '<br>'+
+                                '</div>'+
+                            '</div>';
+
+                        if(respuesta.idunput != 0){
+                            $("input[name=select_value]").val("");
+                            $("#values-select").append(s);
+                        }
+                    }
+                });
+            }
+        });
+        
         $("#add-input").on(ace.click_event, function (e) {
             e.preventDefault();
             bootbox.dialog({});
+            
             $.ajax({
                 url: "formulario_edit/popup",
                 data: "",
@@ -247,7 +305,20 @@
                             .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                             .on('change', function () {
                             });
+                    $('#numero-respuestas-select')
+                            .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                            .on('change', function () {
+                            });
 
+                    $(document).on("change", "#esmulti", function () {
+
+                        if ($(this).is(":checked")) {
+                            $("#numero-respuestas-select").attr("disabled", false);
+                        } else {
+                            $("#numero-respuestas-select").attr("disabled", true);
+                        }
+                    });
+                    
                     $(function () {
                         $('textarea.mention').mentionsInput({
                             onDataRequest: function (mode, query, callback) {
@@ -282,7 +353,10 @@
                             .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                             .on('change', function () {
                             });
-
+                    $('#numero-respuestas-select')
+                            .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                            .on('change', function () {
+                            });
                     $(function () {
                         $('textarea.mention').mentionsInput({
                             onDataRequest: function (mode, query, callback) {
@@ -469,6 +543,10 @@
             if (tipo == "texto") {
                 input_data.respuestas_requeridas = $("#numero-respuestas").val();
             }
+            
+            if (tipo == "dropdown") {
+                //input_data.respuestas_requeridas = $("#numero-respuestas").val();
+            }
 
             $.ajax({
                 url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "edit")) ?>",
@@ -478,9 +556,9 @@
                     nombre: nombre,
                     label: label,
                     tipo: tipo,
-                    ayuda:ayuda,
+                    ayuda: ayuda,
                     input_data: input_data,
-                    obligatorio:obligatorio
+                    obligatorio: obligatorio
                 },
                 success: function (data) {
                     var respuesta = data[0];
@@ -555,24 +633,24 @@
         });
 
         function addControlHtml(id, nombre, label) {
-            var s = 
+            var s =
                     '<div class="control-group item-input">' +
-                        '<div class="alert alert-info" id_input="' + id + '">' +
-                            '<i class="icon-move bigger-130"></i>' +
-                            '<button data-dismiss="alert" class="close" type="button">' +
-                                '<i class="ace-icon fa fa-times"></i>' +
-                            '</button>' +
-                            '<strong>' + nombre + '</strong>' + label +
-                            '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
-                                '<a href="#" class="green edit-input">' +
-                                    '<i class="icon-pencil bigger-130"></i>' +
-                                '</a>' +
-                                '<a href="#" class="red remove del-item">' +
-                                    '<i class="icon-trash bigger-130"></i>' +
-                                '</a>' +
-                            '</div>' +
-                            '<br>' +
-                        '</div>' +
+                    '<div class="alert alert-info" id_input="' + id + '">' +
+                    '<i class="icon-move bigger-130"></i>' +
+                    '<button data-dismiss="alert" class="close" type="button">' +
+                    '<i class="ace-icon fa fa-times"></i>' +
+                    '</button>' +
+                    '<strong>' + nombre + '</strong>' + label +
+                    '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
+                    '<a href="#" class="green edit-input">' +
+                    '<i class="icon-pencil bigger-130"></i>' +
+                    '</a>' +
+                    '<a href="#" class="red remove del-item">' +
+                    '<i class="icon-trash bigger-130"></i>' +
+                    '</a>' +
+                    '</div>' +
+                    '<br>' +
+                    '</div>' +
                     '</div>';
 
             $("#step-container .active #inputs-collections").append(s);
@@ -591,6 +669,10 @@
 
             if (tipo == "texto") {
                 input_data.respuestas_requeridas = $("#numero-respuestas").val();
+            }
+            
+            if (tipo == "dropdown") {
+                //input_data.respuestas_requeridas = $("#numero-respuestas").val();
             }
 
             $.ajax({

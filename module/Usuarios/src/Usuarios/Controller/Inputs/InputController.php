@@ -69,7 +69,6 @@ class InputController extends AbstractActionController {
                         $unInput = new \Usuarios\Model\Entity\Texto();
                         $unInput->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
                         break;
-
                     default:
                         break;
             }
@@ -77,7 +76,55 @@ class InputController extends AbstractActionController {
             $unaEntity->setControl($unInput);
             
             $response = $this->dao->save($unaEntity);
+            
+            if($response->getError() !== false){
+                $idusuario = $_SESSION["miSession"]["usuario"]->getId();
+                $this->dao->saveSelect($idusuario,$response->id);
+            }
         }
+        
+        $view = new JsonModel(array( "response" => $response));
+
+        $view->setTerminal(true);
+
+        return $view;
+    }
+    
+    public function deletetempselectAction(){
+        
+        $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
+        
+        $this->dao->deleteTempSelectValue($idUsuario);
+        
+        $view = new JsonModel(array( "response" => $response));
+
+        $view->setTerminal(true);
+
+        return $view;
+    }
+    
+    public function deleteitemtempselectAction(){
+        
+        $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
+        
+        $this->dao->deleteItemTempSelectValue($idUsuario);
+        
+        $view = new JsonModel(array( "response" => $response));
+
+        $view->setTerminal(true);
+
+        return $view;
+    }
+    
+    public function addtempselectAction(){
+        
+        $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
+        
+        $value = $this->getRequest()->getPost("valueselect", null);
+        $tipo = $this->getRequest()->getPost("tipo", null);
+        $nrespuestas = $this->getRequest()->getPost("nrespuestas", null);
+        
+        $response = $this->dao->insertTempSelectValue($idUsuario,$value,$tipo,$nrespuestas);
         
         $view = new JsonModel(array( "response" => $response));
 
