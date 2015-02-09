@@ -19,6 +19,88 @@ class InputDao {
         $this->params = $this->params->getParams();
     }
     
+    public function deleteTempSelectValue($idUsuario){
+        $response = new \Usuarios\MisClases\Respuesta();
+        
+        $sql = "DELETE FROM input_select_temp WHERE id_input=".$idUsuario;
+        
+        $response->setError(true);
+        
+        $res = $this->adapter->query($sql)->execute();
+        
+        if($res){
+            $response->setError(false);
+            $response->setMensaje("");
+        }
+        
+        return $response;
+    }
+    
+    public function deleteItemTempSelectValue($idUsuario,$idItem){
+        $response = new \Usuarios\MisClases\Respuesta();
+        
+        $sql = "DELETE FROM input_select_temp WHERE id=$idItem AND id_input=".$idUsuario;
+        
+        $response->setError(true);
+        
+        $res = $this->adapter->query($sql)->execute();
+        
+        if($res){
+            $response->setError(false);
+            $response->setMensaje("");
+        }
+        
+        return $response;
+    }
+    
+    public function updateItemTempSelectValue($idUsuario,$idItem,$value,$tipo,$nrespuestas){
+        $response = new \Usuarios\MisClases\Respuesta();
+        
+        $sql = "UPDATE input_select_temp ";
+        $sql .= "set tipo=$tipo,valor=$value,respuestas_requeridas=$nrespuestas ";
+        $sql .= "WHERE id=$idItem AND id_input=".$idUsuario;
+        
+        $response->setError(true);
+        
+        $res = $this->adapter->query($sql)->execute();
+        
+        if($res){
+            $response->setError(false);
+            $response->setMensaje("");
+        }
+        
+        return $response;
+    }
+    
+    public function insertTempSelectValue($idUsuario,$value,$tipo,$nrespuestas){
+        $response = new \Usuarios\MisClases\Respuesta();
+        
+        $sql = "INSERT INTO input_select_temp (id_input,tipo,valor,respuestas_requeridas) VALUES (";
+        $sql .= "'".$idUsuario."',";
+        $sql .= "'".$tipo."',";
+        $sql .= "'".$value."',";
+        $sql .= "'".$nrespuestas."'";
+        $sql .= ")";
+        
+        $response->setError(true);
+        
+        $response->idunput = 0;
+        $response->valor = $value;
+        
+        $res = $this->adapter->query($sql)->execute();
+        
+        if($res){
+            
+            $connection = $this->adapter->getDriver()->getConnection();
+            $response->idunput = $this->adapter->getDriver()->getLastGeneratedValue();
+            
+            $response->setError(false);
+            $response->setMensaje("");
+        }
+        
+        return $response;
+    }
+    
     public function delete($id){
         
         $response = new \Usuarios\MisClases\Respuesta();
@@ -99,6 +181,35 @@ class InputDao {
         }
 
         return $respuesta;
+    }
+    
+    public function saveSelect($idusuario,$idinput){
+        $sql = "SELECT * FROM input_select_temp WHERE id_input=$idusuario";
+        
+        $res = $this->adapter->query($sql);
+        
+        $select = new \stdClass;
+        
+        if ($res) {
+            $result = $res->execute();
+            foreach ($select as $s) {
+                $select->id = $s["id"];
+                $select->id_input = $s["id_input"];
+                $select->tipo = $s["tipo"];
+                $select->valor = $s["valor"];
+                $select->respuestas_requeridas = $s["respuestas_requeridas"];
+                
+                $sql = "INSERT INTO input_select (id_input,tipo,valor,respuestas_requeridas) VALUES (";
+                $sql .= "'".$idinput."',";
+                $sql .= "'".$select->tipo."',";
+                $sql .= "'".$select->valor."',";
+                $sql .= "'".$select->respuestas_requeridas."'";
+                $sql .= ")";
+                $resS = $this->adapter->query($sql)->execute();
+            }
+        }
+        
+        return $select;
     }
     
     public function update($unaEntity) {
