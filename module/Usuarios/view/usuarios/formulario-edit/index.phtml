@@ -238,8 +238,11 @@
         margin:0;
     }
     .select-value-input input[type=text]{:disabled {
-                                             background-color: #d9edf7 !important;
-                                         }
+        background-color: #d9edf7 !important;
+    }
+    #values-select{
+        margin-top: 10px;
+    }
     </style>
     <script>
         $(document).ready(function () {
@@ -300,6 +303,7 @@
 
                 var valueselect = $("input[name=select_value]").val(),
                         idunput = $("#values-select .select-value-input").length + 1,
+                        idselect = $("#idselecthidden").val(),
                         valor = $("input[name=select_value]").val(),
                         tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple",
                         orden = $("#values-select .select-value-input").length + 1,
@@ -313,7 +317,7 @@
                             '<button data-dismiss="alert" class="close" type="button">' +
                             '<i class="ace-icon fa fa-times"></i>' +
                             '</button>' +
-                            '<input id_input="' + idunput + '" name="input-select-value-' + idunput + '" id="input-select-value-' + idunput + '" class="value-option" type="text" value="' + valor + '" disabled="disabled">' +
+                            '<input id_select="'+idselect+'" id_input="' + idunput + '" name="input-select-value-' + idunput + '" id="input-select-value-' + idunput + '" class="value-option" type="text" value="' + valor + '" disabled="disabled">' +
                             '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
                             '<a id="" class="red remove del-input-select-value" style="">' +
                             '<i class="icon-trash bigger-130"></i>' +
@@ -398,8 +402,18 @@
                     url: "formulario_edit/popupeditinput",
                     data: {idinput: idinput},
                     success: function (data) {
+                        
+                        var tipoinput = $(data).find("#tipoinput").val();
+                        
                         $(".bootbox .modal-body").html(data);
-
+                        
+                        $(".bootbox .modal-body").find("#myTab li").each(function(){
+                            anchor = $(this).find("a");
+                            if(anchor.attr("tipo") == tipoinput){
+                                anchor.trigger("click");
+                            }
+                        })
+                        
                         $('#numero-respuestas')
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
@@ -418,6 +432,7 @@
                                 $("#numero-respuestas-select").attr("disabled", true);
                             }
                         });
+                        
                         $(function () {
                             $('textarea.mention').mentionsInput({
                                 onDataRequest: function (mode, query, callback) {
@@ -432,7 +447,18 @@
                             });
 
                         });
-
+                        
+                        $(function () {
+                        $("#values-select").sortable({
+                            connectWith: "#values-select",
+                            stop: function ( ) {
+                                saveOrdenValue();
+                            }
+                        }).disableSelection();
+                        $('#values-select input').bind('click.sortable mousedown.sortable', function (ev) {
+                            ev.target.focus();
+                        });
+                    });
                         var textareaval = $(".textarea-mention").val();
                         $('textarea.mention').val(textareaval);
                     }
@@ -442,6 +468,7 @@
             $(document).on("click", ".del-item", function (e) {
                 e.preventDefault();
                 var id = $(this).parent().parent().attr("id_input");
+                item = $(this).parent().parent().parent();
                 bootbox.confirm("Desea eliminar este item?", function (result) {
                     if (result == false) {
                         $('.bootbox').modal('toggle');
@@ -454,32 +481,8 @@
                             },
                             success: function (data) {
                                 var respuesta = data[0];
-                                var div = "danger";
-                                if (respuesta.error == false) {
-                                    div = "success";
-                                }
-
-                                $(".bootbox .modal-body").prepend(
-                                        '<div class="alert alert-' + div + '">' +
-                                        '<button data-dismiss="alert" class="close" type="button">' +
-                                        '<i class="icon-remove"></i>' +
-                                        '</button>' +
-                                        respuesta.mensaje +
-                                        '<br>' +
-                                        '</div>');
-
-                                if (div == "success") {
-
-                                    $("#inputs-collections").find(".item-input").each(function () {
-                                        if ($(this).find(".alert-info").attr("id_input") == id) {
-                                            $(this).remove();
-                                        }
-                                    });
-
-                                    setTimeout(function () {
-                                        $('.bootbox').modal('toggle');
-                                    }, 2000);
-                                }
+                                item.remove();                        
+                                $('.bootbox').modal('toggle');
                             }
                         });
                     }
@@ -740,6 +743,7 @@
                         label = $(".mention").val(),
                         obligatorio = ($(".inputs-text-control-add input[name=obligatorio]").prop('checked') == true) ? "1" : "0",
                         tipo = $("#myTab li.active a").attr("tipo"),
+                        ayuda = $("input[name=ayuda]").val(),
                         orden = $("#inputs-collections").find(".item-input").length + 1;
 
                 input_data = {};
@@ -775,17 +779,19 @@
                         label: label,
                         obligatorio: obligatorio,
                         tipo: tipo,
+                        ayuda:ayuda,
                         input_data: input_data,
                         orden: orden
                     },
                     success: function (data) {
                         var respuesta = data.response;
 
-                        addControlHtml(respuesta.id, nombre, label);
+                        
 
                         var div = "danger";
                         if (respuesta.error == false) {
                             div = "success";
+                            addControlHtml(respuesta.id, nombre, label);
                         }
 
                         $(".bootbox .modal-body").prepend(

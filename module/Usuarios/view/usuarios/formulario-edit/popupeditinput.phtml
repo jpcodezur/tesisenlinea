@@ -9,6 +9,7 @@
         <textarea name="nombre" placeholder="Etiqueta" class='mention'></textarea>
         <input type="hidden" class="textarea-mention" value="<?php echo $this->input->getLabel() ?>">
         <input type="hidden" id="idinput" value="<?php echo $this->input->getId() ?>">
+        <input type="hidden" id="tipoinput" value="<?php echo $this->input->getTipo() ?>">
         <div class="">
             <label class="popup-label">Obligatorio</label>
             <label>
@@ -71,6 +72,7 @@
                     $select = $this->input->getControl();
                     $values = $select->getValues();
                     ?>
+                    <input type="hidden" id="idselecthidden" value="<?php echo $select->getId() ?>">
                     <?php foreach($values as $value):?>
                     <div class="control-group item-input select-value-input">
                         <div class="alert alert-info">
