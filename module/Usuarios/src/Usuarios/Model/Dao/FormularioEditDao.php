@@ -135,7 +135,8 @@ class FormularioEditDao {
                $unInput->setAyuda($r["ayuda"]);
                switch ($r["tipo_input"]) {
                    case "dropdown":
-                       $select = new \Usuarios\Model\Entity\Select();
+                       
+                       $select = $this->getSelect($unInput->getId());
                         $values = $this->getValuesSelect($unInput->getId());
                         $select->setValues($values);
                         $unInput->setControl($select);
@@ -149,6 +150,26 @@ class FormularioEditDao {
         }
         
         return $inputs;
+    }
+    
+    public function getSelect($id){
+        $select = new \Usuarios\Model\Entity\Select();
+        
+        $sql = "SELECT * FROM input_select WHERE id_input=".$id;
+        
+        $result = $this->adapter->query($sql)->execute();
+
+        if ($result) {
+            foreach ($result as $res) {
+                $select->setId($res["id"]);
+                $select->setIdInput($res["id_input"]);
+                $select->setRespuestasRequeridas($res["respuestas_requeridas"]);
+                $select->setTipo($res["tipo"]);
+                return $select;
+            }
+        }
+        
+        return $select;
     }
     
     public function getValuesSelect($idInput){

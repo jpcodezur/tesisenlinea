@@ -52,6 +52,7 @@
                                                                     <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required" : "" ?>/>
                                                                     <?php elseif($input->getTipo()=="dropdown"):?>
                                                                     <select id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
+                                                                        <option value="">SELECCIONAR</option>
                                                                         <?php $control = $input->getControl();?>
                                                                         <?php foreach($control->getValues() as $value):?>
                                                                         <option value="<?php echo $value->getId() ?>"><?php echo $value->getValue() ?></option>
