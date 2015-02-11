@@ -92,18 +92,19 @@ class InputController extends AbstractActionController {
         return $view;
     }
     
-    /*public function deletetempselectAction(){
+    public function deleteselectAction(){
         
-        $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
+        $idselect = $this->getRequest()->getPost("idselect", null);
+        $idinput = $this->getRequest()->getPost("idinput", null);
         
-        $this->dao->deleteTempSelectValue($idUsuario);
+        $response = $this->dao->deleteSelect($idselect,$idinput);
         
         $view = new JsonModel(array( "response" => $response));
 
         $view->setTerminal(true);
 
         return $view;
-    }*/
+    }
     
     public function deleteitemtempselectAction(){
         
@@ -163,15 +164,22 @@ class InputController extends AbstractActionController {
             
             switch ($unInput->getTipo()) {
                     case "texto":
-                        $unInputTexto = new \Usuarios\Model\Entity\Texto();
-                        $unInputTexto->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
+                        $unControl = new \Usuarios\Model\Entity\Texto();
+                        $unControl->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
+                        break;
+                    case "dropdown":
+                        $unControl = new \Usuarios\Model\Entity\Select();
+                        $select = $input_data["select"];
+                        $unControl->setRespuestasRequeridas($select["respuestas_requeridas"]);
+                        $unControl->setTipo($select["tipo"]);
+                        $unControl->setValues($select["values"]);
                         break;
 
                     default:
                         break;
             }
             
-            $unInput->setControl($unInputTexto);
+            $unInput->setControl($unControl);
             
             $response = $this->dao->update($unInput);
         }
