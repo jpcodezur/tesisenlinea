@@ -133,12 +133,46 @@ class FormularioEditDao {
                $unInput->setRequired($r["required"]);
                $unInput->setTipo($r["tipo_input"]);
                $unInput->setAyuda($r["ayuda"]);
-               
+               switch ($r["tipo_input"]) {
+                   case "dropdown":
+                       $select = new \Usuarios\Model\Entity\Select();
+                        $values = $this->getValuesSelect($unInput->getId());
+                        $select->setValues($values);
+                        $unInput->setControl($select);
+                       break;
+
+                   default:
+                       break;
+               }
                return $unInput;
             }
         }
         
         return $inputs;
+    }
+    
+    public function getValuesSelect($idInput){
+        $sql = " SELECT * FROM select_collections as sc  
+                INNER JOIN input_select as iss      
+                on sc.id_input = iss.id_input 
+                WHERE iss.id_input =  $idInput";
+        
+        $results = array();
+
+        $res = $this->adapter->query($sql);
+
+        if ($res) {
+            $result = $res->execute();
+            foreach ($result as $res) {
+                $selectValue = new \Usuarios\Model\Entity\SelectValues();
+                $selectValue->setId($res["id_select"]);
+                $selectValue->id_input = $res["id_input"];
+                $selectValue->setValue($res["value"]);
+                $results[] = $selectValue;
+            }
+        }
+
+        return $results;
     }
     
 }

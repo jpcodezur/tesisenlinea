@@ -238,625 +238,660 @@
         margin:0;
     }
     .select-value-input input[type=text]{:disabled {
-        background-color: #d9edf7 !important;
-    }
-</style>
-<script>
-    $(document).ready(function () {
-        
-        $(document).on("click",".del-input-select-value",function(e){
+                                             background-color: #d9edf7 !important;
+                                         }
+    </style>
+    <script>
+        $(document).ready(function () {
+
+            $(document).on("click", ".del-input-select-value-on-edit", function (e) {
                 e.preventDefault();
-                 bootbox.confirm("Desea eliminar este opción?", function (result) {
+                inp = $(this);
+                bootbox.confirm("Desea eliminar este opción?", function (result) {
                     if (result == false) {
-                        $('.bootbox').each(function(){
+                        $('.bootbox').each(function () {
                             var pos = $(this).find(".modal-body").text()
-                                pos = pos.indexOf("Desea eliminar este opci");
-                            if(pos!==-1){
+                            pos = pos.indexOf("Desea eliminar este opci");
+                            if (pos !== -1) {
                                 $(this).modal('toggle');
                             }
                         })
                     } else {
-                        $(this).parent().parent().parent().remove();
+                         inp.parent().parent().parent().remove();
+
+
                     }
                 })
             });
-            
-            $(document).on("click",".edit-input-select-value",function(e){
+
+            $(document).on("click", ".del-input-select-value", function (e) {
                 e.preventDefault();
-                $(this).parent().parent().find("input[class=value-option]").attr("disabled",false);
+                bootbox.confirm("Desea eliminar este opción?", function (result) {
+                    if (result == false) {
+                        $('.bootbox').each(function () {
+                            var pos = $(this).find(".modal-body").text()
+                            pos = pos.indexOf("Desea eliminar este opci");
+                            if (pos !== -1) {
+                                $(this).modal('toggle');
+                            }
+                        })
+                    } else {
+                        $(this).parent().parent().remove();
+                    }
+                })
             });
 
-        $(document).on("click", "#input-add-header .close", function () {
-            $.ajax({
-                url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "deletetempselect")) ?>",
-                success: function (data) {
+            $(document).on("click", ".edit-input-select-value", function (e) {
+                e.preventDefault();
+                $(this).parent().parent().find("input[class=value-option]").attr("disabled", false);
+            });
 
+            $(document).on("click", "#input-add-header .close", function () {
+                $.ajax({
+                    url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "deletetempselect")) ?>",
+                    success: function (data) {
+
+                    }
+                });
+            });
+
+            $(document).on("click", "#add-select-value", function (e) {
+                e.preventDefault();
+
+                var valueselect = $("input[name=select_value]").val(),
+                        idunput = $("#values-select .select-value-input").length + 1,
+                        valor = $("input[name=select_value]").val(),
+                        tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple",
+                        orden = $("#values-select .select-value-input").length + 1,
+                        nrespuestas = ($("#esmulti").is(":checked")) ? $("#numero-respuestas-select").val() : "";
+
+                if ($("input[name=select_value]").val()) {
+
+                    s = '<div class="control-group item-input select-value-input">' +
+                            '<div class="alert alert-info">' +
+                            '<i class="icon-move bigger-130"></i>' +
+                            '<button data-dismiss="alert" class="close" type="button">' +
+                            '<i class="ace-icon fa fa-times"></i>' +
+                            '</button>' +
+                            '<input id_input="' + idunput + '" name="input-select-value-' + idunput + '" id="input-select-value-' + idunput + '" class="value-option" type="text" value="' + valor + '" disabled="disabled">' +
+                            '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
+                            '<a id="" class="red remove del-input-select-value" style="">' +
+                            '<i class="icon-trash bigger-130"></i>' +
+                            '</a>' +
+                            '<a class="edit-input-select-value green" id="">' +
+                            '<i class="icon-pencil bigger-130"></i>' +
+                            '</a>' +
+                            '</div>' +
+                            '<br>' +
+                            '</div>' +
+                            '</div>';
+
+
+                    $("input[name=select_value]").val("");
+                    $("#values-select").append(s);
+
+                    $(function () {
+                        $("#values-select").sortable({
+                            connectWith: "#values-select",
+                            stop: function ( ) {
+                                saveOrdenValue();
+                            }
+                        }).disableSelection();
+                        $('#values-select input').bind('click.sortable mousedown.sortable', function (ev) {
+                            ev.target.focus();
+                        });
+                    });
                 }
             });
-        });
 
-        $(document).on("click", "#add-select-value", function (e) {
-            e.preventDefault();
+            $("#add-input").on(ace.click_event, function (e) {
+                e.preventDefault();
+                bootbox.dialog({});
 
-            var valueselect = $("input[name=select_value]").val(),
-                idunput = $("#values-select .select-value-input").length + 1,
-                valor = $("input[name=select_value]").val(),
-                tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple",
-                orden = $("#values-select .select-value-input").length + 1,
-                nrespuestas = ($("#esmulti").is(":checked")) ? $("#numero-respuestas-select").val() : "";
+                $.ajax({
+                    url: "formulario_edit/popup",
+                    data: "",
+                    success: function (data) {
 
-            if ($("input[name=select_value]").val()) {
+                        $(".bootbox .modal-body").html(data);
+                        $('#numero-respuestas')
+                                .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                                .on('change', function () {
+                                });
+                        $('#numero-respuestas-select')
+                                .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                                .on('change', function () {
+                                });
 
-                s = '<div class="control-group item-input select-value-input">' +
-                        '<div class="alert alert-info">' +
+                        $(document).on("change", "#esmulti", function () {
+
+                            if ($(this).is(":checked")) {
+                                $("#numero-respuestas-select").attr("disabled", false);
+                            } else {
+                                $("#numero-respuestas-select").attr("disabled", true);
+                            }
+                        });
+
+                        $(function () {
+                            $('textarea.mention').mentionsInput({
+                                onDataRequest: function (mode, query, callback) {
+                                    var strquery = 'query=' + query;
+                                    $.getJSON("<?php echo $this->url("usuarios", array("controller" => "input", "action" => "getInputsJson")) ?>", strquery, function (responseData) {
+                                        responseData = _.filter(responseData, function (item) {
+                                            return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+                                        });
+                                        callback.call(this, responseData);
+                                    });
+                                }
+                            });
+
+                        });
+                    }
+                })
+            });
+
+            $(document).on("click", ".edit-input", function (e) {
+                e.preventDefault();
+                var idinput = $(this).parent().parent().attr("id_input");
+                bootbox.dialog({});
+                $.ajax({
+                    url: "formulario_edit/popupeditinput",
+                    data: {idinput: idinput},
+                    success: function (data) {
+                        $(".bootbox .modal-body").html(data);
+
+                        $('#numero-respuestas')
+                                .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                                .on('change', function () {
+                                });
+
+                        $('#numero-respuestas-select')
+                                .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                                .on('change', function () {
+                                });
+
+                        $(document).on("change", "#esmulti", function () {
+
+                            if ($(this).is(":checked")) {
+                                $("#numero-respuestas-select").attr("disabled", false);
+                            } else {
+                                $("#numero-respuestas-select").attr("disabled", true);
+                            }
+                        });
+                        $(function () {
+                            $('textarea.mention').mentionsInput({
+                                onDataRequest: function (mode, query, callback) {
+                                    var strquery = 'query=' + query;
+                                    $.getJSON("<?php echo $this->url("usuarios", array("controller" => "input", "action" => "getInputsJson")) ?>", strquery, function (responseData) {
+                                        responseData = _.filter(responseData, function (item) {
+                                            return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
+                                        });
+                                        callback.call(this, responseData);
+                                    });
+                                }
+                            });
+
+                        });
+
+                        var textareaval = $(".textarea-mention").val();
+                        $('textarea.mention').val(textareaval);
+                    }
+                })
+            });
+
+            $(document).on("click", ".del-item", function (e) {
+                e.preventDefault();
+                var id = $(this).parent().parent().attr("id_input");
+                bootbox.confirm("Desea eliminar este item?", function (result) {
+                    if (result == false) {
+                        $('.bootbox').modal('toggle');
+                    } else {
+                        $.ajax({
+                            url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "delete")) ?>",
+                            type: "get",
+                            data: {
+                                id: id,
+                            },
+                            success: function (data) {
+                                var respuesta = data[0];
+                                var div = "danger";
+                                if (respuesta.error == false) {
+                                    div = "success";
+                                }
+
+                                $(".bootbox .modal-body").prepend(
+                                        '<div class="alert alert-' + div + '">' +
+                                        '<button data-dismiss="alert" class="close" type="button">' +
+                                        '<i class="icon-remove"></i>' +
+                                        '</button>' +
+                                        respuesta.mensaje +
+                                        '<br>' +
+                                        '</div>');
+
+                                if (div == "success") {
+
+                                    $("#inputs-collections").find(".item-input").each(function () {
+                                        if ($(this).find(".alert-info").attr("id_input") == id) {
+                                            $(this).remove();
+                                        }
+                                    });
+
+                                    setTimeout(function () {
+                                        $('.bootbox').modal('toggle');
+                                    }, 2000);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+
+            $("#edit-pagina").click(function (e) {
+                e.preventDefault();
+                var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
+                bootbox.dialog({});
+                $.ajax({
+                    url: "formulario_edit/popup-edit",
+                    data: {idpagina: idpagina},
+                    success: function (data) {
+                        $(".bootbox .modal-body").html(data);
+                    }
+                });
+            });
+
+            $("#del-pagina").click(function (e) {
+                e.preventDefault();
+                var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
+                bootbox.confirm("Desea eliminar este item?", function (result) {
+                    if (result == false) {
+                        $('.bootbox').modal('toggle');
+                    } else {
+                        $.ajax({
+                            url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>",
+                            type: "get",
+                            data: {
+                                idpagina: idpagina,
+                            },
+                            success: function (data) {
+                                var respuesta = data[0];
+                                var div = "danger";
+                                if (respuesta.error == false) {
+                                    div = "success";
+                                }
+
+                                $(".bootbox .modal-body").prepend(
+                                        '<div class="alert alert-' + div + '">' +
+                                        '<button data-dismiss="alert" class="close" type="button">' +
+                                        '<i class="icon-remove"></i>' +
+                                        '</button>' +
+                                        respuesta.mensaje +
+                                        '<br>' +
+                                        '</div>');
+
+                                if (div == "success") {
+                                    setTimeout(function () {
+                                        $('.bootbox').modal('toggle');
+                                        window.location.reload();
+                                    }, 2000);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            $("#add-pagina").click(function (e) {
+                e.preventDefault();
+                bootbox.dialog({});
+                $.ajax({
+                    url: "formulario_edit/popup-pagina",
+                    data: "",
+                    success: function (data) {
+                        $(".bootbox .modal-body").html(data);
+                    }
+                });
+            });
+
+            $(document).on("click", "#close-modal-pagina", function () {
+                var nombre = $("input[name=nombre]").val(),
+                        orden = $(".wizard-steps li").length + 1;
+
+                $.ajax({
+                    url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>",
+                    type: "post",
+                    data: {
+                        nombre: nombre,
+                        orden: orden
+                    },
+                    success: function (data) {
+                        var respuesta = data[0];
+                        var div = "danger";
+                        if (respuesta.error == false) {
+                            div = "success";
+                        }
+
+                        $(".bootbox .modal-body").prepend(
+                                '<div class="alert alert-' + div + '">' +
+                                '<button data-dismiss="alert" class="close" type="button">' +
+                                '<i class="icon-remove"></i>' +
+                                '</button>' +
+                                respuesta.mensaje +
+                                '<br>' +
+                                '</div>');
+
+                        if (div == "success") {
+                            setTimeout(function () {
+                                $('.bootbox').modal('toggle');
+                                window.location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
+            });
+
+            $(document).on("click", "#close-modal-edit-input", function () {
+
+                var nombre = $("input[name=nombre]").val(),
+                        idinput = $("#idinput").val(),
+                        ayuda = $("input[name=ayuda]").val(),
+                        label = $("textarea.mention").val(),
+                        tipo = $("ul#myTab li.active a").attr("tipo"),
+                        obligatorio = ($(".inputs-text-control-edit input[name=obligatorio]").prop('checked') == true) ? "1" : "0";
+
+                input_data = {};
+
+                if (tipo == "texto") {
+                    input_data.respuestas_requeridas = $("#numero-respuestas").val();
+                }
+
+                if (tipo == "dropdown") {
+                    input_data.select = {};
+                    input_data.select.respuestas_requeridas = $("#numero-respuestas-select").val();
+                    input_data.select.tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple";
+
+                    values = [];
+
+                    $("#values-select .select-value-input").each(function (i) {
+                        value = {};
+                        value.id_input = $(this).find(".value-option").attr("id_input");
+                        value.id_select = $(this).find(".value-option").attr("id_select");
+                        value.value = $(this).find(".value-option").val();
+                        value.orden = i + 1;
+                        values.push(value);
+                    })
+
+                    input_data.select.values = values;
+                }
+
+                $.ajax({
+                    url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "edit")) ?>",
+                    type: "post",
+                    data: {
+                        idinput: idinput,
+                        nombre: nombre,
+                        label: label,
+                        tipo: tipo,
+                        ayuda: ayuda,
+                        input_data: input_data,
+                        obligatorio: obligatorio
+                    },
+                    success: function (data) {
+                        var respuesta = data[0];
+                        var div = "danger";
+                        if (respuesta.error == false) {
+                            div = "success";
+                        }
+
+                        $(".bootbox .modal-body").prepend(
+                                '<div class="alert alert-' + div + '">' +
+                                '<button data-dismiss="alert" class="close" type="button">' +
+                                '<i class="icon-remove"></i>' +
+                                '</button>' +
+                                respuesta.mensaje +
+                                '<br>' +
+                                '</div>');
+
+                        if (div == "success") {
+                            setTimeout(function () {
+                                $('.bootbox').modal('toggle');
+                                window.location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
+            });
+
+            $(document).on("click", "#close-modal-edit-pagina", function () {
+                $(".wizard-steps li").each(function (i) {
+                    var at = $(this).attr("class");
+                    if (at.indexOf("active") !== -1) {
+                        orden = i;
+                        return false;
+                    }
+                })
+
+                var nombre = $("input[name=nombre]").val(),
+                        idpagina = $("#idpagina").val();
+
+                $.ajax({
+                    url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "edit")) ?>",
+                    type: "post",
+                    data: {
+                        idpagina: idpagina,
+                        nombre: nombre,
+                        orden: orden
+                    },
+                    success: function (data) {
+                        var respuesta = data[0];
+                        var div = "danger";
+                        if (respuesta.error == false) {
+                            div = "success";
+                        }
+
+                        $(".bootbox .modal-body").prepend(
+                                '<div class="alert alert-' + div + '">' +
+                                '<button data-dismiss="alert" class="close" type="button">' +
+                                '<i class="icon-remove"></i>' +
+                                '</button>' +
+                                respuesta.mensaje +
+                                '<br>' +
+                                '</div>');
+
+                        if (div == "success") {
+                            setTimeout(function () {
+                                $('.bootbox').modal('toggle');
+                                window.location.reload();
+                            }, 2000);
+                        }
+                    }
+                });
+
+            });
+
+            function addControlHtml(id, nombre, label) {
+                var s =
+                        '<div class="control-group item-input">' +
+                        '<div class="alert alert-info" id_input="' + id + '">' +
                         '<i class="icon-move bigger-130"></i>' +
                         '<button data-dismiss="alert" class="close" type="button">' +
                         '<i class="ace-icon fa fa-times"></i>' +
                         '</button>' +
-                        '<input id_input="'+idunput+'" name="input-select-value-' + idunput + '" id="input-select-value-' + idunput + '" class="value-option" type="text" value="' + valor + '" disabled="disabled">' +
+                        '<strong>' + nombre + '</strong>' + label +
                         '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
-                        '<a id="" class="red remove del-input-select-value" style="">' +
-                        '<i class="icon-trash bigger-130"></i>' +
-                        '</a>' +
-                        '<a class="edit-input-select-value green" id="">' +
+                        '<a href="#" class="green edit-input">' +
                         '<i class="icon-pencil bigger-130"></i>' +
+                        '</a>' +
+                        '<a href="#" class="red remove del-item">' +
+                        '<i class="icon-trash bigger-130"></i>' +
                         '</a>' +
                         '</div>' +
                         '<br>' +
                         '</div>' +
                         '</div>';
 
-
-                $("input[name=select_value]").val("");
-                $("#values-select").append(s);
-
-                $(function () {
-                    $("#values-select").sortable({
-                        connectWith: "#values-select",
-                        stop: function ( ) {
-                            saveOrdenValue();
-                        }
-                    }).disableSelection();
-                    $('#values-select input').bind('click.sortable mousedown.sortable',function(ev){
-                    ev.target.focus();
-                  });
-                });
-            }
-        });
-
-        $("#add-input").on(ace.click_event, function (e) {
-            e.preventDefault();
-            bootbox.dialog({});
-
-            $.ajax({
-                url: "formulario_edit/popup",
-                data: "",
-                success: function (data) {
-
-                    $(".bootbox .modal-body").html(data);
-                    $('#numero-respuestas')
-                            .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
-                            .on('change', function () {
-                            });
-                    $('#numero-respuestas-select')
-                            .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
-                            .on('change', function () {
-                            });
-
-                    $(document).on("change", "#esmulti", function () {
-
-                        if ($(this).is(":checked")) {
-                            $("#numero-respuestas-select").attr("disabled", false);
-                        } else {
-                            $("#numero-respuestas-select").attr("disabled", true);
-                        }
-                    });
-
-                    $(function () {
-                        $('textarea.mention').mentionsInput({
-                            onDataRequest: function (mode, query, callback) {
-                                var strquery = 'query=' + query;
-                                $.getJSON("<?php echo $this->url("usuarios", array("controller" => "input", "action" => "getInputsJson")) ?>", strquery, function (responseData) {
-                                    responseData = _.filter(responseData, function (item) {
-                                        return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
-                                    });
-                                    callback.call(this, responseData);
-                                });
-                            }
-                        });
-
-                    });
-                }
-            })
-        });
-
-        $(document).on("click", ".edit-input", function (e) {
-            e.preventDefault();
-            var idinput = $(this).parent().parent().attr("id_input");
-            bootbox.dialog({});
-            $.ajax({
-                url: "formulario_edit/popupeditinput",
-                data: {idinput: idinput},
-                success: function (data) {
-                    $(".bootbox .modal-body").html(data);
-
-                    $('#numero-respuestas')
-                            .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
-                            .on('change', function () {
-                            });
-                    
-                     $('#numero-respuestas-select')
-                            .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
-                            .on('change', function () {
-                            });
-
-                    $(document).on("change", "#esmulti", function () {
-
-                        if ($(this).is(":checked")) {
-                            $("#numero-respuestas-select").attr("disabled", false);
-                        } else {
-                            $("#numero-respuestas-select").attr("disabled", true);
-                        }
-                    });
-                    $(function () {
-                        $('textarea.mention').mentionsInput({
-                            onDataRequest: function (mode, query, callback) {
-                                var strquery = 'query=' + query;
-                                $.getJSON("<?php echo $this->url("usuarios", array("controller" => "input", "action" => "getInputsJson")) ?>", strquery, function (responseData) {
-                                    responseData = _.filter(responseData, function (item) {
-                                        return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1
-                                    });
-                                    callback.call(this, responseData);
-                                });
-                            }
-                        });
-
-                    });
-
-                    var textareaval = $(".textarea-mention").val();
-                    $('textarea.mention').val(textareaval);
-                }
-            })
-        });
-
-        $(document).on("click", ".del-item", function (e) {
-            e.preventDefault();
-            var id = $(this).parent().parent().attr("id_input");
-            bootbox.confirm("Desea eliminar este item?", function (result) {
-                if (result == false) {
-                    $('.bootbox').modal('toggle');
-                } else {
-                    $.ajax({
-                        url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "delete")) ?>",
-                        type: "get",
-                        data: {
-                            id: id,
-                        },
-                        success: function (data) {
-                            var respuesta = data[0];
-                            var div = "danger";
-                            if (respuesta.error == false) {
-                                div = "success";
-                            }
-
-                            $(".bootbox .modal-body").prepend(
-                                    '<div class="alert alert-' + div + '">' +
-                                    '<button data-dismiss="alert" class="close" type="button">' +
-                                    '<i class="icon-remove"></i>' +
-                                    '</button>' +
-                                    respuesta.mensaje +
-                                    '<br>' +
-                                    '</div>');
-
-                            if (div == "success") {
-
-                                $("#inputs-collections").find(".item-input").each(function () {
-                                    if ($(this).find(".alert-info").attr("id_input") == id) {
-                                        $(this).remove();
-                                    }
-                                });
-
-                                setTimeout(function () {
-                                    $('.bootbox').modal('toggle');
-                                }, 2000);
-                            }
-                        }
-                    });
-                }
-            });
-        });
-
-
-        $("#edit-pagina").click(function (e) {
-            e.preventDefault();
-            var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
-            bootbox.dialog({});
-            $.ajax({
-                url: "formulario_edit/popup-edit",
-                data: {idpagina: idpagina},
-                success: function (data) {
-                    $(".bootbox .modal-body").html(data);
-                }
-            });
-        });
-
-        $("#del-pagina").click(function (e) {
-            e.preventDefault();
-            var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
-            bootbox.confirm("Desea eliminar este item?", function (result) {
-                if (result == false) {
-                    $('.bootbox').modal('toggle');
-                } else {
-                    $.ajax({
-                        url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>",
-                        type: "get",
-                        data: {
-                            idpagina: idpagina,
-                        },
-                        success: function (data) {
-                            var respuesta = data[0];
-                            var div = "danger";
-                            if (respuesta.error == false) {
-                                div = "success";
-                            }
-
-                            $(".bootbox .modal-body").prepend(
-                                    '<div class="alert alert-' + div + '">' +
-                                    '<button data-dismiss="alert" class="close" type="button">' +
-                                    '<i class="icon-remove"></i>' +
-                                    '</button>' +
-                                    respuesta.mensaje +
-                                    '<br>' +
-                                    '</div>');
-
-                            if (div == "success") {
-                                setTimeout(function () {
-                                    $('.bootbox').modal('toggle');
-                                    window.location.reload();
-                                }, 2000);
-                            }
-                        }
-                    });
-                }
-            });
-        });
-
-        $("#add-pagina").click(function (e) {
-            e.preventDefault();
-            bootbox.dialog({});
-            $.ajax({
-                url: "formulario_edit/popup-pagina",
-                data: "",
-                success: function (data) {
-                    $(".bootbox .modal-body").html(data);
-                }
-            });
-        });
-
-        $(document).on("click", "#close-modal-pagina", function () {
-            var nombre = $("input[name=nombre]").val(),
-                    orden = $(".wizard-steps li").length + 1;
-
-            $.ajax({
-                url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>",
-                type: "post",
-                data: {
-                    nombre: nombre,
-                    orden: orden
-                },
-                success: function (data) {
-                    var respuesta = data[0];
-                    var div = "danger";
-                    if (respuesta.error == false) {
-                        div = "success";
-                    }
-
-                    $(".bootbox .modal-body").prepend(
-                            '<div class="alert alert-' + div + '">' +
-                            '<button data-dismiss="alert" class="close" type="button">' +
-                            '<i class="icon-remove"></i>' +
-                            '</button>' +
-                            respuesta.mensaje +
-                            '<br>' +
-                            '</div>');
-
-                    if (div == "success") {
-                        setTimeout(function () {
-                            $('.bootbox').modal('toggle');
-                            window.location.reload();
-                        }, 2000);
-                    }
-                }
-            });
-        });
-
-        $(document).on("click", "#close-modal-edit-input", function () {
-
-            var nombre = $("input[name=nombre]").val(),
-                    idinput = $("#idinput").val(),
-                    ayuda = $("input[name=ayuda]").val(),
-                    label = $("textarea.mention").val(),
-                    tipo = $("ul#myTab li.active a").attr("tipo"),
-                    obligatorio = ($(".inputs-text-control-edit input[name=obligatorio]").prop('checked') == true) ? "1" : "0";
-
-            input_data = {};
-
-            if (tipo == "texto") {
-                input_data.respuestas_requeridas = $("#numero-respuestas").val();
+                $("#step-container .active #inputs-collections").append(s);
             }
 
-            if (tipo == "dropdown") {
-                //input_data.respuestas_requeridas = $("#numero-respuestas").val();
-            }
+            $(document).on("click", "#close-modal", function () {
+                var
+                        id_pagina = $(".wizard-steps li.active").attr("id_page"),
+                        nombre = $("input[name=nombre]").val(),
+                        label = $(".mention").val(),
+                        obligatorio = ($(".inputs-text-control-add input[name=obligatorio]").prop('checked') == true) ? "1" : "0",
+                        tipo = $("#myTab li.active a").attr("tipo"),
+                        orden = $("#inputs-collections").find(".item-input").length + 1;
 
-            $.ajax({
-                url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "edit")) ?>",
-                type: "post",
-                data: {
-                    idinput: idinput,
-                    nombre: nombre,
-                    label: label,
-                    tipo: tipo,
-                    ayuda: ayuda,
-                    input_data: input_data,
-                    obligatorio: obligatorio
-                },
-                success: function (data) {
-                    var respuesta = data[0];
-                    var div = "danger";
-                    if (respuesta.error == false) {
-                        div = "success";
-                    }
+                input_data = {};
 
-                    $(".bootbox .modal-body").prepend(
-                            '<div class="alert alert-' + div + '">' +
-                            '<button data-dismiss="alert" class="close" type="button">' +
-                            '<i class="icon-remove"></i>' +
-                            '</button>' +
-                            respuesta.mensaje +
-                            '<br>' +
-                            '</div>');
-
-                    if (div == "success") {
-                        setTimeout(function () {
-                            $('.bootbox').modal('toggle');
-                            window.location.reload();
-                        }, 2000);
-                    }
+                if (tipo == "texto") {
+                    input_data.respuestas_requeridas = $("#numero-respuestas").val();
                 }
-            });
-        });
 
-        $(document).on("click", "#close-modal-edit-pagina", function () {
-            $(".wizard-steps li").each(function (i) {
-                var at = $(this).attr("class");
-                if (at.indexOf("active") !== -1) {
-                    orden = i;
-                    return false;
-                }
-            })
+                if (tipo == "dropdown") {
+                    input_data.select = {};
+                    input_data.select.respuestas_requeridas = $("#numero-respuestas-select").val();
+                    input_data.select.tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple";
 
-            var nombre = $("input[name=nombre]").val(),
-                    idpagina = $("#idpagina").val();
+                    values = [];
 
-            $.ajax({
-                url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "edit")) ?>",
-                type: "post",
-                data: {
-                    idpagina: idpagina,
-                    nombre: nombre,
-                    orden: orden
-                },
-                success: function (data) {
-                    var respuesta = data[0];
-                    var div = "danger";
-                    if (respuesta.error == false) {
-                        div = "success";
-                    }
-
-                    $(".bootbox .modal-body").prepend(
-                            '<div class="alert alert-' + div + '">' +
-                            '<button data-dismiss="alert" class="close" type="button">' +
-                            '<i class="icon-remove"></i>' +
-                            '</button>' +
-                            respuesta.mensaje +
-                            '<br>' +
-                            '</div>');
-
-                    if (div == "success") {
-                        setTimeout(function () {
-                            $('.bootbox').modal('toggle');
-                            window.location.reload();
-                        }, 2000);
-                    }
-                }
-            });
-            
-        });
-
-        function addControlHtml(id, nombre, label) {
-            var s =
-                    '<div class="control-group item-input">' +
-                    '<div class="alert alert-info" id_input="' + id + '">' +
-                    '<i class="icon-move bigger-130"></i>' +
-                    '<button data-dismiss="alert" class="close" type="button">' +
-                    '<i class="ace-icon fa fa-times"></i>' +
-                    '</button>' +
-                    '<strong>' + nombre + '</strong>' + label +
-                    '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
-                    '<a href="#" class="green edit-input">' +
-                    '<i class="icon-pencil bigger-130"></i>' +
-                    '</a>' +
-                    '<a href="#" class="red remove del-item">' +
-                    '<i class="icon-trash bigger-130"></i>' +
-                    '</a>' +
-                    '</div>' +
-                    '<br>' +
-                    '</div>' +
-                    '</div>';
-
-            $("#step-container .active #inputs-collections").append(s);
-        }
-
-        $(document).on("click", "#close-modal", function () {
-            var
-                    id_pagina = $(".wizard-steps li.active").attr("id_page"),
-                    nombre = $("input[name=nombre]").val(),
-                    label = $(".mention").val(),
-                    obligatorio = ($(".inputs-text-control-add input[name=obligatorio]").prop('checked') == true) ? "1" : "0",
-                    tipo = $("#myTab li.active a").attr("tipo"),
-                    orden = $("#inputs-collections").find(".item-input").length + 1;
-
-            input_data = {};
-
-            if (tipo == "texto") {
-                input_data.respuestas_requeridas = $("#numero-respuestas").val();
-            }
-
-            if (tipo == "dropdown") {
-                input_data.select = {};
-                input_data.select.respuestas_requeridas = $("#numero-respuestas-select").val();
-                input_data.select.tipo = ($("#esmulti").is(":checked")) ? "multi" : "simple";
-
-                values = [];
-                
-                $("#values-select .select-value-input").each(function(i){
-                    value = {};
-                    value.id = $(this).find(".value-option").attr("id_input");
-                    value.value = $(this).find(".value-option").val();
-                    value.orden = i+1;
-                    values.push(value);
-                })
-                
-                input_data.select.values = values; 
-            }
-
-            $.ajax({
-                url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "add")) ?>",
-                type: "post",
-                data: {
-                    id_pagina: id_pagina,
-                    nombre: nombre,
-                    label: label,
-                    obligatorio: obligatorio,
-                    tipo: tipo,
-                    input_data: input_data,
-                    orden: orden
-                },
-                success: function (data) {
-                    var respuesta = data.response;
-
-                    addControlHtml(respuesta.id, nombre, label);
-
-                    var div = "danger";
-                    if (respuesta.error == false) {
-                        div = "success";
-                    }
-
-                    $(".bootbox .modal-body").prepend(
-                            '<div class="alert alert-' + div + '">' +
-                            '<button data-dismiss="alert" class="close" type="button">' +
-                            '<i class="icon-remove"></i>' +
-                            '</button>' +
-                            respuesta.mensaje +
-                            '<br>' +
-                            '</div>');
-
-                    if (div == "success") {
-                        setTimeout(function () {
-                            $('.bootbox').modal('toggle');
-                        }, 2000);
-                    }
-                }
-            })
-        })
-
-        $(function () {
-            $(".wizard-steps").sortable({
-                connectWith: ".wizard-steps",
-                stop: function ( ) {
-                    $(".wizard-steps li").each(function (i) {
-                        $(this).find(".step").text(i + 1);
+                    $("#values-select .select-value-input").each(function (i) {
+                        value = {};
+                        value.id = $(this).find(".value-option").attr("id_input");
+                        value.value = $(this).find(".value-option").val();
+                        value.orden = i + 1;
+                        values.push(value);
                     })
 
-                    saveOrden();
+                    input_data.select.values = values;
                 }
-            }).disableSelection();
-        });
 
-        $(function () {
-            $(".form-horizontal").sortable({
-                connectWith: ".form-horizontal",
-                stop: function ( ) {
-                    saveOrdenItem();
+                $.ajax({
+                    url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "add")) ?>",
+                    type: "post",
+                    data: {
+                        id_pagina: id_pagina,
+                        nombre: nombre,
+                        label: label,
+                        obligatorio: obligatorio,
+                        tipo: tipo,
+                        input_data: input_data,
+                        orden: orden
+                    },
+                    success: function (data) {
+                        var respuesta = data.response;
+
+                        addControlHtml(respuesta.id, nombre, label);
+
+                        var div = "danger";
+                        if (respuesta.error == false) {
+                            div = "success";
+                        }
+
+                        $(".bootbox .modal-body").prepend(
+                                '<div class="alert alert-' + div + '">' +
+                                '<button data-dismiss="alert" class="close" type="button">' +
+                                '<i class="icon-remove"></i>' +
+                                '</button>' +
+                                respuesta.mensaje +
+                                '<br>' +
+                                '</div>');
+
+                        if (div == "success") {
+                            setTimeout(function () {
+                                $('.bootbox').modal('toggle');
+                            }, 2000);
+                        }
+                    }
+                })
+            })
+
+            $(function () {
+                $(".wizard-steps").sortable({
+                    connectWith: ".wizard-steps",
+                    stop: function ( ) {
+                        $(".wizard-steps li").each(function (i) {
+                            $(this).find(".step").text(i + 1);
+                        })
+
+                        saveOrden();
+                    }
+                }).disableSelection();
+            });
+
+            $(function () {
+                $(".form-horizontal").sortable({
+                    connectWith: ".form-horizontal",
+                    stop: function ( ) {
+                        saveOrdenItem();
+                    }
+                }).disableSelection();
+            });
+
+        });
+        function saveOrdenValue() {
+            var items = [];
+
+            $("#values-select .select-value-input").each(function (i) {
+                var unInput = {};
+                unInput.id = $(this).find(".alert-info:first").attr("id_input");
+                unInput.orden = i + 1;
+                items.push(unInput);
+            })
+
+            $.ajax({
+                url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "saveordenvalue")) ?>",
+                type: "post",
+                data: {
+                    items: items
+                },
+                success: function (data) {
+
                 }
-            }).disableSelection();
-        });
+            });
+        }
 
-    });
-    function saveOrdenValue() {
-        var items = [];
+        function saveOrdenItem() {
+            var items = [];
 
-        $("#values-select .select-value-input").each(function (i) {
-            var unInput = {};
-            unInput.id = $(this).find(".alert-info:first").attr("id_input");
-            unInput.orden = i + 1;
-            items.push(unInput);
-        })
+            $("#step-container .item-input").each(function (i) {
+                var unInput = {};
+                unInput.id = $(this).find(".alert-info:first").attr("id_input");
+                unInput.orden = i + 1;
+                items.push(unInput);
+            })
 
-        $.ajax({
-            url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "saveordenvalue")) ?>",
-            type: "post",
-            data: {
-                items: items
-            },
-            success: function (data) {
+            $.ajax({
+                url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenitems")) ?>",
+                type: "post",
+                data: {
+                    items: items
+                },
+                success: function (data) {
 
-            }
-        });
-    }
+                }
+            });
+        }
 
-    function saveOrdenItem() {
-        var items = [];
+        function saveOrden() {
+            var paginas = [];
 
-        $("#step-container .item-input").each(function (i) {
-            var unInput = {};
-            unInput.id = $(this).find(".alert-info:first").attr("id_input");
-            unInput.orden = i + 1;
-            items.push(unInput);
-        })
+            $(".wizard-steps li").each(function (i) {
+                var unaPagina = {};
+                unaPagina.id = $(this).attr("id_page");
+                unaPagina.orden = i + 1;
+                paginas.push(unaPagina);
+            })
 
-        $.ajax({
-            url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenitems")) ?>",
-            type: "post",
-            data: {
-                items: items
-            },
-            success: function (data) {
+            $.ajax({
+                url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenpaginas")) ?>",
+                type: "post",
+                data: {
+                    paginas: paginas
+                },
+                success: function (data) {
 
-            }
-        });
-    }
-
-    function saveOrden() {
-        var paginas = [];
-
-        $(".wizard-steps li").each(function (i) {
-            var unaPagina = {};
-            unaPagina.id = $(this).attr("id_page");
-            unaPagina.orden = i + 1;
-            paginas.push(unaPagina);
-        })
-
-        $.ajax({
-            url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenpaginas")) ?>",
-            type: "post",
-            data: {
-                paginas: paginas
-            },
-            success: function (data) {
-
-            }
-        });
-    }
-</script>
+                }
+            });
+        }
+    </script>
