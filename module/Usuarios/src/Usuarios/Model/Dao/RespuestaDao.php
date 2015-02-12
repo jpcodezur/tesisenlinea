@@ -35,14 +35,26 @@ class RespuestaDao {
     
     
     public function search($idInput){
-        $sql = "SELECT id FROM respuestas WHERE estado=1 AND id_input=$idInput";
+        $sql = "SELECT COUNT(*) as total FROM respuestas WHERE estado=1 AND id_input=$idInput";
         $result = $this->adapter->query($sql)->execute();
          
         foreach($result as $r){
-            return $r["id"];
+            return $r["total"];
         }
+        
+        return false;
     }
 
+    public function updateRespuesta($idInput,$tipo,$idUsuario,$texto){
+        $sql = "UPDATE respuestas set id_input=$idInput,tipo='" . $tipo . "',id_usuario='" . $idUsuario . "',estado=1 WHERE id_input=".$idInput;
+        return $this->adapter->query($sql)->execute();
+    }
+    
+    public function insertarRespuesta($idInput,$tipo,$idUsuario,$texto){
+        $sql = "INSERT INTO respuestas(id_input,tipo,id_usuario,estado) VALUES($idInput,'" . $tipo . "','" . $idUsuario . "',1)";
+        return $this->adapter->query($sql)->execute();
+    }
+    
     public function addRespuestas($post) {
 
         $response = new \Usuarios\MisClases\Respuesta();
@@ -59,12 +71,10 @@ class RespuestaDao {
                 $update = $this->search($idInput);
                 
                 if(!$update){
-                    $sql = "INSERT INTO respuestas(id_input,tipo,id_usuario,estado) VALUES($idInput,'" . $tipo . "','" . $idUsuario . "',1)";
+                    $res = $this->insertarRespuesta($idInput,$tipo,$idUsuario,$texto);
                 }else{
-                    $sql = "UPDATE respuestas set id_input=$idInput,tipo='" . $tipo . "',id_usuario='" . $idUsuario . "',estado=1";
+                   $res = $this->updateRespuesta($idInput,$tipo,$idUsuario,$texto);
                 }
-                
-                $res = $this->adapter->query($sql)->execute();
                 
                 $idRespuesta = $update;
                 
