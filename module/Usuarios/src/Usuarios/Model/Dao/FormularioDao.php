@@ -165,6 +165,8 @@ class FormularioDao {
     }
 
     public function getPaginas() {
+        
+        
         $sql = "SELECT * FROM paginas WHERE estado = 1 ORDER BY orden ASC";
 
         $paginas = array();
