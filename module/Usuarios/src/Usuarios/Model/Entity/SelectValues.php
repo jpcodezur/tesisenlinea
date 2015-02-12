@@ -6,6 +6,15 @@ class SelectValues{
 
     private $id;
     private $value;
+    private $selected;
+    
+    function getSelected() {
+        return $this->selected;
+    }
+
+    function setSelected($selected) {
+        $this->selected = $selected;
+    }
 
     function getId() {
         return $this->id;

@@ -107,7 +107,4 @@ class Input {
         $this->tipo = $tipo;
     }
     
-    
-    
-
 }
