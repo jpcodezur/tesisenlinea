@@ -113,13 +113,33 @@ class FormularioDao {
             $result = $res->execute();
             foreach ($result as $res) {
                 $selectValue = new \Usuarios\Model\Entity\SelectValues();
-                $selectValue->setId($res["id"]);
+                $selectValue->setId($res["id_select"]);
                 $selectValue->setValue($res["value"]);
+                
+                if($this->getRespSelect($res["id_select"])){
+                    $selectValue->setSelected(true);
+                }
+                
                 $results[] = $selectValue;
             }
         }
 
         return $results;
+    }
+    
+    public function getRespSelect($id){
+        $sql = "SELECT * FROM respuesta_select";
+        $result = $this->adapter->query($sql)->execute();
+        
+        if ($result) {
+            foreach ($result as $rres) {
+                if($rres["id_select"] == $id){
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     public function getRespuestaTexto($idInput) {
@@ -211,7 +231,7 @@ class FormularioDao {
 
         return $inputs;
     }
-
+    
     public function getGruposPorPagina($idPagina, $id = null) {
 
         $sql = "select * from grupos WHERE estado = 1 AND id_pagina=" . $idPagina;

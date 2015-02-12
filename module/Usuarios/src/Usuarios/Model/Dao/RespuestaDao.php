@@ -23,6 +23,17 @@ class RespuestaDao {
         return $this->adapter->query($sql)->execute();
     }
     
+    public function saveDropdown($idRespuesta, $texto,$update) {
+        if(!$update){
+            $sql = "INSERT INTO respuesta_select (id_respuesta,id_select) VALUES ($idRespuesta,'".$texto."')";
+        }else{
+            $sql = "UPDATE respuesta_select set id_respuesta=$idRespuesta,id_select='".$texto."'";
+        }
+        
+        return $this->adapter->query($sql)->execute();
+    }
+    
+    
     public function search($idInput){
         $sql = "SELECT id FROM respuestas WHERE estado=1 AND id_input=$idInput";
         $result = $this->adapter->query($sql)->execute();
@@ -64,6 +75,8 @@ class RespuestaDao {
                 if ($res) {
                     if ($tipo == "texto") {
                         $res = $this->saveTexto($idRespuesta, $texto,$update);
+                    }elseif ($tipo == "dropdown") {
+                        $res = $this->saveDropdown($idRespuesta, $texto,$update);
                     }
                 }
             }
