@@ -77,7 +77,7 @@ class AclListener implements ListenerAggregateInterface{
                 'login:index',
                 'login:login',
                 'login:logout'),
-                    array('index','wizard','msgs','resparent','adds'))
+                    array('index','wizard','msgs','resparent','adds','actualizospan'))
             
             
             ->deny('admin',array('usuarios:index','usuarios:formulario'),array('list','add','wizard'));

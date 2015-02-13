@@ -276,7 +276,8 @@ class FormularioDao {
                     $palabra = substr($palabra, 0, $pos);
                 }
             }
-            $respuesta[] = $this->getRespuestaPregunta($palabra, $idUsuario, $tipo,$separador_temp);
+            
+            $respuesta[] = '<span class="resp-span" nom="'.$palabra.'" tipo="'.$tipo.'">'.$this->getRespuestaPregunta($palabra, $idUsuario, $tipo,$separador_temp).'</span>';
         }
 
         return $respuesta;

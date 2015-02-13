@@ -99,5 +99,32 @@ class RespuestaDao {
 
         return $response;
     }
+    
+    public function remplaceSpan($post){
+        $nombre = $post["nom"];
+        $tipo = $post["tipo"];
+        
+        switch ($tipo) {
+            case "texto":
+                $sql = "SELECT * FROM inputs as i "
+                . "INNER JOIN respuestas as r on r.id_input = i.id "
+                . "INNER JOIN respuesta_texto as rt on rt.id_respuesta = r.id "    
+                . "WHERE i.nombre ='".$nombre."'";
+                break;
+
+            default:
+                break;
+        }
+        
+        $res = $this->adapter->query($sql)->execute();
+        
+        $obj  = new \stdClass();
+         
+        foreach($res as $r){
+            return $r["texto"];
+        }
+        
+        return false;
+    }
 
 }

@@ -45,7 +45,7 @@
                                                 <form class="form-horizontal" id="sample-form" >
                                                     <?php foreach ($pagina->getInputs() as $input): ?>
                                                         <div class="control-group inputs-respuestas">
-                                                            <label id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
+                                                            <label nom="<?php echo $input->getNombre() ?>" id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
                                                             <div class="controls">
                                                                 <span class="span6 input-icon input-icon-right">
                                                                     <?php if($input->getTipo()=="texto"):?>
@@ -214,20 +214,52 @@
         })
     }
 
+
+
     $(document).ready(function () {
 
-        actualizoLabels();
+        arrobaToSpan();
+        
+        function actualizoLabels(){
+            
+            $(".resp-span").each(function () {
+                $(".main-container").css("opacity",0.3);
+                $("#ajax_loader").show();
+                span = $(this);
+                nom = $(this).attr("nom");
+                tipo = $(this).attr("tipo");
+                
+                $.ajax({
+                    url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "actualizospan")) ?>",
+                    type:"post",
+                    async:false,
+                    data:{
+                        nom:nom,
+                        tipo:tipo
+                    },
+                    success:function(data){
+                        str = data[0];
+                        span.text(str);
+                        $(".main-container").css("opacity",1);
+                        $("#ajax_loader").hide();
+                    }
+                })
+            });
+            
+            
+        }
 
-        function actualizoLabels() {
+        function arrobaToSpan() {
 
             $(".inputs-respuestas").each(function () {
                 var txt = $(this).find("label").text();
-
+                txt = txt.trim();
+                
                 words = txt.split(" ");
 
                 words_res = "";
 
-                for (var i = 0; i < words.length; i++) {
+                    for (var i = 0; i < words.length; i++) {
                     if (words[i].indexOf("@") === 0) {
                         getRespuesta(words[i]);
                         words_res += resparent;
@@ -236,7 +268,7 @@
                     }
                 }
 
-                $(this).find("label").text(words_res);
+                $(this).find("label").html(words_res);
 
             });
         }
@@ -264,6 +296,9 @@
                 respuesta.texto = $(this).find("select option:selected").val();
                 respuestas.push(respuesta);
             });
+            
+            $(".main-container").css("opacity",0.3);
+            $("#ajax_loader").show();
             
             $.ajax({
                 url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "adds")) ?>",

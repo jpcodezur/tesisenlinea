@@ -41,6 +41,18 @@ class RespuestaController extends AbstractActionController {
         return $view;
         
     }
+    
+    public function actualizospanAction(){
+        $respuestas = $_POST;
+        
+        $response = $this->dao->remplaceSpan($_POST);
+        
+        $view = new JsonModel(array($response));
+
+        $view->setTerminal(true);
+
+        return $view;
+    }
 
     
 
