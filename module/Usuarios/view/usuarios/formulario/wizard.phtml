@@ -291,7 +291,7 @@
             rules: {
                 <?php foreach ($this->paginas as $pagina): ?>
                     <?php foreach ($pagina->getInputs() as $input): ?>
-                        <?php echo ($input->getRequired())?$input->getNombre().": 'required',":"" ?>
+                        <?php echo ($input->getRequired())?$input->getNombre().": 'required',":"" ?><?php echo "\n"?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             },

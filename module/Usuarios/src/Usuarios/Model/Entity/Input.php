@@ -126,5 +126,5 @@ class Input {
     function setTipo($tipo) {
         $this->tipo = $tipo;
     }
-
+    public function dummi(){}
 }

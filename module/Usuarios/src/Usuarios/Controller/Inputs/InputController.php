@@ -227,5 +227,5 @@ class InputController extends AbstractActionController {
 
         return $view;
     }
-
+    public function dummi(){}
 }

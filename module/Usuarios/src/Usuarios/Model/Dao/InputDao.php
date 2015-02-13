@@ -536,5 +536,7 @@ class InputDao {
 
         return $inputs;
     }
+    
+    public function dummi(){}
 
 }

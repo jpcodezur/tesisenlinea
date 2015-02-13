@@ -17,7 +17,7 @@ class RespuestaDao {
         if(!$update){
             $sql = "INSERT INTO respuesta_texto (id_respuesta,texto) VALUES ($idRespuesta,'".$texto."')";
         }else{
-            $sql = "UPDATE respuesta_texto set id_respuesta=$idRespuesta,texto='".$texto."'";
+            $sql = "UPDATE respuesta_texto set texto='".$texto."' WHERE id_respuesta=".$idRespuesta;
         }
         
         return $this->adapter->query($sql)->execute();
@@ -35,11 +35,11 @@ class RespuestaDao {
     
     
     public function search($idInput){
-        $sql = "SELECT COUNT(*) as total FROM respuestas WHERE estado=1 AND id_input=$idInput";
+        $sql = "SELECT id FROM respuestas WHERE estado=1 AND id_input=$idInput";
         $result = $this->adapter->query($sql)->execute();
          
         foreach($result as $r){
-            return $r["total"];
+            return $r["id"];
         }
         
         return false;
