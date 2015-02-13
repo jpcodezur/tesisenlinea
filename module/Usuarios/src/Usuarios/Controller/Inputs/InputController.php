@@ -221,7 +221,7 @@ class InputController extends AbstractActionController {
         
         $result = $this->dao->fetchOneLike($query);
 
-        $view = new JsonModel(array($result));
+        $view = new JsonModel(($result));
 
         $view->setTerminal(true);
 

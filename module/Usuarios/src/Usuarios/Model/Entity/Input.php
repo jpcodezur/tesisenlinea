@@ -57,29 +57,30 @@ class Input {
     }
 
     function getLabel() {
-        $separadores = array("?", ".", "!", ":", ";", ",");
-
-        $res = "";
-
-        $respuesta = "";
-        $palabras = explode(" ", trim($this->label));
-        foreach ($palabras as $palabra) {
-            $s = $palabra. " ";
-            if (strpos($palabra, "@") === 0) {
-                $s = "<span class='mg'>";
-                foreach ($separadores as $separador) {
-                    $pos = strpos($palabra, $separador);
-                    if ($pos !== false) {
-                        $separador_temp = $separador;
-                        $palabra = substr($palabra, 0, $pos);
-                    }
-                }
-                $s .=$palabra."</span>";
-            }
-            $respuesta.= $s;
-        }
-
-        return $respuesta;
+        return $this->label;
+//        $separadores = array("?", ".", "!", ":", ";", ",");
+//
+//        $res = "";
+//
+//        $respuesta = "";
+//        $palabras = explode(" ", trim($this->label));
+//        foreach ($palabras as $palabra) {
+//            $s = $palabra. " ";
+//            if (strpos($palabra, "@") === 0) {
+//                $s = "<span class='mg'>";
+//                foreach ($separadores as $separador) {
+//                    $pos = strpos($palabra, $separador);
+//                    if ($pos !== false) {
+//                        $separador_temp = $separador;
+//                        $palabra = substr($palabra, 0, $pos);
+//                    }
+//                }
+//                $s .=$palabra."</span>";
+//            }
+//            $respuesta.= $s;
+//        }
+//
+//        return $respuesta;
     }
 
     function getOrden() {
