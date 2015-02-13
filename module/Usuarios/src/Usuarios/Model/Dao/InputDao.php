@@ -477,14 +477,14 @@ class InputDao {
     public function fetchOneLike($query) {
         $sql = "SELECT * FROM inputs WHERE estado = 1 AND nombre LIKE '%" . $query . "%' ORDER BY nombre DESC";
 
-        $paginas = array();
+        $r = array();
 
         $res = $this->adapter->query($sql);
 
         if ($res) {
             $result = $res->execute();
             foreach ($result as $entity) {
-                return array(
+                $r[] = array(
                     "id" => $entity["id"],
                     "name" => $entity["nombre"],
                     "avatar" => "",
@@ -493,7 +493,7 @@ class InputDao {
             }
         }
 
-        return $paginas;
+        return $r;
     }
 
     public function fetchOne($array) {
@@ -536,5 +536,7 @@ class InputDao {
 
         return $inputs;
     }
+    
+    public function dummi(){}
 
 }
