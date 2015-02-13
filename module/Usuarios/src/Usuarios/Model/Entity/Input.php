@@ -3,7 +3,7 @@
 namespace Usuarios\Model\Entity;
 
 class Input {
-    
+
     private $id;
     private $nombre;
     private $idPagina;
@@ -15,7 +15,7 @@ class Input {
     private $control;
     private $respuesta;
     private $ayuda;
-    
+
     function getAyuda() {
         return $this->ayuda;
     }
@@ -24,7 +24,6 @@ class Input {
         $this->ayuda = $ayuda;
     }
 
-        
     function getRespuesta() {
         return $this->respuesta;
     }
@@ -33,7 +32,6 @@ class Input {
         $this->respuesta = $respuesta;
     }
 
-        
     function getControl() {
         return $this->control;
     }
@@ -42,7 +40,6 @@ class Input {
         $this->control = $control;
     }
 
-    
     function getNombre() {
         return $this->nombre;
     }
@@ -60,7 +57,29 @@ class Input {
     }
 
     function getLabel() {
-        return $this->label;
+        $separadores = array("?", ".", "!", ":", ";", ",");
+
+        $res = "";
+
+        $respuesta = "";
+        $palabras = explode(" ", trim($this->label));
+        foreach ($palabras as $palabra) {
+            $s = $palabra. " ";
+            if (strpos($palabra, "@") === 0) {
+                $s = "<span class='mg'>";
+                foreach ($separadores as $separador) {
+                    $pos = strpos($palabra, $separador);
+                    if ($pos !== false) {
+                        $separador_temp = $separador;
+                        $palabra = substr($palabra, 0, $pos);
+                    }
+                }
+                $s .=$palabra."</span>";
+            }
+            $respuesta.= $s;
+        }
+
+        return $respuesta;
     }
 
     function getOrden() {
@@ -106,5 +125,5 @@ class Input {
     function setTipo($tipo) {
         $this->tipo = $tipo;
     }
-    
+
 }
