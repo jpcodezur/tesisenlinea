@@ -176,7 +176,8 @@
 </style>
 <script>
     var resparent = "[]";
-
+    var inputs = [];
+    
     function saveRes(nameInput) {
         var input = {},
                 id_input = $("input[name=" + nameInput + "]").attr("id_input"),
@@ -214,11 +215,45 @@
         })
     }
 
+    function seteoInputs(){
+        inputs = [];
+        $("#sample-form input[type=text]").each(function(){
+            input = {};
+            input.name = $(this).attr("name");
+            input.val = $(this).val();
+            inputs.push(input);
+        })
+    }
 
+    function modificoDatos(obj){
+        for(var i=0;i<inputs.length;i++){
+            if(obj.attr("name") == inputs[i].name){
+                val = obj.val();
+                if(val == inputs[i].val){
+                    return false;
+                }
+            }
+        }
+        seteoInputs();
+        return true;
+    }
 
     $(document).ready(function () {
-
+        
         arrobaToSpan();
+        
+        seteoInputs();
+        
+        
+        $("#sample-form select").change(function(){
+            saveRespuesta($(this));
+        });
+        
+        $("#sample-form input[type=text]").focusout(function(){
+            if(modificoDatos($(this))){
+                saveRespuesta($(this));
+            }
+        })
         
         function actualizoLabels(){
             
@@ -271,6 +306,30 @@
                 $(this).find("label").html(words_res);
 
             });
+        }
+        
+        function saveRespuesta(obj){
+            respuesta = {};
+            
+            respuesta.nombre = obj.attr("name");
+            respuesta.id_pagina = obj.attr("id_pagina");
+            respuesta.tipo = obj.attr("tipo");
+            respuesta.id_input = obj.attr("id_input");
+            respuesta.texto = obj.val();
+            
+            $(".main-container").css("opacity",0.3);
+            $("#ajax_loader").show();
+            
+            $.ajax({
+                url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "add")) ?>",
+                type:"post",
+                data:{respuesta:respuesta},
+                success:function(data){
+                    actualizoLabels();
+                }
+            })
+            
+            return respuesta;
         }
         
         function saveRespuestas(){

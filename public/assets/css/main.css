@@ -64,3 +64,21 @@ input[name=nombre],input[name=ayuda]{width: 516px;}
 .inputs-text-control{
     margin-top:10px;
 }
+.action-paginas a{
+    cursor:pointer;
+}
+#values-select{
+    margin-top: 10px;
+    max-height: 75px;
+    overflow-y: scroll;
+}
+.modal.fade.in {
+    top: 3% !important;
+}
+span.resp-span {
+    float: none !important;
+    margin-left: 0px  !important;
+    min-height: 1px;
+    width: auto !important;
+    display: inline !important;
+}

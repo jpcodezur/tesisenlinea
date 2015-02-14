@@ -277,18 +277,42 @@ class FormularioDao {
                 }
             }
             
-            $respuesta[] = '<span class="resp-span" nom="'.$palabra.'" tipo="'.$tipo.'">'.$this->getRespuestaPregunta($palabra, $idUsuario, $tipo,$separador_temp).'</span>';
+            $tipo = $this->getTipoInput($palabra);
+            
+            $respuesta[] = '<span class="resp-span" nom="'.$palabra.'" tipo="'.$tipo.'">'.$this->getRespuestaPregunta($palabra, $idUsuario, $tipo,$separador_temp).'</span>'.$separador_temp;
         }
 
         return $respuesta;
     }
+    
+    public function getTipoInput($name){
+        $sql = "SELECT tipo_input FROM inputs "
+                . "WHERE estado=1 AND nombre = '" . $name . "'";
 
+        $res = $this->adapter->query($sql);
+
+        if ($res) {
+            $result = $res->execute();
+            foreach ($result as $r) {
+                return $r["tipo_input"];
+            }
+        }
+
+        return false;
+    }
+    
     public function getRespuestaPregunta($nomPregunta, $idUsuario, $tipo,$separador) {
 
         if ($tipo == "texto") {
             $sql = "SELECT rt.texto as respuesta FROM respuesta_texto as rt "
                     . "INNER JOIN respuestas as r on r.id = rt.id_respuesta "
                     . "INNER JOIN inputs as i on i.id = r.id_input "
+                    . "WHERE r.id_usuario = $idUsuario AND i.nombre = '" . $nomPregunta . "'";
+        }elseif ($tipo == "dropdown") {
+            $sql = "SELECT sc.value as respuesta FROM respuesta_select as rs "
+                    . "INNER JOIN respuestas as r on r.id = rs.id_respuesta "
+                    . "INNER JOIN inputs as i on i.id = r.id_input "
+                    . "INNER JOIN select_collections as sc on sc.id_input = i.id AND sc.id_select = rs.id_select "
                     . "WHERE r.id_usuario = $idUsuario AND i.nombre = '" . $nomPregunta . "'";
         }
 
@@ -301,7 +325,7 @@ class FormularioDao {
             }
         }
 
-        return $nomPregunta.$separador;
+        return $nomPregunta;
     }
 
 }

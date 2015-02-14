@@ -28,6 +28,20 @@ class RespuestaController extends AbstractActionController {
         die("500");
     }
 
+    public function addAction() {
+        
+        $respuestas = $_POST;
+        
+        $response = $this->dao->addRespuesta($respuestas);
+        
+        $view = new JsonModel(array($response));
+
+        $view->setTerminal(true);
+
+        return $view;
+        
+    }
+    
     public function addsAction() {
         
         $respuestas = $_POST;
