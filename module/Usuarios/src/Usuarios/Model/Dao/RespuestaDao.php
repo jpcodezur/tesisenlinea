@@ -55,6 +55,49 @@ class RespuestaDao {
         return $this->adapter->query($sql)->execute();
     }
     
+    public function addRespuesta($post) {
+
+        $response = new \Usuarios\MisClases\Respuesta();
+        $response->setError(false);
+
+            foreach ($post as $respuesta) {
+                $idInput = $respuesta["id_input"];
+                $tipo = $respuesta["tipo"];
+                $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
+                $texto = $respuesta["texto"];
+                $connection = $this->adapter->getDriver()->getConnection();
+
+                $update = $this->search($idInput);
+                
+                if(!$update){
+                    $res = $this->insertarRespuesta($idInput,$tipo,$idUsuario,$texto);
+                }else{
+                   $res = $this->updateRespuesta($idInput,$tipo,$idUsuario,$texto);
+                }
+                
+                $idRespuesta = $update;
+                
+                if(!$update){
+                    $idRespuesta = $connection->getLastGeneratedValue();
+                }
+
+                if ($res) {
+                    if ($tipo == "texto") {
+                        $res = $this->saveTexto($idRespuesta, $texto,$update);
+                    }elseif ($tipo == "dropdown") {
+                        $res = $this->saveDropdown($idRespuesta, $texto,$update);
+                    }
+                }
+            }
+        
+        if ($res) {
+            $response->setError(false);
+            $response->setMensaje("Saved success");
+        }
+
+        return $response;
+    }
+    
     public function addRespuestas($post) {
 
         $response = new \Usuarios\MisClases\Respuesta();
@@ -109,6 +152,13 @@ class RespuestaDao {
                 $sql = "SELECT * FROM inputs as i "
                 . "INNER JOIN respuestas as r on r.id_input = i.id "
                 . "INNER JOIN respuesta_texto as rt on rt.id_respuesta = r.id "    
+                . "WHERE i.nombre ='".$nombre."'";
+                break;
+            case "dropdown":
+                $sql = "SELECT sc.value as texto FROM inputs as i "
+                . "INNER JOIN respuestas as r on r.id_input = i.id "
+                . "INNER JOIN respuesta_select as rs on rs.id_respuesta = r.id "    
+                . "INNER JOIN select_collections as sc on sc.id_input = i.id AND sc.id_select = rs.id_select "
                 . "WHERE i.nombre ='".$nombre."'";
                 break;
 

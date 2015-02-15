@@ -182,6 +182,9 @@
         </div><!--/.span-->
     </div><!--/.row-fluid-->
 </div><!--/.page-content-->
+<form method="post" id="form_reload_page">
+    <input type="hidden" name="last_page" value="<?php echo (isset($_POST["last_page"]))?$_POST["last_page"]:"0" ?>">
+</form>
 <style>
     .save-formulario{
         margin-right: -8px;
@@ -246,7 +249,16 @@
     </style>
     <script>
         $(document).ready(function () {
-
+            
+            if($("input[name=last_page]").val()){
+                $(".wizard-steps li").each(function(){
+                    if($(this).attr("id_page")==$("input[name=last_page]").val()){
+                        $(this).addClass("complete");
+                        $(this).click();
+                    }
+                })
+            }
+            
             $(document).on("click", ".del-input-select-value-on-edit", function (e) {
                 e.preventDefault();
                 inp = $(this);
@@ -286,7 +298,10 @@
 
             $(document).on("click", ".edit-input-select-value", function (e) {
                 e.preventDefault();
-                $(this).parent().parent().find("input[class=value-option]").attr("disabled", false);
+                var input = $(this).parent().parent().find("input[class=value-option]");
+                        input.attr("disabled", false);
+                        input.focus();
+                        
             });
 
             $(document).on("click", "#input-add-header .close", function () {
@@ -340,7 +355,7 @@
                             stop: function ( ) {
                                 saveOrdenValue();
                             }
-                        }).disableSelection();
+                        });
                         $('#values-select input').bind('click.sortable mousedown.sortable', function (ev) {
                             ev.target.focus();
                         });
@@ -454,7 +469,7 @@
                             stop: function ( ) {
                                 saveOrdenValue();
                             }
-                        }).disableSelection();
+                        });
                         $('#values-select input').bind('click.sortable mousedown.sortable', function (ev) {
                             ev.target.focus();
                         });
@@ -535,7 +550,9 @@
                                 if (div == "success") {
                                     setTimeout(function () {
                                         $('.bootbox').modal('toggle');
-                                        window.location.reload();
+                                        //window.location.reload();
+                                        $("input[name=last_page]").val( $("ul.wizard-steps li.active").attr("id_page") );
+                                        $("#form_reload_page").submit();
                                     }, 2000);
                                 }
                             }
@@ -586,7 +603,9 @@
                         if (div == "success") {
                             setTimeout(function () {
                                 $('.bootbox').modal('toggle');
-                                window.location.reload();
+                                //window.location.reload();
+                                $("input[name=last_page]").val( $("ul.wizard-steps li.active").attr("id_page") );
+                                $("#form_reload_page").submit();
                             }, 2000);
                         }
                     }
@@ -658,7 +677,9 @@
                         if (div == "success") {
                             setTimeout(function () {
                                 $('.bootbox').modal('toggle');
-                                window.location.reload();
+                                //window.location.reload();
+                                $("input[name=last_page]").val( $("ul.wizard-steps li.active").attr("id_page") );
+                                $("#form_reload_page").submit();
                             }, 2000);
                         }
                     }
@@ -704,7 +725,10 @@
                         if (div == "success") {
                             setTimeout(function () {
                                 $('.bootbox').modal('toggle');
-                                window.location.reload();
+                                //window.location.reload();
+                                val = $("ul.wizard-steps li.active").attr("id_page");
+                                $("input[name=last_page]").val(val);
+                                $("#form_reload_page").submit();
                             }, 2000);
                         }
                     }
