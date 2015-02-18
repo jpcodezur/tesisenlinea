@@ -218,7 +218,8 @@ class FormularioDao {
                 }
                 switch ($unInput->getTipo()) {
                     case "dropdown":
-                        $select = new \Usuarios\Model\Entity\Select();
+                        //$select = new \Usuarios\Model\Entity\Select();
+                        $select = $this->getSelect($unInput->getId());
                         $values = $this->getValuesSelect($unInput->getId());
                         $select->setValues($values);
                         $unInput->setControl($select);
@@ -232,6 +233,31 @@ class FormularioDao {
         }
 
         return $inputs;
+    }
+    
+    public function getSelect($idInput){
+        
+        $sql = " SELECT * FROM input_select
+                WHERE id_input =  $idInput";
+        
+        $results = array();
+
+        $res = $this->adapter->query($sql);
+
+        if ($res) {
+            $result = $res->execute();
+            foreach ($result as $res) {
+                $select = new \Usuarios\Model\Entity\Select();
+                $select->setId($res["id"]);
+                $select->setIdInput($res["id_input"]);
+                $select->setRespuestasRequeridas($res["respuestas_requeridas"]);
+                $select->setTipo($res["tipo"]);
+                
+                return $select;
+            }
+        }
+
+        return $results;
     }
     
     public function getGruposPorPagina($idPagina, $id = null) {
@@ -327,5 +353,5 @@ class FormularioDao {
 
         return $nomPregunta;
     }
-
+    public function dummy(){}
 }
