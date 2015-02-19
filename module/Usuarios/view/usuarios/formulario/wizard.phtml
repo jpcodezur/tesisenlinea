@@ -48,7 +48,9 @@
                                                             <div class="controls">
                                                                 <span class="span6 input-icon input-icon-right">
                                                                     <?php if($input->getTipo()=="texto"):?>
-                                                                    <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
+                                                                        <?php if($input->getControl()->getRespuestasRequeridas() > 0 ):?>
+                                                                            <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
+                                                                        <?php endif; ?>
                                                                     <?php elseif($input->getTipo()=="dropdown"):?>
                                                                     <select <?php echo ($input->getControl()->getTipo() == "multi")?"class='chzn-select' multiple='multiple'":""?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
                                                                         <option value="">SELECCIONAR</option>

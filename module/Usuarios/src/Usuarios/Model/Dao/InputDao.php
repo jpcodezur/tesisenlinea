@@ -218,10 +218,16 @@ class InputDao {
     public function save($unaEntity) {
 
         $validate = new SaveInput("", $this, $this->params);
-
+        
+        
+        
         $respuesta = $validate->validate($unaEntity);
 
         $respuesta->id = false;
+        
+        if ($respuesta->getError() === false) {
+            $respuesta = $validate->validateName($unaEntity->getNombre());
+        }
 
         if ($respuesta->getError() === false) {
 
@@ -330,6 +336,10 @@ class InputDao {
         $respuesta = $validate->validate($unaEntity);
 
         $respuesta->id = false;
+        
+        if ($respuesta->getError() === false) {
+            $respuesta = $validate->validateName($unaEntity->getNombre());
+        }
 
         if ($respuesta->getError() === false) {
 

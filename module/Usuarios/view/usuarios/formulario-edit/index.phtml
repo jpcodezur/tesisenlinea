@@ -250,6 +250,10 @@
     <script>
         $(document).ready(function () {
             
+            $(document).on("focus",".modal-body input[type=text]",function(){
+                $(".modal-body .alert-danger").remove();
+            })
+            
             if($("input[name=last_page]").val()){
                 $(".wizard-steps li").each(function(){
                     if($(this).attr("id_page")==$("input[name=last_page]").val()){
@@ -428,9 +432,9 @@
                                 anchor.trigger("click");
                             }
                         })
-                        
+                        value = $(data).find("#numero-respuestas").val();
                         $('#numero-respuestas')
-                                .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
+                                .ace_spinner({value: value, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
                                 });
 

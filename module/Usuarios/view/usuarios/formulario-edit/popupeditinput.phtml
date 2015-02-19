@@ -46,7 +46,7 @@
             <div id="home" class="tab-pane in active">
                 <div class="widget-main">
                     <label>Respuestas requeridas</label>
-                    <input type="text" class="input-mini" id="numero-respuestas" />
+                    <input type="text" class="input-mini" id="numero-respuestas"  value="<?php echo ($this->input->getTipo()=="texto")?$this->input->getControl()->getRespuestasRequeridas():"1"; ?>"/>
                     <div class="space-6"></div>
                 </div>
             </div>
