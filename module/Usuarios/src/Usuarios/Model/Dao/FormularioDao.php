@@ -79,7 +79,7 @@ class FormularioDao {
                 $unInput->setTipo($r["tipo_input"]);
                 $unInput->setAyuda($r["ayuda"]);
                 $unInput->setRespuesta($this->getRespuestaTexto($r["id"]));
-                
+
                 switch ($unInput->getTipo()) {
                     case "dropdown":
                         $select = new \Usuarios\Model\Entity\Select();
@@ -91,20 +91,20 @@ class FormularioDao {
                     default:
                         break;
                 }
-                
+
                 $inputs[] = $unInput;
             }
         }
 
         return $inputs;
     }
-    
-    public function getValuesSelect($idInput){
+
+    public function getValuesSelect($idInput) {
         $sql = " SELECT * FROM select_collections as sc  
                 INNER JOIN input_select as iss      
                 on sc.id_input = iss.id_input 
                 WHERE iss.id_input =  $idInput";
-        
+
         $results = array();
 
         $res = $this->adapter->query($sql);
@@ -115,30 +115,30 @@ class FormularioDao {
                 $selectValue = new \Usuarios\Model\Entity\SelectValues();
                 $selectValue->setId($res["id_select"]);
                 $selectValue->setValue($res["value"]);
-                
-                if($this->getRespSelect($res["id_select"])){
+
+                if ($this->getRespSelect($res["id_select"])) {
                     $selectValue->setSelected(true);
                 }
-                
+
                 $results[] = $selectValue;
             }
         }
 
         return $results;
     }
-    
-    public function getRespSelect($id){
+
+    public function getRespSelect($id) {
         $sql = "SELECT * FROM respuesta_select";
         $result = $this->adapter->query($sql)->execute();
-        
+
         if ($result) {
             foreach ($result as $rres) {
-                if($rres["id_select"] == $id){
+                if ($rres["id_select"] == $id) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -165,8 +165,8 @@ class FormularioDao {
     }
 
     public function getPaginas() {
-        
-        
+
+
         $sql = "SELECT * FROM paginas WHERE estado = 1 ORDER BY orden ASC";
 
         $paginas = array();
@@ -183,7 +183,7 @@ class FormularioDao {
                 $unaPagina->setOrden($r["orden"]);
                 $inputs = $this->getInputs($r["id"]);
                 $unaPagina->setInputs($inputs);
-                
+
                 $paginas[] = $unaPagina;
             }
         }
@@ -224,7 +224,10 @@ class FormularioDao {
                         $select->setValues($values);
                         $unInput->setControl($select);
                         break;
-
+                    case "texto":
+                        $texto = $this->getTexto($unInput->getId());
+                        $unInput->setControl($texto);
+                        break;
                     default:
                         break;
                 }
@@ -234,12 +237,30 @@ class FormularioDao {
 
         return $inputs;
     }
-    
-    public function getSelect($idInput){
-        
+
+    public function getTexto($id) {
+        $input = new Input();
+
+        $sql = "SELECT * FROM input_texto WHERE id_input=" . $id;
+
+        $result = $this->adapter->query($sql)->execute();
+
+        if ($result) {
+            foreach ($result as $res) {
+                $input->setId($res["id"]);
+                $input->setRespuestasRequeridas($res["respuestas_requeridas"]);
+                return $input;
+            }
+        }
+
+        return $input;
+    }
+
+    public function getSelect($idInput) {
+
         $sql = " SELECT * FROM input_select
                 WHERE id_input =  $idInput";
-        
+
         $results = array();
 
         $res = $this->adapter->query($sql);
@@ -252,14 +273,14 @@ class FormularioDao {
                 $select->setIdInput($res["id_input"]);
                 $select->setRespuestasRequeridas($res["respuestas_requeridas"]);
                 $select->setTipo($res["tipo"]);
-                
+
                 return $select;
             }
         }
 
         return $results;
     }
-    
+
     public function getGruposPorPagina($idPagina, $id = null) {
 
         $sql = "select * from grupos WHERE estado = 1 AND id_pagina=" . $idPagina;
@@ -302,16 +323,16 @@ class FormularioDao {
                     $palabra = substr($palabra, 0, $pos);
                 }
             }
-            
+
             $tipo = $this->getTipoInput($palabra);
-            
-            $respuesta[] = '<span class="resp-span" nom="'.$palabra.'" tipo="'.$tipo.'">'.$this->getRespuestaPregunta($palabra, $idUsuario, $tipo,$separador_temp).'</span>'.$separador_temp;
+
+            $respuesta[] = '<span class="resp-span" nom="' . $palabra . '" tipo="' . $tipo . '">' . $this->getRespuestaPregunta($palabra, $idUsuario, $tipo, $separador_temp) . '</span>' . $separador_temp;
         }
 
         return $respuesta;
     }
-    
-    public function getTipoInput($name){
+
+    public function getTipoInput($name) {
         $sql = "SELECT tipo_input FROM inputs "
                 . "WHERE estado=1 AND nombre = '" . $name . "'";
 
@@ -326,15 +347,15 @@ class FormularioDao {
 
         return false;
     }
-    
-    public function getRespuestaPregunta($nomPregunta, $idUsuario, $tipo,$separador) {
+
+    public function getRespuestaPregunta($nomPregunta, $idUsuario, $tipo, $separador) {
 
         if ($tipo == "texto") {
             $sql = "SELECT rt.texto as respuesta FROM respuesta_texto as rt "
                     . "INNER JOIN respuestas as r on r.id = rt.id_respuesta "
                     . "INNER JOIN inputs as i on i.id = r.id_input "
                     . "WHERE r.id_usuario = $idUsuario AND i.nombre = '" . $nomPregunta . "'";
-        }elseif ($tipo == "dropdown") {
+        } elseif ($tipo == "dropdown") {
             $sql = "SELECT sc.value as respuesta FROM respuesta_select as rs "
                     . "INNER JOIN respuestas as r on r.id = rs.id_respuesta "
                     . "INNER JOIN inputs as i on i.id = r.id_input "
@@ -353,5 +374,9 @@ class FormularioDao {
 
         return $nomPregunta;
     }
-    public function dummy(){}
+
+    public function dummy() {
+        
+    }
+
 }
