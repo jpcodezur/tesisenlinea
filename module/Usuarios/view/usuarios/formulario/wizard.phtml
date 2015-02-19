@@ -37,7 +37,6 @@
 
                                     <hr />
                                     <div class="step-content row-fluid position-relative" id="step-container">
-
                                         <?php $count = 1; ?>
                                         <?php foreach ($this->paginas as $pagina): ?>
                                             <div class="step-pane <?php echo ($count === 1 ) ? "active" : "" ?>" id="step<?php echo $count ?>">
@@ -51,7 +50,7 @@
                                                                     <?php if($input->getTipo()=="texto"):?>
                                                                     <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
                                                                     <?php elseif($input->getTipo()=="dropdown"):?>
-                                                                    <select id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
+                                                                    <select <?php echo ($input->getControl()->getTipo() == "multi")?"class='chzn-select' multiple='multiple'":""?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
                                                                         <option value="">SELECCIONAR</option>
                                                                         <?php $control = $input->getControl();?>
                                                                         <?php foreach($control->getValues() as $value):?>
@@ -239,6 +238,8 @@
     }
 
     $(document).ready(function () {
+        
+        $(".chzn-select").chosen(); 
         
         arrobaToSpan();
         
