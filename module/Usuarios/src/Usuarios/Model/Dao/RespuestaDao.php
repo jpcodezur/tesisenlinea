@@ -23,8 +23,10 @@ class RespuestaDao {
         return $this->adapter->query($sql)->execute();
     }
     
-    public function getIdsRespuestasSelect($idRespuesta){
-        $sql = "SELECT * FROM respuesta_select WHERE id_respuesta =$idRespuesta";
+    public function getIdsRespuestasSelect($idRespuesta,$idSelect,$idAlumno){
+        $sql = "SELECT rs.id_select FROM respuesta_select as rs "
+                . "INNER JOIN respuestas as r on r.id = rs.id_respuesta "
+                . "WHERE rs.id_respuesta =$idRespuesta AND r.id_usuario = $idAlumno";
         $res = $this->adapter->query($sql)->execute();
         $ids = array();
         foreach($res as $r){
@@ -34,54 +36,68 @@ class RespuestaDao {
         return $ids;
     }
     
-    public function respuestaSelectExist($t,$idRespuesta){
-        $sql = "SELECT * FROM respuesta_select WHERE id_respuesta =$idRespuesta AND id_select=".$t;
+    public function respuestaSelectExist($t,$idRespuesta,$idAlumno){
+        $sql = "SELECT rs.id FROM respuesta_select as rs INNER JOIN respuestas as r on r.id = rs.id_respuesta WHERE rs.id_respuesta =$idRespuesta AND rs.id_select=".$t." AND r.id_usuario=$idAlumno";
         $res = $this->adapter->query($sql)->execute();
         $ret = false;
         foreach($res as $r){
-            $ret = true;
+            $ret = $r["id"];
         }
         
         return $ret;
     }
-    public function dummy(){}
+
     public function saveDropdown($idRespuesta, $texto,$update) {
         //$idRespuesta = $this->getIdRespuesta($idSelect);
+        $sql = "";
+        
+        $idAlumno = null;
+
+        if(isset($_SESSION["miSession"]["usuario"])){
+            $idAlumno = $_SESSION["miSession"]["usuario"]->getId();
+        }
+        
+        
         if(!$texto){
             $sql = "DELETE FROM respuesta_select WHERE id_respuesta=$idRespuesta;";
         }else{
         if(!is_array($texto)){
             if(!$update){
-                $sql = "INSERT INTO respuesta_select (id_respuesta,id_select) VALUES ($idRespuesta,'".$texto."')";
+                $sql = "INSERT INTO respuesta_select (id_respuesta,id_select,id_usuario) VALUES ($idRespuesta,'".$texto."','".$idAlumno."')";
             }else{
                 $sql = "UPDATE respuesta_select set id_select='".$texto."' WHERE id_respuesta=$idRespuesta";
             }
         }else{
             if(!$update){
-                foreach($texto as $t){
-                    $sql .= "INSERT INTO respuesta_select (id_respuesta,id_select) VALUES ($idRespuesta,'".$t."');";
+                foreach($texto as $idSelect){
+                    $sql .= "INSERT INTO respuesta_select (id_respuesta,id_select,id_usuario) VALUES ($idRespuesta,'".$idSelect."','".$idAlumno."');";
                 }
             }else{
-                $idsRespuestas = $this->getIdsRespuestasSelect($idRespuesta);
-                
-                foreach($idsRespuestas as $ids){
-                    if(!in_array($ids, $texto)){
-                        $sql = "DELETE FROM respuesta_select WHERE id_select='".$ids."' AND id_respuesta=$idRespuesta;";
+                foreach($texto as $idSelect){
+                    $idRespuestaSelects = $this->getIdsRespuestasSelect($idRespuesta,$idSelect,$idAlumno);
+                    foreach($idRespuestaSelects as $idRespuestaSelect){
+                        if(!in_array($idRespuestaSelect, $texto)){
+                            $sql = "DELETE FROM respuesta_select WHERE id_select='".$idRespuestaSelect."' AND id_respuesta=$idRespuesta;";
+                        }
                     }
                 }
                 
-                foreach($texto as $t){
-                    if($this->respuestaSelectExist($t,$idRespuesta)){
-                        $sql .= "UPDATE respuesta_select set id_select='".$t."' WHERE id_respuesta=$idRespuesta;";
+                foreach($texto as $idSelect){
+                    $updateSelect = $this->respuestaSelectExist($idSelect,$idRespuesta,$idAlumno);
+                    if($updateSelect){
+                        $sql .= "UPDATE respuesta_select set id_select='".$idSelect."' WHERE id_respuesta=$idRespuesta AND id=$updateSelect;";
                     }else{
-                        $sql .= "INSERT INTO respuesta_select (id_select,id_respuesta) VALUES('".$t."','".$idRespuesta."');";
+                        $sql .= "INSERT INTO respuesta_select (id_select,id_respuesta,id_usuario) VALUES('".$idSelect."','".$idRespuesta."','".$idAlumno."');";
                     }
                     
                 }
             }
         }
         }
-        
+        /*
+            INSERT INTO respuesta_select (id_select,id_respuesta,id_usuario) VALUES('1','24','5');
+         *  UPDATE respuesta_select set id_select='14' WHERE id_respuesta=24;
+         *          */
         return $this->adapter->query($sql)->execute();
     }
     

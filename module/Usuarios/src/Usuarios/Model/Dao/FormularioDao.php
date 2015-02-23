@@ -116,7 +116,17 @@ class FormularioDao {
                 $selectValue->setId($res["id_select"]);
                 $selectValue->setValue($res["value"]);
 
-                if ($this->getRespSelect($res["id_select"])) {
+                $idAlumno = null;
+        
+                if(isset($_SESSION["miSession"]["usuario"])){
+                    $idAlumno = $_SESSION["miSession"]["usuario"]->getId();
+                }
+                
+                $idRespuesta = $this->getIdRespuesta($res["id_input"],$idAlumno);
+                
+                $isSelected = $this->getRespSelect($res["id_select"],$idAlumno,$idRespuesta);
+                
+                if ($isSelected) {
                     $selectValue->setSelected(true);
                 }
 
@@ -127,8 +137,28 @@ class FormularioDao {
         return $results;
     }
 
-    public function getRespSelect($id) {
-        $sql = "SELECT * FROM respuesta_select";
+    public function getIdRespuesta($idInput,$idAlumno) {
+        $sql ="SELECT id FROM respuestas WHERE id_input=$idInput AND id_usuario=$idAlumno";
+        
+        $result = $this->adapter->query($sql)->execute();
+        
+        if ($result) {
+            foreach ($result as $res) {
+                return $res["id"];
+            }
+        }
+
+        return false;
+    }
+    
+    public function getRespSelect($id,$idAlumno,$idRespuesta) {
+        
+        
+        //SELECT * FROM respuesta_select WHERE id_respuesta = 24 AND id_select=82 AND id_usuario=5
+        // AND
+        // AND id_respuesta = $idRespuesta
+        $sql = "SELECT * FROM respuesta_select WHERE id_respuesta = $idRespuesta AND id_usuario=$idAlumno";
+        
         $result = $this->adapter->query($sql)->execute();
 
         if ($result) {
