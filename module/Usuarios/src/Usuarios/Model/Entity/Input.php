@@ -16,7 +16,17 @@ class Input {
     private $respuesta;
     private $ayuda;
     private $respuestasRequeridas;
+    private $isMagic;
+    
+    function getIsMagic() {
+        return $this->isMagic;
+    }
 
+    function setIsMagic($isMagic) {
+        $this->isMagic = $isMagic;
+    }
+
+    
     function getRespuestasRequeridas() {
         return $this->respuestasRequeridas;
     }

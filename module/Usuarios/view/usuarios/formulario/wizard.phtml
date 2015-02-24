@@ -49,21 +49,38 @@
                                                                 <span class="span6 input-icon input-icon-right">
                                                                     <?php if($input->getTipo()=="texto"):?>
                                                                         <?php if($input->getControl()->getRespuestasRequeridas() > 0 ):?>
-                                                                            <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12" type="text" id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
+                                                                    <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12 <?php echo ($input->getIsMagic())?"isMagic":"" ?>" type="text" id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
                                                                         <?php endif; ?>
+                                                                    <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
                                                                     <?php elseif($input->getTipo()=="dropdown"):?>
-                                                                    <select <?php echo ($input->getControl()->getTipo() == "multi")?"class='chzn-select' multiple='multiple'":""?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
+                                                                    <?php
+                                                                    $sc = "";
+                                                                    $stipo = $input->getControl()->getTipo();
+                                                                    if($input->getIsMagic()){
+                                                                        $sc = "isMagic";
+                                                                    }
+                                                                    $valuesSelected = array();
+                                                                    ?>
+                                                                    <select class="<?php echo $sc ?><?php echo ($stipo == "multi")? "chzn-select":"" ?>" <?php echo ($stipo == "multi")?"multiple='multiple'":"" ?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
                                                                         <option value="">SELECCIONAR</option>
                                                                         <?php $control = $input->getControl();?>
                                                                         <?php foreach($control->getValues() as $value):?>
-                                                                        <option <?php echo ($value->getSelected())?"selected='selected'":"" ?> value="<?php echo $value->getId() ?>"><?php echo $value->getValue() ?></option>
+                                                                        <option 
+                                                                            <?php 
+                                                                            if($value->getSelected()){
+                                                                                echo "selected='selected'";
+                                                                                $valuesSelected[] = $value->getId();
+                                                                            } 
+                                                                            ?> 
+                                                                            value="<?php echo $value->getId() ?>"><?php echo $value->getValue() ?></option>
                                                                         <?php endforeach;?>
                                                                     </select>
+                                                                    <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo implode(",", $valuesSelected) ?>"/>
                                                                     <?php endif;?>
                                                                     <?php if($input->getAyuda()):?>    
                                                                     <i class="tooltip-success icon-question-sign" data-rel="tooltip" data-placement="right" title="<?php echo $input->getAyuda(); ?>"></i>
                                                                     <?php endif;?>
-                                                                    <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
+                                                                    
                                                                 </span>
                                                                 <!--<span class="help-inline">Something may have gone wrong</span>-->
                                                             </div>
@@ -241,6 +258,12 @@
 
     $(document).ready(function () {
         
+        $(".wizard-steps").hide();
+        
+        actualizoPaginas();
+        
+        $(".wizard-steps").show();
+        
         $(".chzn-select").chosen(); 
         
         arrobaToSpan();
@@ -248,11 +271,11 @@
         seteoInputs();
         
         
-        $("#sample-form select").change(function(){
+        $("#sample-form select.isMagic").change(function(){
             saveRespuesta($(this));
         });
         
-        $("#sample-form input[type=text]").focusout(function(){
+        $("#sample-form input.isMagic").focusout(function(){
             if(modificoDatos($(this))){
                 saveRespuesta($(this));
             }
@@ -336,42 +359,91 @@
         }
         
         function saveRespuestas(){
+            var huboCambios = huboCambiosEnInputs();    
+            if(huboCambios){
+                respuestas = [];
+                $("#step-container .active .inputs-respuestas").each(function(){
+                    respuesta = {};
 
-            respuestas = [];
-            $("#step-container .active .inputs-respuestas").each(function(){
-                respuesta = {};
-                respuesta.nombre = $(this).find("input[type=text]").attr("name");
-                respuesta.id_pagina = $(this).find("input[type=text]").attr("id_pagina");
-                respuesta.tipo = $(this).find("input[type=text]").attr("tipo");
-                respuesta.id_input = $(this).find("input[type=text]").attr("id_input");
-                respuesta.texto = $(this).find("input[type=text]").val();
-                
-                respuestas.push(respuesta);
-            });
-            
-            $("#step-container .active .inputs-respuestas").each(function(){
-                respuesta = {};
-                respuesta.nombre = $(this).find("select").attr("name");
-                respuesta.id_pagina = $(this).find("select").attr("id_pagina");
-                respuesta.tipo = $(this).find("select").attr("tipo");
-                respuesta.id_input = $(this).find("select").attr("id_input");
-                respuesta.texto = $(this).find("select option:selected").val();
-                respuestas.push(respuesta);
-            });
-            
-            $(".main-container").css("opacity",0.3);
-            $("#ajax_loader").show();
-            
-            $.ajax({
-                url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "adds")) ?>",
-                type:"post",
-                data:{respuestas:respuestas},
-                success:function(data){
-                    actualizoLabels();
+                    respuesta.tipo = $(this).find("input[type=text]").attr("tipo");
+
+                    if(respuesta.tipo == "texto"){
+                        respuesta.id_input = $(this).find("input[type=text]").attr("id_input");
+                        respuesta.texto = $(this).find("input[type=text]").val();
+                        respuesta.nombre = $(this).find("input[type=text]").attr("name");
+                        respuesta.id_pagina = $(this).find("input[type=text]").attr("id_pagina");
+                    }else{
+                        respuesta.tipo = $(this).find("select").attr("tipo");
+                        respuesta.nombre = $(this).find("select").attr("name");
+                        respuesta.id_pagina = $(this).find("select").attr("id_pagina");
+                        respuesta.id_input = $(this).find("select").attr("id_input");
+                        respuesta.texto = $(this).find("select").val();
+                    }
+
+                    respuestas.push(respuesta);
+                });
+
+                $(".main-container").css("opacity",0.3);
+                $("#ajax_loader").show();
+
+                $.ajax({
+                    url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "adds")) ?>",
+                    type:"post",
+                    data:{respuestas:respuestas},
+                    success:function(data){
+                        actualizoLabels();
+                    }
+                })
+
+                return respuesta;
                 }
-            })
+        }
+        
+        function huboCambiosEnInputs(){
+            var cambios = false;
+            $(".inputs-respuestas").each(function(){
+                obj = $(this).find("input[tipo=texto]");
+                
+                if(obj.length){
+                    a = obj.val() + "";
+                    b = $(this).find("input[type=hidden]").val() + "";
+                    if(a !== b){
+                        console.log("obj in1: "+obj.val());
+                        cambios = true;
+                        $(this).find("input[type=hidden]").val(a)
+                    }
+                }else{
+                    var s = $(this).find("select");
+                    selectVal = s.val();
+                    if(selectVal){
+                        //selectVal = selectVal.split(",");
+                        for(var i=0; i<selectVal.length;i++){
+                            var arr = $(this).find("input[type=hidden]").val();
+                            arr = arr.split(",");
+                            //if(selectVal[i] !== ){
+                            var iguales = false;
+                            console.log("obj: "+s.attr("name"));
+                            for(var x = 0; x<arr.length;x++){
+                                console.log("selectVal[i]: "+selectVal[i]);
+                                console.log("arr[x]: "+arr[x]);
+                                if(selectVal[i] == arr[x]){
+                                    iguales = true;
+                                }
+                            }
+                            console.log("iguales: "+iguales);
+                            if(!iguales){
+                                console.log("obj in: "+s.attr("name"));
+                                $(this).find("input[type=hidden]").val(selectVal.join());
+                                cambios = true;
+                            }
+                        }
+                    }
+                }
+                //hidden-response
+            });
             
-            return respuesta;
+            console.log("cambios: "+cambios);
+            return cambios;
         }
         
         $(".btn-next").mousedown(function(){
@@ -379,6 +451,7 @@
             if($('#sample-form').valid()){
                 saveRespuestas();
             }
+            
         })
         
         $('#sample-form').validate({
@@ -440,5 +513,6 @@
             invalidHandler: function (form) {
             }
     });
+    
     });
 </script>
