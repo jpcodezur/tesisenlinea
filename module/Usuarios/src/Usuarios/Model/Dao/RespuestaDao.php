@@ -65,7 +65,7 @@ class RespuestaDao {
             if(!$update){
                 $sql = "INSERT INTO respuesta_select (id_respuesta,id_select,id_usuario) VALUES ($idRespuesta,'".$texto."','".$idAlumno."')";
             }else{
-                $sql = "UPDATE respuesta_select set id_select='".$texto."' WHERE id_respuesta=$idRespuesta";
+                $sql = "UPDATE respuesta_select set id_select='".$texto."' WHERE id_respuesta=$idRespuesta AND id_usuario=$idAlumno";
             }
         }else{
             if(!$update){
@@ -77,7 +77,7 @@ class RespuestaDao {
                     $idRespuestaSelects = $this->getIdsRespuestasSelect($idRespuesta,$idSelect,$idAlumno);
                     foreach($idRespuestaSelects as $idRespuestaSelect){
                         if(!in_array($idRespuestaSelect, $texto)){
-                            $sql = "DELETE FROM respuesta_select WHERE id_select='".$idRespuestaSelect."' AND id_respuesta=$idRespuesta;";
+                            $sql = "DELETE FROM respuesta_select WHERE id_select='".$idRespuestaSelect."' AND id_respuesta=$idRespuesta AND id_usuario=$idAlumno;";
                         }
                     }
                 }
@@ -102,8 +102,8 @@ class RespuestaDao {
     }
     
     
-    public function search($idInput){
-        $sql = "SELECT id FROM respuestas WHERE estado=1 AND id_input=$idInput";
+    public function search($idInput,$idAlumno){
+        $sql = "SELECT id FROM respuestas WHERE estado=1 AND id_input=$idInput AND id_usuario=$idAlumno";
         $result = $this->adapter->query($sql)->execute();
          
         foreach($result as $r){
@@ -114,7 +114,7 @@ class RespuestaDao {
     }
 
     public function updateRespuesta($idInput,$tipo,$idUsuario,$texto){
-        $sql = "UPDATE respuestas set id_input=$idInput,tipo='" . $tipo . "',id_usuario='" . $idUsuario . "',estado=1 WHERE id_input=".$idInput;
+        $sql = "UPDATE respuestas set id_input=$idInput,tipo='" . $tipo . "',id_usuario='" . $idUsuario . "',estado=1 WHERE id_input=".$idInput." AND id_usuario=".$idUsuario;
         return $this->adapter->query($sql)->execute();
     }
     
@@ -135,7 +135,7 @@ class RespuestaDao {
                 $texto = $respuesta["texto"];
                 $connection = $this->adapter->getDriver()->getConnection();
 
-                $update = $this->search($idInput);
+                $update = $this->search($idInput,$idUsuario);
                 
                 if(!$update){
                     $res = $this->insertarRespuesta($idInput,$tipo,$idUsuario,$texto);
@@ -179,7 +179,7 @@ class RespuestaDao {
                 $texto = $respuesta["texto"];
                 $connection = $this->adapter->getDriver()->getConnection();
 
-                $update = $this->search($idInput);
+                $update = $this->search($idInput,$idUsuario);
                 
                 if(!$update){
                     $res = $this->insertarRespuesta($idInput,$tipo,$idUsuario,$texto);
@@ -215,19 +215,25 @@ class RespuestaDao {
         $nombre = $post["nom"];
         $tipo = $post["tipo"];
         
+        $idAlumno = null;
+
+        if(isset($_SESSION["miSession"]["usuario"])){
+            $idAlumno = $_SESSION["miSession"]["usuario"]->getId();
+        }
+        
         switch ($tipo) {
             case "texto":
                 $sql = "SELECT * FROM inputs as i "
                 . "INNER JOIN respuestas as r on r.id_input = i.id "
                 . "INNER JOIN respuesta_texto as rt on rt.id_respuesta = r.id "    
-                . "WHERE i.nombre ='".$nombre."'";
+                . "WHERE i.nombre ='".$nombre."' AND r.id_usuario=$idAlumno";
                 break;
             case "dropdown":
                 $sql = "SELECT sc.value as texto FROM inputs as i "
                 . "INNER JOIN respuestas as r on r.id_input = i.id "
                 . "INNER JOIN respuesta_select as rs on rs.id_respuesta = r.id "    
                 . "INNER JOIN select_collections as sc on sc.id_input = i.id AND sc.id_select = rs.id_select "
-                . "WHERE i.nombre ='".$nombre."'";
+                . "WHERE i.nombre ='".$nombre."' AND r.id_usuario=$idAlumno";
                 break;
 
             default:

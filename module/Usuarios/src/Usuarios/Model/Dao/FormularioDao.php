@@ -65,6 +65,12 @@ class FormularioDao {
 
         $res = $this->adapter->query($sql);
 
+        $idAlumno = null;
+
+        if(isset($_SESSION["miSession"]["usuario"])){
+            $idAlumno = $_SESSION["miSession"]["usuario"]->getId();
+        }
+        
         if ($res) {
             $result = $res->execute();
             foreach ($result as $r) {
@@ -78,7 +84,7 @@ class FormularioDao {
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
                 $unInput->setAyuda($r["ayuda"]);
-                $unInput->setRespuesta($this->getRespuestaTexto($r["id"]));
+                $unInput->setRespuesta($this->getRespuestaTexto($r["id"],$idAlumno));
 
                 switch ($unInput->getTipo()) {
                     case "dropdown":
@@ -123,11 +129,12 @@ class FormularioDao {
                 }
                 
                 $idRespuesta = $this->getIdRespuesta($res["id_input"],$idAlumno);
-                
-                $isSelected = $this->getRespSelect($res["id_select"],$idAlumno,$idRespuesta);
-                
-                if ($isSelected) {
-                    $selectValue->setSelected(true);
+                    if($idRespuesta){
+                    $isSelected = $this->getRespSelect($res["id_select"],$idAlumno,$idRespuesta);
+
+                    if ($isSelected) {
+                        $selectValue->setSelected(true);
+                    }
                 }
 
                 $results[] = $selectValue;
@@ -154,7 +161,7 @@ class FormularioDao {
     public function getRespSelect($id,$idAlumno,$idRespuesta) {
         
         
-        //SELECT * FROM respuesta_select WHERE id_respuesta = 24 AND id_select=82 AND id_usuario=5
+        // SELECT * FROM respuesta_select WHERE id_respuesta = 42 AND id_usuario=5
         // AND
         // AND id_respuesta = $idRespuesta
         $sql = "SELECT * FROM respuesta_select WHERE id_respuesta = $idRespuesta AND id_usuario=$idAlumno";
@@ -172,11 +179,12 @@ class FormularioDao {
         return false;
     }
 
-    public function getRespuestaTexto($idInput) {
+    public function getRespuestaTexto($idInput,$idAlumno) {
         $sql = "SELECT rt.texto as texto from respuesta_texto as rt "
                 . "INNER JOIN respuestas as r on r.id = rt.id_respuesta "
                 . "WHERE r.id_input = $idInput "
-                . "AND r.estado = 1";
+                . "AND r.estado = 1 "
+                . "AND r.id_usuario=$idAlumno";
 
         $results = array();
 
@@ -221,6 +229,22 @@ class FormularioDao {
         return $paginas;
     }
 
+    public function isInputMagic($idPagina,$nombreInput){
+        $sql = "SELECT id FROM inputs 
+                WHERE id_pagina = $idPagina
+                AND label LIKE '%@".$nombreInput."%'";
+        
+        $res = $this->adapter->query($sql)->execute();
+
+        if ($res) {
+            foreach ($res as $r) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     public function getInputs($idPagina) {
         $sql = "SELECT * FROM inputs WHERE estado = 1 AND id_pagina = $idPagina ORDER BY orden ASC";
 
@@ -228,6 +252,12 @@ class FormularioDao {
 
         $res = $this->adapter->query($sql);
 
+        $idAlumno = null;
+
+        if(isset($_SESSION["miSession"]["usuario"])){
+            $idAlumno = $_SESSION["miSession"]["usuario"]->getId();
+        }
+        
         if ($res) {
             $result = $res->execute();
             foreach ($result as $r) {
@@ -241,7 +271,12 @@ class FormularioDao {
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
                 $unInput->setAyuda($r["ayuda"]);
-                $respuesta = $this->getRespuestaTexto($r["id"]);
+                
+                if($this->isInputMagic($r["id_pagina"],$r["nombre"])){
+                    $unInput->setIsMagic(true);
+                }
+                
+                $respuesta = $this->getRespuestaTexto($r["id"],$idAlumno);
                 $unInput->setRespuesta("");
                 if (is_string($respuesta)) {
                     $unInput->setRespuesta($respuesta);
