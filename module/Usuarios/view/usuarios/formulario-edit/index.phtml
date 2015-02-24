@@ -72,7 +72,7 @@
                                                                 <button data-dismiss="alert" class="close" type="button">
                                                                     <i class="ace-icon fa fa-times"></i>
                                                                 </button>
-                                                                <strong><?php echo $input->getNombre() ?></strong>
+                                                                <strong>[<?php echo $input->getNombre() ?>]</strong>
                                                                 <?php echo $input->getLabel() ?>
                                                                 <div class="action-paginas hidden-phone visible-desktop action-buttons">
                                                                     <a href="#" class="green edit-input">
@@ -249,6 +249,12 @@
     </style>
     <script>
         $(document).ready(function () {
+            
+            $(".wizard-steps").hide();
+        
+            actualizoPaginas();
+
+            $(".wizard-steps").show();
             
             $(document).on("focus",".modal-body input[type=text]",function(){
                 $(".modal-body .alert-danger").remove();
@@ -748,7 +754,7 @@
                         '<button data-dismiss="alert" class="close" type="button">' +
                         '<i class="ace-icon fa fa-times"></i>' +
                         '</button>' +
-                        '<strong>' + nombre + '</strong>' + label +
+                        '<strong>[' + nombre + ']</strong>' + label +
                         '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
                         '<a href="#" class="green edit-input">' +
                         '<i class="icon-pencil bigger-130"></i>' +

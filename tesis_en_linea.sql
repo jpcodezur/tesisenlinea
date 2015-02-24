@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 19, 2015 at 05:16 AM
+-- Generation Time: Feb 24, 2015 at 05:22 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `inputs` (
   `required` int(11) NOT NULL DEFAULT '1',
   `nombre` varchar(255) NOT NULL,
   `ayuda` varchar(250) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `inputs`
@@ -86,18 +86,20 @@ INSERT INTO `inputs` (`id`, `id_pagina`, `orden`, `estado`, `label`, `tipo_input
 (81, 6, 8, 1, 'Coloca el nombre de tu @Nivel_de_estudios ', 'texto', 1, 'Nombre_de_nivel_de_estudio', ''),
 (82, 6, 9, 1, 'Qué idiomas puedes leer en textos', 'dropdown', 1, 'Lectura_de_textos', 'Coloca los lenguajes que puedes leer en textos para apoyos'),
 (83, 7, 10, 1, 'Nombre de tu institución', 'texto', 1, 'Nombre_institución', 'Coloca el nombre completo de tu institución de estudios'),
-(84, 7, 10, 1, 'Coloca el área, departamento o escuela a la que pertenece tu carrera', 'texto', 1, 'Area_de_carrera', 'Coloca el área, departamento o escuela a la que pertenece tu carrera'),
-(85, 7, 10, 1, 'Nombre del campus', 'texto', 0, 'Campus', 'Si tu institución tiene otros campus, por favor coloca al que pertences'),
-(86, 7, 10, 1, 'Ciudad', 'texto', 1, 'Ciudad', ''),
-(87, 7, 10, 1, 'Estado', 'texto', 1, 'Estado', ''),
-(88, 7, 10, 1, 'Pais', 'texto', 1, 'Pais_institución', ''),
-(94, 7, 10, 1, 'Logo de la institución', 'texto', 1, 'Logo_de_institucion', ''),
-(95, 8, 10, 1, 'Selecciona el tipo de investigación que presentarás', 'dropdown', 1, 'Tipo_de_investigación', ''),
-(96, 8, 10, 1, 'Describe un problema que pretendes estudiar', 'texto', 0, 'Problema_tentativo', ''),
-(97, 8, 10, 1, 'Coloca el nombre de tu director de @Tipo_de_investigación ', 'texto', 1, 'Director_investigación', ''),
-(98, 8, 10, 1, 'E-mail de tu director', 'texto', 1, 'Email_director', ''),
-(99, 8, 10, 1, 'Coloca la fecha de inicio de tu proyecto', 'texto', 1, 'Fecha_de_inicio', ''),
-(100, 8, 10, 1, 'Fecha probable de termino', 'texto', 1, 'Fecha_de_termino', '');
+(84, 7, 11, 1, 'Coloca el área, departamento o escuela a la que pertenece tu carrera', 'texto', 1, 'Area_de_carrera', 'Coloca el área, departamento o escuela a la que pertenece tu carrera'),
+(85, 7, 12, 1, 'Nombre del campus', 'texto', 0, 'Campus', 'Si tu institución tiene otros campus, por favor coloca al que pertences'),
+(86, 7, 13, 1, 'Ciudad', 'texto', 1, 'Ciudad', ''),
+(87, 7, 14, 1, 'Estado', 'texto', 1, 'Estado', ''),
+(88, 7, 15, 1, 'Pais', 'texto', 1, 'Pais_institución', ''),
+(94, 7, 16, 1, 'Logo de la institución', 'texto', 1, 'Logo_de_institucion', ''),
+(95, 8, 18, 1, 'Selecciona el tipo de investigación que presentarás', 'dropdown', 1, 'Tipo_de_investigación', ''),
+(96, 8, 19, 1, 'Describe un problema que pretendes estudiar', 'texto', 0, 'Problema_tentativo', ''),
+(97, 8, 20, 1, 'Coloca el nombre de tu director de @Tipo_de_investigación ', 'texto', 1, 'Director_investigación', ''),
+(98, 8, 21, 1, 'E-mail de tu director', 'texto', 1, 'Email_director', ''),
+(99, 8, 22, 1, 'Coloca la fecha de inicio de tu proyecto', 'texto', 1, 'Fecha_de_inicio', ''),
+(100, 8, 23, 1, 'Fecha probable de termino', 'texto', 1, 'Fecha_de_termino', ''),
+(103, 7, 17, 1, 'Como estas @Nombre? ', 'texto', 1, 'saludo_prueba', 'prueba_saludo_sin_respuesta'),
+(104, 6, 10, 1, 'pruebaaaa', 'texto', 1, 'pruebaaaa', 'pruebaaaa');
 
 -- --------------------------------------------------------
 
@@ -138,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `input_texto` (
 `id` int(11) NOT NULL,
   `id_input` int(11) NOT NULL,
   `respuestas_requeridas` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `input_texto`
@@ -173,7 +175,9 @@ INSERT INTO `input_texto` (`id`, `id_input`, `respuestas_requeridas`) VALUES
 (68, 97, '1'),
 (69, 98, '1'),
 (70, 99, '1'),
-(71, 100, '1');
+(71, 100, '1'),
+(74, 103, '0'),
+(75, 104, '1');
 
 -- --------------------------------------------------------
 
@@ -265,50 +269,44 @@ CREATE TABLE IF NOT EXISTS `respuestas` (
   `tipo` varchar(255) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `respuestas`
 --
 
 INSERT INTO `respuestas` (`id`, `id_input`, `tipo`, `id_usuario`, `estado`) VALUES
-(1, 57, 'texto', 23, 1),
-(2, 62, 'texto', 23, 1),
-(3, 65, 'texto', 23, 1),
-(4, 66, 'texto', 23, 1),
-(5, 56, 'dropdown', 23, 1),
-(6, 33, 'texto', 23, 1),
-(7, 64, 'texto', 23, 1),
-(8, 67, 'texto', 23, 1),
-(9, 38, 'texto', 23, 1),
-(10, 39, 'texto', 23, 1),
-(11, 63, 'dropdown', 5, 1),
-(12, 52, 'dropdown', 23, 1),
-(13, 68, 'texto', 23, 1),
-(14, 69, 'texto', 23, 1),
-(15, 70, 'dropdown', 5, 1),
-(17, 74, 'texto', 5, 1),
-(18, 75, 'texto', 5, 1),
-(19, 76, 'texto', 5, 1),
-(20, 77, 'texto', 5, 1),
-(21, 78, 'texto', 5, 1),
-(22, 79, 'texto', 5, 1),
-(23, 81, 'texto', 5, 1),
-(24, 82, 'dropdown', 5, 1),
-(25, 83, 'texto', 5, 1),
-(26, 84, 'texto', 5, 1),
-(27, 85, 'texto', 5, 1),
-(28, 86, 'texto', 5, 1),
-(29, 87, 'texto', 5, 1),
-(30, 88, 'texto', 5, 1),
-(31, 94, 'texto', 5, 1),
-(32, 96, 'texto', 5, 1),
-(33, 97, 'texto', 5, 1),
-(34, 98, 'texto', 5, 1),
-(35, 99, 'texto', 5, 1),
-(36, 100, 'texto', 5, 1),
-(37, 95, 'dropdown', 5, 1),
-(42, 80, 'dropdown', 5, 1);
+(1, 80, 'dropdown', 23, 1),
+(2, 74, 'texto', 23, 1),
+(3, 75, 'texto', 23, 1),
+(4, 76, 'texto', 23, 1),
+(5, 77, 'texto', 23, 1),
+(6, 78, 'texto', 23, 1),
+(7, 79, 'texto', 23, 1),
+(8, 81, 'texto', 23, 1),
+(9, 82, 'dropdown', 23, 1),
+(10, 80, 'dropdown', 5, 1),
+(11, 74, 'texto', 5, 1),
+(12, 75, 'texto', 5, 1),
+(13, 76, 'texto', 5, 1),
+(14, 77, 'texto', 5, 1),
+(15, 78, 'texto', 5, 1),
+(16, 79, 'texto', 5, 1),
+(17, 81, 'texto', 5, 1),
+(18, 82, 'dropdown', 5, 1),
+(19, 83, 'texto', 23, 1),
+(20, 84, 'texto', 23, 1),
+(21, 85, 'texto', 23, 1),
+(22, 86, 'texto', 23, 1),
+(23, 87, 'texto', 23, 1),
+(24, 88, 'texto', 23, 1),
+(25, 94, 'texto', 23, 1),
+(26, 95, 'dropdown', 23, 1),
+(27, 96, 'texto', 23, 1),
+(28, 97, 'texto', 23, 1),
+(29, 98, 'texto', 23, 1),
+(30, 99, 'texto', 23, 1),
+(31, 100, 'texto', 23, 1);
 
 -- --------------------------------------------------------
 
@@ -320,17 +318,22 @@ CREATE TABLE IF NOT EXISTS `respuesta_select` (
 `id` int(11) NOT NULL,
   `id_respuesta` int(11) NOT NULL,
   `id_select` int(255) NOT NULL,
-  `estado` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+  `estado` int(11) NOT NULL DEFAULT '1',
+  `id_usuario` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `respuesta_select`
 --
 
-INSERT INTO `respuesta_select` (`id`, `id_respuesta`, `id_select`, `estado`) VALUES
-(2, 37, 2, 1),
-(3, 41, 4, 1),
-(4, 42, 5, 1);
+INSERT INTO `respuesta_select` (`id`, `id_respuesta`, `id_select`, `estado`, `id_usuario`) VALUES
+(1, 1, 4, 1, 23),
+(2, 9, 1, 1, 23),
+(4, 10, 2, 1, 5),
+(5, 18, 2, 1, 5),
+(6, 18, 15, 1, 5),
+(7, 9, 14, 1, 23),
+(8, 9, 2, 1, 23);
 
 -- --------------------------------------------------------
 
@@ -342,43 +345,53 @@ CREATE TABLE IF NOT EXISTS `respuesta_texto` (
 `id` int(11) NOT NULL,
   `id_respuesta` int(11) NOT NULL,
   `texto` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `respuesta_texto`
 --
 
 INSERT INTO `respuesta_texto` (`id`, `id_respuesta`, `texto`) VALUES
-(1, 1, 'Juan21'),
-(2, 2, 'a2'),
-(3, 3, 'b1'),
-(4, 4, 'qwewq'),
-(5, 6, 'a'),
-(6, 7, 'b'),
-(7, 8, 'c'),
-(8, 9, 'd'),
-(9, 10, 'e'),
-(10, 13, 'asdasdq'),
-(11, 14, 'Mario'),
-(12, 17, 'Edgar'),
-(13, 18, 'Fabiel'),
-(14, 19, 'Sánchez'),
-(15, 20, 'Díaz'),
-(16, 21, '7355429822'),
-(17, 22, 'edgarfabiel@gmail.com'),
-(18, 23, 'Ciencias Administrativas'),
-(19, 25, 'Instituto de estudios universitarios'),
-(20, 26, 'Escuela de postgrados'),
-(21, 27, 'Campus On Line'),
-(22, 28, 'Puebla'),
-(23, 29, 'Puebla'),
-(24, 30, 'México'),
-(25, 31, ''),
-(26, 32, ''),
-(27, 33, ''),
-(28, 34, ''),
-(29, 35, ''),
-(30, 36, '');
+(1, 2, 'a'),
+(2, 3, 'b'),
+(3, 4, 'c'),
+(4, 5, 'd'),
+(5, 6, 'e'),
+(6, 7, 'f'),
+(7, 8, 'g'),
+(8, 2, 'a'),
+(9, 3, 'b'),
+(10, 4, 'c'),
+(11, 5, 'd'),
+(12, 6, 'e'),
+(13, 7, 'f'),
+(14, 8, 'g'),
+(15, 2, 'a'),
+(16, 3, 'b'),
+(17, 4, 'c'),
+(18, 5, 'd'),
+(19, 6, 'e'),
+(20, 7, 'f'),
+(21, 8, 'g'),
+(22, 11, 'a2'),
+(23, 12, 'b2'),
+(24, 13, 'c2'),
+(25, 14, 'd2'),
+(26, 15, 'e2'),
+(27, 16, 'f2'),
+(28, 17, 'g2'),
+(29, 19, ''),
+(30, 20, ''),
+(31, 21, ''),
+(32, 22, ''),
+(33, 23, ''),
+(34, 24, ''),
+(35, 25, ''),
+(36, 27, ''),
+(37, 28, ''),
+(38, 29, ''),
+(39, 30, ''),
+(40, 31, '');
 
 -- --------------------------------------------------------
 
@@ -619,7 +632,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 -- AUTO_INCREMENT for table `inputs`
 --
 ALTER TABLE `inputs`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=105;
 --
 -- AUTO_INCREMENT for table `input_select`
 --
@@ -629,7 +642,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
 -- AUTO_INCREMENT for table `input_texto`
 --
 ALTER TABLE `input_texto`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=72;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=76;
 --
 -- AUTO_INCREMENT for table `mensajes`
 --
@@ -644,17 +657,17 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 -- AUTO_INCREMENT for table `respuestas`
 --
 ALTER TABLE `respuestas`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=43;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
 --
 -- AUTO_INCREMENT for table `respuesta_select`
 --
 ALTER TABLE `respuesta_select`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `respuesta_texto`
 --
 ALTER TABLE `respuesta_texto`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT for table `select_collections`
 --
