@@ -196,6 +196,25 @@
     var resparent = "[]";
     var inputs = [];
     
+    jQuery.extend({
+    compare: function (arrayA, arrayB) {
+        if (arrayA.length != arrayB.length) { return false; }
+        // sort modifies original array
+        // (which are passed by reference to our method!)
+        // so clone the arrays before sorting
+        var a = jQuery.extend(true, [], arrayA);
+        var b = jQuery.extend(true, [], arrayB);
+        a.sort(); 
+        b.sort();
+        for (var i = 0, l = a.length; i < l; i++) {
+            if (a[i] !== b[i]) { 
+                return false;
+            }
+        }
+        return true;
+    }
+});
+    
     function saveRes(nameInput) {
         var input = {},
                 id_input = $("input[name=" + nameInput + "]").attr("id_input"),
@@ -358,6 +377,22 @@
             return respuesta;
         }
         
+        function intersection(a,b){
+            
+            typea = typeof a;
+            typeb = typeof b;
+
+            if(typea == "string"){
+                a = a.split(",");
+            }
+
+            if(typeb == "string"){
+                b = b.split(",");
+            }
+            
+            return jQuery.compare(a, b);
+        }
+        
         function saveRespuestas(){
             var huboCambios = huboCambiosEnInputs();    
             if(huboCambios){
@@ -377,7 +412,13 @@
                         respuesta.nombre = $(this).find("select").attr("name");
                         respuesta.id_pagina = $(this).find("select").attr("id_pagina");
                         respuesta.id_input = $(this).find("select").attr("id_input");
-                        respuesta.texto = $(this).find("select").val();
+                        
+                        
+                        if(!$(this).find(".chzn-select").length){
+                            respuesta.texto = $(this).find("select option:selected").val();
+                        }else{
+                            respuesta.texto = $(this).find(".chzn-select").val()
+                        }
                     }
 
                     respuestas.push(respuesta);
@@ -414,10 +455,38 @@
                     }
                 }else{
                     var s = $(this).find("select");
-                    selectVal = s.val();
+                    
+                    //selectVal = s.val();
+                    
+                    
+                    if(!$(this).find(".chzn-select").length){
+                        selectVal = $(this).find("select option:selected").val();
+                    }else{
+                        selectVal = $(this).find(".chzn-select").val();
+                    }
+                    
+                    
                     if(selectVal){
                         //selectVal = selectVal.split(",");
-                        for(var i=0; i<selectVal.length;i++){
+                        type = typeof selectVal;
+                        
+                        selVal2 = $(this).find("input[type=hidden]").val();
+                        
+                        type2 = typeof selVal2;
+                        
+                        if(type == "string" && type2 == "string"){
+                            if(selectVal != selVal2){
+                                cambios = true;
+                            }
+                        }else{
+                            v = intersection(selectVal, selVal2);
+
+                            if(!v){
+                                cambios = true;
+                            }
+                        }
+                        
+                        /*for(var i=0; i<selectVal.length;i++){
                             var arr = $(this).find("input[type=hidden]").val();
                             arr = arr.split(",");
                             //if(selectVal[i] !== ){
@@ -433,10 +502,17 @@
                             console.log("iguales: "+iguales);
                             if(!iguales){
                                 console.log("obj in: "+s.attr("name"));
-                                $(this).find("input[type=hidden]").val(selectVal.join());
+                                
+                                type = typeof selectVal;
+                                
+                                if(type != "string"){
+                                    selectVal = selectVal.join()
+                                }
+                                
+                                $(this).find("input[type=hidden]").val(selectVal);
                                 cambios = true;
                             }
-                        }
+                        }*/
                     }
                 }
                 //hidden-response
