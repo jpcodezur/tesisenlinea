@@ -143,21 +143,28 @@
       var syntaxMessage = getInputBoxValue(); //Get the actual value of the text area
 
       _.each(mentionsCollection, function (mention) {
+        console.log("mention.value: "+mention.value);
         var textSyntax = settings.templates.mentionItemSyntax(mention);
-        syntaxMessage = syntaxMessage.replace(new RegExp(utils.regexpEncode(mention.value), 'g'), textSyntax);
+        console.log("textSyntax: "+textSyntax);
+        syntaxMessage = syntaxMessage.replace((mention.value), textSyntax);
+        console.log("syntaxMessage: "+syntaxMessage);
       });
 
+      
       var mentionText = utils.htmlEncode(syntaxMessage); //Encode the syntaxMessage
-
+      
       _.each(mentionsCollection, function (mention) {
         var formattedMention = _.extend({}, mention, {value: utils.htmlEncode(mention.value)});
         var textSyntax = settings.templates.mentionItemSyntax(formattedMention);
         var textHighlight = settings.templates.mentionItemHighlight(formattedMention);
 
         mentionText = mentionText.replace(new RegExp(utils.regexpEncode(textSyntax), 'g'), textHighlight);
+        
       });
 
+      
       mentionText = mentionText.replace(/\n/g, '<br />'); //Replace the escape character for <br />
+      
       mentionText = mentionText.replace(/ {2}/g, '&nbsp; '); //Replace the 2 preceding token to &nbsp; 
 
       elmInputBox.data('messageText', syntaxMessage); //Save the messageText to elmInputBox
@@ -186,6 +193,11 @@
 
       var currentMessage = getInputBoxValue(); //Get the actual value of the text area
 
+      temp = currentMessage.indexOf(settings.triggerChar + currentDataQuery) ;
+      
+      //temp = temp + currentDataQuery.length;
+      
+      
       // Using a regex to figure out positions
       var regex = new RegExp("\\" + settings.triggerChar + currentDataQuery, "gi");
       regex.exec(currentMessage); //Executes a search for a match in a specified string. Returns a result array, or null
@@ -193,8 +205,14 @@
       var startCaretPosition = regex.lastIndex - currentDataQuery.length - 1; //Set the star caret position
       var currentCaretPosition = regex.lastIndex; //Set the current caret position
 
+    /* Fix */
+      startCaretPosition = temp;
+      currentCaretPosition = temp + currentMessage.length;
+    /*End Fix */
+    
       var start = currentMessage.substr(0, startCaretPosition);
       var end = currentMessage.substr(currentCaretPosition, currentMessage.length);
+      
       var startEndIndex = (start + mention.value).length + 1;
 
       // See if there's the same mention in the list
@@ -221,7 +239,9 @@
 
 	//Gets the actual value of the text area without white spaces from the beginning and end of the value
     function getInputBoxValue() {
-      return $.trim(elmInputBox.val());
+        valor = elmInputBox.val();
+        
+      return $.trim(valor);
     }
 	
 	// This is taken straight from live (as of Sep 2012) GitHub code. The
