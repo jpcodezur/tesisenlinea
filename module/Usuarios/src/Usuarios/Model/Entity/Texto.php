@@ -7,7 +7,26 @@ class Texto{
     private $id;
     private $idInput;
     private $respuestasRequeridas;
+    private $ejemplo;
+    private $validacion;
     
+    function getEjemplo() {
+        return $this->ejemplo;
+    }
+
+    function getValidacion() {
+        return $this->validacion;
+    }
+
+    function setEjemplo($ejemplo) {
+        $this->ejemplo = $ejemplo;
+    }
+
+    function setValidacion($validacion) {
+        $this->validacion = $validacion;
+    }
+
+        
     function getId() {
         return $this->id;
     }

@@ -47,9 +47,38 @@
                                                             <label nom="<?php echo $input->getNombre() ?>" id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
                                                             <div class="controls">
                                                                 <span class="span6 input-icon input-icon-right">
+                                                                    <?php 
+                                                                    $tamanio = $input->getTamanio();
+                                                                    
+                                                                    switch ($tamanio) {
+                                                                        case "Largo":
+                                                                            $tamanio = "100%";
+                                                                            break;
+                                                                        case "Mediano":
+                                                                            $tamanio = "50%";
+
+                                                                            break;
+                                                                        case "Pequeño":
+                                                                            $tamanio = "25%";
+                                                                            break;
+                                                                        default:
+                                                                            break;
+                                                                    }
+                                                                    
+                                                                    ?>
                                                                     <?php if($input->getTipo()=="texto"):?>
                                                                         <?php if($input->getControl()->getRespuestasRequeridas() > 0 ):?>
-                                                                    <input value="<?php echo $input->getRespuesta() ?>" id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" class="span12 <?php echo ($input->getIsMagic())?"isMagic":"" ?>" type="text" id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
+                                                                    <input style="width: <?php echo $tamanio ?> !important" 
+                                                                           placeholder="<?php echo $input->getControl()->getEjemplo() ?>" 
+                                                                           value="<?php echo $input->getRespuesta() ?>" 
+                                                                           id_input="<?php echo $input->getId() ?>" 
+                                                                           tipo="<?php echo $input->getTipo() ?>" 
+                                                                           id_pagina="<?php echo $input->getIdPagina() ?>"  
+                                                                           name="<?php echo $input->getNombre() ?>" 
+                                                                           class="span12 <?php echo ($input->getIsMagic())?"isMagic":"" ?>" 
+                                                                           <?php $validacion = strtolower($input->getControl()->getValidacion()) ?>
+                                                                           type="<?php echo ($validacion != "" && $validacion != "validacion")?$validacion:"text" ?>" 
+                                                                           id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
                                                                         <?php endif; ?>
                                                                     <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
                                                                     <?php elseif($input->getTipo()=="dropdown"):?>
@@ -61,7 +90,7 @@
                                                                     }
                                                                     $valuesSelected = array();
                                                                     ?>
-                                                                    <select class="<?php echo $sc ?><?php echo ($stipo == "multi")? "chzn-select":"" ?>" <?php echo ($stipo == "multi")?"multiple='multiple'":"" ?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
+                                                                    <select style="width: <?php echo $tamanio ?> !important" class="<?php echo $sc ?><?php echo ($stipo == "multi")? "chzn-select":"" ?>" <?php echo ($stipo == "multi")?"multiple='multiple'":"" ?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
                                                                         <option value="">SELECCIONAR</option>
                                                                         <?php $control = $input->getControl();?>
                                                                         <?php foreach($control->getValues() as $value):?>
@@ -84,6 +113,7 @@
                                                                                 <div class="control-group">
                                                                                         <div class="row-fluid input-append">
                                                                                                 <input 
+                                                                                                    style="width: calc(<?php echo $tamanio ?> - 36px) ! important;"
                                                                                                     id_input="<?php echo $input->getId() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>"
                                                                                                     tipo="fecha" tipofecha="simple" class="span10 date-picker fechadatepicker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy" 
                                                                                                     value="<?php echo $input->getRespuesta() ?>"
@@ -104,6 +134,7 @@
                                                                                                 </span>
 
                                                                                                 <input 
+                                                                                                    style="width: calc(<?php echo $tamanio ?> - 27px) ! important;"
                                                                                                     id_input="<?php echo $input->getId() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>"
                                                                                                     tipo="fecha" tipofecha="rango" class="span10 fechadatepicker fechadatepicker-rango" type="text" name="date-range-picker" id="id-date-range-picker-1" 
                                                                                                     value="<?php echo $input->getRespuesta() ?>"
@@ -240,7 +271,7 @@
         width: 516px !important;
     }
     .input-append .add-on{
-        width: 53px;
+        width: 25px;
     }
 </style>
 <script>
@@ -306,6 +337,12 @@
     function seteoInputs(){
         inputs = [];
         $("#sample-form input[type=text]").each(function(){
+            input = {};
+            input.name = $(this).attr("name");
+            input.val = $(this).val();
+            inputs.push(input);
+        })
+        $("#sample-form input[type=email]").each(function(){
             input = {};
             input.name = $(this).attr("name");
             input.val = $(this).val();
@@ -453,19 +490,26 @@
 
                     respuesta.id = $(this).find("input[type=text]").attr("id");
                     respuesta.tipo = $(this).find("input[type=text]").attr("tipo");
+                    tipo = "text";
+                    
+                    if(!respuesta.tipo || respuesta.tipo == "undefined"){
+                        respuesta.tipo = $(this).find("input[type=email]").attr("tipo");
+                        tipo = "email";
+                    }
+                    
 
                     if(respuesta.tipo == "texto"){
-                        respuesta.id_input = $(this).find("input[type=text]").attr("id_input");
-                        respuesta.texto = $(this).find("input[type=text]").val();
-                        respuesta.nombre = $(this).find("input[type=text]").attr("name");
-                        respuesta.id_pagina = $(this).find("input[type=text]").attr("id_pagina");
+                        respuesta.id_input = $(this).find("input[type="+tipo+"]").attr("id_input");
+                        respuesta.texto = $(this).find("input[type="+tipo+"]").val();
+                        respuesta.nombre = $(this).find("input[type="+tipo+"]").attr("name");
+                        respuesta.id_pagina = $(this).find("input[type="+tipo+"]").attr("id_pagina");
                     }else{
                         if(respuesta.tipo == "fecha"){
                             tipo = $(this).find(".fechadatepicker").attr("tipofecha");
-                            respuesta.id_input = $(this).find("input[type=text]").attr("id_input");
-                            respuesta.texto = $(this).find("input[type=text]").val();
-                            respuesta.nombre = $(this).find("input[type=text]").attr("name");
-                            respuesta.id_pagina = $(this).find("input[type=text]").attr("id_pagina");
+                            respuesta.id_input = $(this).find("input[type="+tipo+"]").attr("id_input");
+                            respuesta.texto = $(this).find("input[type="+tipo+"]").val();
+                            respuesta.nombre = $(this).find("input[type="+tipo+"]").attr("name");
+                            respuesta.id_pagina = $(this).find("input[type="+tipo+"]").attr("id_pagina");
                             if(tipo == "simple"){
                                 val = $(this).find(".fechadatepicker").val();
                                 respuesta.desde = val;

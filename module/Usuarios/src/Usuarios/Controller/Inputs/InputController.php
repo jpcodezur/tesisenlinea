@@ -55,6 +55,7 @@ class InputController extends AbstractActionController {
             $unaEntity->setLabel($this->getRequest()->getPost("label", null));
             $unaEntity->setRequired($this->getRequest()->getPost("obligatorio", null));
             $unaEntity->setTipo($this->getRequest()->getPost("tipo", null));
+            $unInput->setTamanio($this->getRequest()->getPost("tamanio", null));
             $unaEntity->setEstado(1);
             $unaEntity->setOrden($this->getRequest()->getPost("orden", null));
             $unaEntity->setIdPagina($this->getRequest()->getPost("id_pagina", null));
@@ -68,6 +69,8 @@ class InputController extends AbstractActionController {
                     case "texto":
                         $unInput = new \Usuarios\Model\Entity\Texto();
                         $unInput->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
+                        $unInput->setEjemplo($input_data["ejemplo"]);
+                        $unInput->setValidacion($input_data["validacion"]);
                         break;
                     case "dropdown":
                         $unInput = new \Usuarios\Model\Entity\Select();
@@ -160,6 +163,7 @@ class InputController extends AbstractActionController {
             $unInput->setId($this->getRequest()->getPost("idinput", null));
             $unInput->setNombre($this->getRequest()->getPost("nombre", null));
             $unInput->setLabel($this->getRequest()->getPost("label", null));
+            $unInput->setTamanio($this->getRequest()->getPost("tamanio", null));
             $unInput->setTipo($this->getRequest()->getPost("tipo", null));
             $unInput->setAyuda($this->getRequest()->getPost("ayuda", null));
             $unInput->setRequired($this->getRequest()->getPost("obligatorio", null));
@@ -170,6 +174,8 @@ class InputController extends AbstractActionController {
                     case "texto":
                         $unControl = new \Usuarios\Model\Entity\Texto();
                         $unControl->setRespuestasRequeridas($input_data["respuestas_requeridas"]);
+                        $unControl->setEjemplo($input_data["ejemplo"]);
+                        $unControl->setValidacion($input_data["validacion"]);
                         break;
                     case "dropdown":
                         $unControl = new \Usuarios\Model\Entity\Select();

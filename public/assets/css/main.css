@@ -82,3 +82,24 @@ span.resp-span {
     width: auto !important;
     display: inline !important;
 }
+.modal-body input[name=nombre]{
+    width: 47%;
+}
+.modal-body input[name=ayuda]{
+    width: 47.5%;
+}
+input[name=ejemplo]{
+    width: 47%;
+}
+select.validacion{
+    width: 49.9%;
+}
+.modal-body input[name=nombre],.modal-body input[name=ayuda], input[name=ejemplo]{
+    padding: 1%;
+}
+.mentions-input-box {
+    clear: both;
+}
+.input-icon.input-icon-right > [class*="icon-"] {
+    right: -26px !important;
+}

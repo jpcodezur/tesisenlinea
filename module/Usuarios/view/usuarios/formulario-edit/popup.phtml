@@ -1,23 +1,51 @@
 <div class="">
-    <div class="table-header" id="input-add-header">
+    <div class="table-header table-popup" id="input-add-header">
         <button data-dismiss="modal" class="close" type="button">×</button>
         Nuevo Control
     </div>
-    <div class="inputs-text-control inputs-text-control-add">
-        <input type="text" name="nombre" placeholder="Nombre">
-        <input type="text" name="ayuda" placeholder="Ayuda">
-        <textarea name="nombre" placeholder="Etiqueta" class='mention'></textarea>
-        <div class="">
-            <label class="popup-label">Obligatorio</label>
-            <label>
-                <input name="obligatorio" class="ace-switch ace-switch-2" type="checkbox" checked="checked" />
-                <span class="lbl"></span>
-            </label>
+    
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="myTabOption">
+            <li class="active">
+                <a data-toggle="tab" href="#basico" tipo="texto">
+                    Basico
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#avanzado" tipo="dropdown">
+                    Avanzado
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="basico" class="tab-pane in active">
+                <div class="inputs-text-control inputs-text-control-add">
+                    <input type="text" name="nombre" placeholder="Nombre">
+                    <input type="text" name="ayuda" placeholder="Ayuda">
+                    <textarea name="nombre" placeholder="Etiqueta" class='mention'></textarea>
+                    <div class="">
+                        <label class="popup-label">Obligatorio</label>
+                        <label>
+                            <input name="obligatorio" class="ace-switch ace-switch-2" type="checkbox" checked="checked" />
+                            <span class="lbl"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div id="avanzado" class="tab-pane row">
+                
+                <div class="control-group">
+                    <label class="control-label" for="form-field-4">Tamaño</label>
+
+                    <div class="controls">
+                        <label id="tamanio-label">Pequeño</label>
+                        <div class="help-block" id="input-size-slider"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div>
-        <label>Tipo de control</label>
-    </div>
+    
     <div class="tabbable">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active">
@@ -48,6 +76,12 @@
         <div class="tab-content">
             <div id="home" class="tab-pane in active">
                 <div class="widget-main">
+                    <input type="text" name="ejemplo" placeholder="Ejemplo">
+                    <select class="validacion">
+                        <option>Validacion</option>
+                        <option value="email">Email</option>
+                        <option value="numerico">Numérico</option>
+                    </select>
                     <label>Respuestas requeridas</label>
                     <input type="text" class="input-mini" id="numero-respuestas" />
                     <div class="space-6"></div>
@@ -81,7 +115,7 @@
                     </div>
                 </div>
             </div>
-            <div id="fecha" class="tab-pane in active">
+            <div id="fecha" class="tab-pane row">
                 <div class="widget-main">
                     <label>
                             <input checked="checked" name="radio-fecha" type="radio" value="simple" />
