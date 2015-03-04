@@ -83,7 +83,12 @@
                                                                                 
                                                                                 <div class="control-group">
                                                                                         <div class="row-fluid input-append">
-                                                                                                <input tipo="fecha" tipofecha="simple" class="span10 date-picker fechadatepicker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy" />
+                                                                                                <input 
+                                                                                                    id_input="<?php echo $input->getId() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>"
+                                                                                                    tipo="fecha" tipofecha="simple" class="span10 date-picker fechadatepicker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy" 
+                                                                                                    value="<?php echo $input->getRespuesta() ?>"
+                                                                                                    />
+                                                                                                <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" id="" value="<?php echo $input->getRespuesta() ?>"/>
                                                                                                 <span class="add-on">
                                                                                                         <i class="icon-calendar"></i>
                                                                                                 </span>
@@ -98,12 +103,17 @@
                                                                                                         <i class="icon-calendar"></i>
                                                                                                 </span>
 
-                                                                                                <input tipo="fecha" tipofecha="rango" class="span10 fechadatepicker fechadatepicker-rango" type="text" name="date-range-picker" id="id-date-range-picker-1" />
+                                                                                                <input 
+                                                                                                    id_input="<?php echo $input->getId() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>"
+                                                                                                    tipo="fecha" tipofecha="rango" class="span10 fechadatepicker fechadatepicker-rango" type="text" name="date-range-picker" id="id-date-range-picker-1" 
+                                                                                                    value="<?php echo $input->getRespuesta() ?>"
+                                                                                                    />
+                                                                                                <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" id="" value="<?php echo $input->getRespuesta() ?>"/>
                                                                                         </div>
                                                                                 </div>
                                                                                 
                                                                                 <?php endif; ?>
-                                                                        <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value=""/>
+                                                                        
                                                                     <?php endif;?>
                                                                     <?php if($input->getAyuda()):?>    
                                                                     <i class="tooltip-success icon-question-sign" data-rel="tooltip" data-placement="right" title="<?php echo $input->getAyuda(); ?>"></i>
@@ -211,6 +221,10 @@
     </div><!--/.row-fluid-->
 </div><!--/.page-content-->
 <style>
+    .tooltip-inner {
+        max-width: 250px !important;
+        width: 250px;
+    }
 
     .form-horizontal .control-label {
         float: left;
@@ -218,6 +232,15 @@
         padding-top: 5px;
         text-align: right;
         width: 260px;
+    }
+    .fechadatepicker{
+        width: 479px !important;
+    }
+    .fechadatepicker-rango{
+        width: 516px !important;
+    }
+    .input-append .add-on{
+        width: 53px;
     }
 </style>
 <script>
@@ -439,17 +462,20 @@
                     }else{
                         if(respuesta.tipo == "fecha"){
                             tipo = $(this).find(".fechadatepicker").attr("tipofecha");
-                            
+                            respuesta.id_input = $(this).find("input[type=text]").attr("id_input");
+                            respuesta.texto = $(this).find("input[type=text]").val();
+                            respuesta.nombre = $(this).find("input[type=text]").attr("name");
+                            respuesta.id_pagina = $(this).find("input[type=text]").attr("id_pagina");
                             if(tipo == "simple"){
                                 val = $(this).find(".fechadatepicker").val();
-                                respuesta.fecha_desde = val;
-                                respuesta.fecha_hasta = "";
+                                respuesta.desde = val;
+                                respuesta.hasta = "";
                             }else{
                                 val = $(this).find(".fechadatepicker").val();
                                 val = $.trim(val);
                                 val = val.split("-");
-                                respuesta.fecha_desde = val[0];
-                                respuesta.fecha_hasta = val[1];
+                                respuesta.desde = val[0];
+                                respuesta.hasta = val[1];
                             }
                             
                         }else{
@@ -500,6 +526,21 @@
                         $(this).find("input[type=hidden]").val(a)
                     }
                 }else{
+                    
+                    obj = $(this).find("input[tipo=fecha]");
+                
+                    if(obj.length){
+                    a = obj.val() + "";
+                    b = $(this).find("input[type=hidden]").val() + "";
+                    if(a !== b){
+                        console.log("obj in1: "+obj.val());
+                        cambios = true;
+                        $(this).find("input[type=hidden]").val(a)
+                    }
+                    }else
+                    {
+                    
+                    
                     var s = $(this).find("select");
                     
                     //selectVal = s.val();
@@ -559,6 +600,7 @@
                                 cambios = true;
                             }
                         }*/
+                    }
                     }
                 }
                 //hidden-response
@@ -639,7 +681,9 @@
         $('.date-picker').datepicker().next().on(ace.click_event, function(){
                 $(this).prev().focus();
         });
-        $('.fechadatepicker-rango').daterangepicker().prev().on(ace.click_event, function(){
+        $('.fechadatepicker-rango').daterangepicker({
+            yearRange: '2010:2020',
+        }).prev().on(ace.click_event, function(){
                 $(this).next().focus();
         });
     });

@@ -178,7 +178,32 @@ class FormularioDao {
 
         return false;
     }
+    
+    public function getRespuestaFecha($idInput,$idAlumno) {
+        $sql = "SELECT rf.desde ,rf.hasta from respuesta_fecha as rf "
+                . "INNER JOIN respuestas as r on r.id = rf.id_respuesta "
+                . "WHERE r.id_input = $idInput "
+                . "AND r.estado = 1 "
+                . "AND r.id_usuario=$idAlumno";
 
+        $results = array();
+
+        $res = $this->adapter->query($sql);
+
+        if ($res) {
+            $result = $res->execute();
+            foreach ($result as $rres) {
+                $hasta = "";
+                if($rres["hasta"]){
+                    $hasta = " - " . $rres["hasta"];
+                }
+                return $rres["desde"] . $hasta;
+            }
+        }
+
+        return $result;
+    }
+    
     public function getRespuestaTexto($idInput,$idAlumno) {
         $sql = "SELECT rt.texto as texto from respuesta_texto as rt "
                 . "INNER JOIN respuestas as r on r.id = rt.id_respuesta "
@@ -277,10 +302,17 @@ class FormularioDao {
                 }
                 
                 $respuesta = $this->getRespuestaTexto($r["id"],$idAlumno);
+                
+                if($unInput->getTipo() == "fecha"){
+                    $respuesta = $this->getRespuestaFecha($r["id"],$idAlumno);
+                }
+                
                 $unInput->setRespuesta("");
+                
                 if (is_string($respuesta)) {
                     $unInput->setRespuesta($respuesta);
                 }
+                
                 switch ($unInput->getTipo()) {
                     case "dropdown":
                         //$select = new \Usuarios\Model\Entity\Select();
@@ -447,6 +479,11 @@ class FormularioDao {
                     . "INNER JOIN respuestas as r on r.id = rs.id_respuesta "
                     . "INNER JOIN inputs as i on i.id = r.id_input "
                     . "INNER JOIN select_collections as sc on sc.id_input = i.id AND sc.id_select = rs.id_select "
+                    . "WHERE r.id_usuario = $idUsuario AND i.nombre = '" . $nomPregunta . "'";
+        }elseif ($tipo == "fecha") {
+            $sql = "SELECT CONCAT(rf.desde , ' ', rf.hasta)as respuesta  FROM respuesta_fecha as rf "
+                    . "INNER JOIN respuestas as r on r.id = rf.id_respuesta "
+                    . "INNER JOIN inputs as i on i.id = r.id_input "
                     . "WHERE r.id_usuario = $idUsuario AND i.nombre = '" . $nomPregunta . "'";
         }
 
