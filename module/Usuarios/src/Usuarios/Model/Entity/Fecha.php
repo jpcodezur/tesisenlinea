@@ -7,7 +7,26 @@ class Fecha {
     private $id;
     private $idInput;
     private $tipoFecha;
+    private $desde;
+    private $hasta;
     
+    function getDesde() {
+        return $this->desde;
+    }
+
+    function getHasta() {
+        return $this->hasta;
+    }
+
+    function setDesde($desde) {
+        $this->desde = $desde;
+    }
+
+    function setHasta($hasta) {
+        $this->hasta = $hasta;
+    }
+
+        
     function getIdInput() {
         return $this->idInput;
     }
