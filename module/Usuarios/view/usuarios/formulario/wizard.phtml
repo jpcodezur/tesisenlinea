@@ -77,8 +77,9 @@
                                                                     </select>
                                                                     <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo implode(",", $valuesSelected) ?>"/>
                                                                     <?php elseif($input->getTipo()=="fecha"):?>
-                                                                                
-                                                                                <?php if(false): ?>
+                                                                                <?php 
+                                                                                $fechaTipo = $input->getControl()->getTipoFecha(); ?>
+                                                                                <?php if($fechaTipo == "simple"): ?>
                                                                                 
                                                                                 <div class="control-group">
                                                                                         <div class="row-fluid input-append">
@@ -97,7 +98,7 @@
                                                                                                         <i class="icon-calendar"></i>
                                                                                                 </span>
 
-                                                                                                <input tipo="fecha" tipofecha="rango" class="span10 fechadatepicker" type="text" name="date-range-picker" id="id-date-range-picker-1" />
+                                                                                                <input tipo="fecha" tipofecha="rango" class="span10 fechadatepicker fechadatepicker-rango" type="text" name="date-range-picker" id="id-date-range-picker-1" />
                                                                                         </div>
                                                                                 </div>
                                                                                 
@@ -638,7 +639,7 @@
         $('.date-picker').datepicker().next().on(ace.click_event, function(){
                 $(this).prev().focus();
         });
-        $('#id-date-range-picker-1').daterangepicker().prev().on(ace.click_event, function(){
+        $('.fechadatepicker-rango').daterangepicker().prev().on(ace.click_event, function(){
                 $(this).next().focus();
         });
     });

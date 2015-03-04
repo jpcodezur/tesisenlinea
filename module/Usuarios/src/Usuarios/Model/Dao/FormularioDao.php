@@ -293,6 +293,10 @@ class FormularioDao {
                         $texto = $this->getTexto($unInput->getId());
                         $unInput->setControl($texto);
                         break;
+                    case "fecha":
+                        $fecha = $this->getFecha($unInput->getId());
+                        $unInput->setControl($fecha);
+                        break;
                     default:
                         break;
                 }
@@ -302,7 +306,25 @@ class FormularioDao {
 
         return $inputs;
     }
+    
+    public function getFecha($id) {
+        $input = new \Usuarios\Model\Entity\Fecha();
 
+        $sql = "SELECT * FROM input_fecha WHERE id_input=" . $id;
+
+        $result = $this->adapter->query($sql)->execute();
+
+        if ($result) {
+            foreach ($result as $res) {
+                $input->setId($res["id"]);
+                $input->setTipoFecha($res["tipo_fecha"]);
+                return $input;
+            }
+        }
+
+        return $input;
+    }
+    
     public function getTexto($id) {
         $input = new Input();
 
