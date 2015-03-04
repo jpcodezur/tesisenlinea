@@ -296,6 +296,7 @@ class FormularioDao {
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
                 $unInput->setAyuda($r["ayuda"]);
+                $unInput->setTamanio($r["tamanio"]);
                 
                 if($this->isInputMagic($r["id_pagina"],$r["nombre"])){
                     $unInput->setIsMagic(true);
@@ -358,7 +359,7 @@ class FormularioDao {
     }
     
     public function getTexto($id) {
-        $input = new Input();
+        $input = new \Usuarios\Model\Entity\Texto();
 
         $sql = "SELECT * FROM input_texto WHERE id_input=" . $id;
 
@@ -368,6 +369,8 @@ class FormularioDao {
             foreach ($result as $res) {
                 $input->setId($res["id"]);
                 $input->setRespuestasRequeridas($res["respuestas_requeridas"]);
+                $input->setEjemplo($res["ejemplo"]);
+                $input->setValidacion($res["validacion"]);
                 return $input;
             }
         }

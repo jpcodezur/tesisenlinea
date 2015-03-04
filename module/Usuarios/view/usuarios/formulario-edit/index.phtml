@@ -186,6 +186,10 @@
     <input type="hidden" name="last_page" value="<?php echo (isset($_POST["last_page"]))?$_POST["last_page"]:"0" ?>">
 </form>
 <style>
+    
+    .table-popup{
+        margin-bottom: 10px;
+    }
     .save-formulario{
         margin-right: -8px;
     }   
@@ -208,7 +212,7 @@
         cursor:pointer
     }
     textarea.mention {
-        width: calc(100% - 12px);
+        width: 100% !important;
         font-size: 13px;
         font-weight: normal;
         position:relative;
@@ -262,6 +266,7 @@
     .item-input strong{
         margin-right: 6px;
     }
+    
     .select-value-input input[type=text]{
         background-color: #d9edf7;
         border:none;
@@ -276,6 +281,7 @@
     select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
         margin-bottom: 10px !important;
     }
+    
     </style>
     <script>
         $(document).ready(function () {
@@ -421,7 +427,20 @@
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
                                 });
-
+                        
+                        $( "#input-size-slider" ).css('width','200px').slider({
+                                value:1,
+                                range: "min",
+                                min: 1,
+                                max: 3,
+                                step: 1,
+                                slide: function( event, ui ) {
+                                        var sizing = ['', 'Pequeño', 'Mediano', 'Largo'];
+                                        var val = parseInt(ui.value);
+                                        $("#tamanio-label").text(sizing[val]);
+                                }
+                        });
+                        
                         $(document).on("change", "#esmulti", function () {
 
                             if ($(this).is(":checked")) {
@@ -478,6 +497,35 @@
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
                                 });
+                        
+                        t = $("#tamanio-hidden").val();
+                        
+                        v = 1;
+                        
+                        if(t == "Largo"){
+                            v = 3;
+                        }
+                        if(t == "Mediano"){
+                            v = 2;
+                        }
+                        if(t == "Pequeño"){
+                            v = 1;
+                        }
+                        
+                        $("#tamanio-label").text(t);
+                        
+                        $( "#input-size-slider" ).css('width','200px').slider({
+                                value:v,
+                                range: "min",
+                                min: 1,
+                                max: 3,
+                                step: 1,
+                                slide: function( event, ui ) {
+                                        var sizing = ['', 'Pequeño', 'Mediano', 'Largo'];
+                                        var val = parseInt(ui.value);
+                                        $("#tamanio-label").text(sizing[val]);
+                                }
+                        });
 
                         $(document).on("change", "#esmulti", function () {
 
@@ -657,6 +705,7 @@
                 var nombre = $("input[name=nombre]").val(),
                         idinput = $("#idinput").val(),
                         ayuda = $("input[name=ayuda]").val(),
+                        tamanio = $("#tamanio-label").text(),
                         label = $("textarea.mention").val(),
                         tipo = $("ul#myTab li.active a").attr("tipo"),
                         obligatorio = ($(".inputs-text-control-edit input[name=obligatorio]").prop('checked') == true) ? "1" : "0";
@@ -665,6 +714,8 @@
 
                 if (tipo == "texto") {
                     input_data.respuestas_requeridas = $("#numero-respuestas").val();
+                    input_data.ejemplo = $("input[name=ejemplo]").val();
+                    input_data.validacion = $("select.validacion option:selected").val();
                 }
                 
                 if (tipo == "fecha") {
@@ -697,6 +748,7 @@
                         idinput: idinput,
                         nombre: nombre,
                         label: label,
+                        tamanio:tamanio,
                         tipo: tipo,
                         ayuda: ayuda,
                         input_data: input_data,
@@ -812,12 +864,15 @@
                         obligatorio = ($(".inputs-text-control-add input[name=obligatorio]").prop('checked') == true) ? "1" : "0",
                         tipo = $("#myTab li.active a").attr("tipo"),
                         ayuda = $("input[name=ayuda]").val(),
+                        tamanio = $("#tamanio-label").text(),
                         orden = $("#inputs-collections").find(".item-input").length + 1;
 
                 input_data = {};
 
                 if (tipo == "texto") {
                     input_data.respuestas_requeridas = $("#numero-respuestas").val();
+                    input_data.ejemplo = $("input[name=ejemplo]").val();
+                    input_data.validacion = $("select.validacion option:selected").val();
                 }
                 
                 if (tipo == "fecha") {
@@ -849,6 +904,7 @@
                         id_pagina: id_pagina,
                         nombre: nombre,
                         label: label,
+                        tamanio:tamanio,
                         obligatorio: obligatorio,
                         tipo: tipo,
                         ayuda:ayuda,

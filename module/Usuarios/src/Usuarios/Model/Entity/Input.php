@@ -17,6 +17,16 @@ class Input {
     private $ayuda;
     private $respuestasRequeridas;
     private $isMagic;
+    private $tamanio;
+    
+    function getTamanio() {
+        return $this->tamanio;
+    }
+
+    function setTamanio($tamanio) {
+        $this->tamanio = $tamanio;
+    }
+
     
     function getIsMagic() {
         return $this->isMagic;

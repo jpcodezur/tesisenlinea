@@ -133,6 +133,7 @@ class FormularioEditDao {
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
                 $unInput->setAyuda($r["ayuda"]);
+                $unInput->setTamanio($r["tamanio"]);
                 switch ($r["tipo_input"]) {
                     case "dropdown":
 

@@ -237,7 +237,7 @@ class InputDao {
 
             $connection->beginTransaction();
 
-            $sql = "INSERT INTO inputs (nombre,label,required,tipo_input,estado,orden,id_pagina,ayuda) VALUES(";
+            $sql = "INSERT INTO inputs (nombre,label,required,tipo_input,estado,orden,id_pagina,tamanio,ayuda) VALUES(";
 
             $sql .= "'" . $unaEntity->getNombre() . "',";
             $sql .= "'" . $unaEntity->getLabel() . "',";
@@ -246,6 +246,7 @@ class InputDao {
             $sql .= "'" . $unaEntity->getEstado() . "',";
             $sql .= "'" . $unaEntity->getOrden() . "',";
             $sql .= "'" . $unaEntity->getIdPagina() . "',";
+            $sql .= "'" . $unaEntity->getTamanio() . "',";
             $sql .= "'" . $unaEntity->getAyuda() . "'";
             $sql .= ")";
 
@@ -349,7 +350,7 @@ class InputDao {
 
             $connection->beginTransaction();
 
-            $sql = "UPDATE inputs set required = '" . $unaEntity->getRequired() . "', nombre='" . $unaEntity->getNombre() . "',label='" . $unaEntity->getLabel() . "',ayuda='" . $unaEntity->getAyuda() . "'";
+            $sql = "UPDATE inputs set required = '" . $unaEntity->getRequired() . "', nombre='" . $unaEntity->getNombre() . "', tamanio='" . $unaEntity->getTamanio() . "',label='" . $unaEntity->getLabel() . "',ayuda='" . $unaEntity->getAyuda() . "'";
             $sql .= " WHERE id =" . $unaEntity->getId();
 
             $result = $this->adapter->query($sql)->execute();
@@ -397,7 +398,7 @@ class InputDao {
 
         switch ($tipo) {
             case "texto":
-                $sql = "UPDATE input_texto set respuestas_requeridas='" . $entity->getRespuestasRequeridas() . "' WHERE id_input=" . $entity->getIdInput() . "";
+                $sql = "UPDATE input_texto set respuestas_requeridas='" . $entity->getRespuestasRequeridas() . "', ejemplo='" . $entity->getEjemplo() . "', validacion='" . $entity->getValidacion() . "' WHERE id_input=" . $entity->getIdInput() . "";
 
                 $result = $this->adapter->query($sql)->execute();
                 if ($result) {
@@ -457,8 +458,8 @@ class InputDao {
 
         switch ($tipo) {
             case "texto":
-                $sql = "INSERT INTO input_texto (id_input,respuestas_requeridas) ";
-                $sql .= "VALUES ('" . $entity->getIdInput() . "','" . $entity->getRespuestasRequeridas() . "')";
+                $sql = "INSERT INTO input_texto (id_input,respuestas_requeridas,ejemplo,validacion) ";
+                $sql .= "VALUES ('" . $entity->getIdInput() . "','" . $entity->getRespuestasRequeridas() . "','" . $entity->getEjemplo() . "','" . $entity->getValidacion() . "')";
                 $result = $this->adapter->query($sql)->execute();
                 if ($result) {
                     $response->setError(false);
