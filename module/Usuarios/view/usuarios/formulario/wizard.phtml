@@ -76,6 +76,33 @@
                                                                         <?php endforeach;?>
                                                                     </select>
                                                                     <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo implode(",", $valuesSelected) ?>"/>
+                                                                    <?php elseif($input->getTipo()=="fecha"):?>
+                                                                                
+                                                                                <?php if(false): ?>
+                                                                                
+                                                                                <div class="control-group">
+                                                                                        <div class="row-fluid input-append">
+                                                                                                <input tipo="fecha" tipofecha="simple" class="span10 date-picker fechadatepicker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy" />
+                                                                                                <span class="add-on">
+                                                                                                        <i class="icon-calendar"></i>
+                                                                                                </span>
+                                                                                        </div>
+                                                                                </div>
+                                                                                
+                                                                                <?php else: ?>
+
+                                                                                <div class="control-group">
+                                                                                        <div class="row-fluid input-prepend">
+                                                                                                <span class="add-on">
+                                                                                                        <i class="icon-calendar"></i>
+                                                                                                </span>
+
+                                                                                                <input tipo="fecha" tipofecha="rango" class="span10 fechadatepicker" type="text" name="date-range-picker" id="id-date-range-picker-1" />
+                                                                                        </div>
+                                                                                </div>
+                                                                                
+                                                                                <?php endif; ?>
+                                                                        <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value=""/>
                                                                     <?php endif;?>
                                                                     <?php if($input->getAyuda()):?>    
                                                                     <i class="tooltip-success icon-question-sign" data-rel="tooltip" data-placement="right" title="<?php echo $input->getAyuda(); ?>"></i>
@@ -400,6 +427,7 @@
                 $("#step-container .active .inputs-respuestas").each(function(){
                     respuesta = {};
 
+                    respuesta.id = $(this).find("input[type=text]").attr("id");
                     respuesta.tipo = $(this).find("input[type=text]").attr("tipo");
 
                     if(respuesta.tipo == "texto"){
@@ -408,16 +436,33 @@
                         respuesta.nombre = $(this).find("input[type=text]").attr("name");
                         respuesta.id_pagina = $(this).find("input[type=text]").attr("id_pagina");
                     }else{
-                        respuesta.tipo = $(this).find("select").attr("tipo");
-                        respuesta.nombre = $(this).find("select").attr("name");
-                        respuesta.id_pagina = $(this).find("select").attr("id_pagina");
-                        respuesta.id_input = $(this).find("select").attr("id_input");
-                        
-                        
-                        if(!$(this).find(".chzn-select").length){
-                            respuesta.texto = $(this).find("select option:selected").val();
+                        if(respuesta.tipo == "fecha"){
+                            tipo = $(this).find(".fechadatepicker").attr("tipofecha");
+                            
+                            if(tipo == "simple"){
+                                val = $(this).find(".fechadatepicker").val();
+                                respuesta.fecha_desde = val;
+                                respuesta.fecha_hasta = "";
+                            }else{
+                                val = $(this).find(".fechadatepicker").val();
+                                val = $.trim(val);
+                                val = val.split("-");
+                                respuesta.fecha_desde = val[0];
+                                respuesta.fecha_hasta = val[1];
+                            }
+                            
                         }else{
-                            respuesta.texto = $(this).find(".chzn-select").val()
+                            respuesta.tipo = $(this).find("select").attr("tipo");
+                            respuesta.nombre = $(this).find("select").attr("name");
+                            respuesta.id_pagina = $(this).find("select").attr("id_pagina");
+                            respuesta.id_input = $(this).find("select").attr("id_input");
+
+
+                            if(!$(this).find(".chzn-select").length){
+                                respuesta.texto = $(this).find("select option:selected").val();
+                            }else{
+                                respuesta.texto = $(this).find(".chzn-select").val()
+                            }
                         }
                     }
 
@@ -589,6 +634,12 @@
             invalidHandler: function (form) {
             }
     });
-    
+        
+        $('.date-picker').datepicker().next().on(ace.click_event, function(){
+                $(this).prev().focus();
+        });
+        $('#id-date-range-picker-1').daterangepicker().prev().on(ace.click_event, function(){
+                $(this).next().focus();
+        });
     });
 </script>

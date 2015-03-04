@@ -661,6 +661,10 @@
                 if (tipo == "texto") {
                     input_data.respuestas_requeridas = $("#numero-respuestas").val();
                 }
+                
+                if (tipo == "fecha") {
+                    input_data.tipo_fecha = $("input[name=radio-fecha]:checked").val();
+                }
 
                 if (tipo == "dropdown") {
                     input_data.select = {};
@@ -809,6 +813,10 @@
 
                 if (tipo == "texto") {
                     input_data.respuestas_requeridas = $("#numero-respuestas").val();
+                }
+                
+                if (tipo == "fecha") {
+                    input_data.tipo_fecha = $("input[name=radio-fecha]:checked").val();
                 }
 
                 if (tipo == "dropdown") {

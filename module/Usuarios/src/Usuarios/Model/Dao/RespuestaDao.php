@@ -47,6 +47,23 @@ class RespuestaDao {
         return $ret;
     }
 
+    public function saveFecha($idRespuesta, $desde,$hasta,$update){
+        
+        $idAlumno = null;
+
+        if(isset($_SESSION["miSession"]["usuario"])){
+            $idAlumno = $_SESSION["miSession"]["usuario"]->getId();
+        }
+        
+        if(!$update){
+            $sql = "INSERT INTO respuesta_fecha (id_respuesta,desde,hasta,id_usuario) VALUES ($idRespuesta,'".$desde."','".$hasta."','".$idAlumno."')";
+        }else{
+            $sql = "UPDATE respuesta_fecha set desde='".$desde."', hasta='".$hasta."' WHERE id_respuesta=$idRespuesta AND id_usuario=$idAlumno";
+        }
+        
+        return $this->adapter->query($sql)->execute();
+    }
+    
     public function saveDropdown($idRespuesta, $texto,$update) {
         //$idRespuesta = $this->getIdRespuesta($idSelect);
         $sql = "";
@@ -198,6 +215,10 @@ class RespuestaDao {
                         $res = $this->saveTexto($idRespuesta, $texto,$update);
                     }elseif ($tipo == "dropdown") {
                         $res = $this->saveDropdown($idRespuesta, $texto,$update);
+                    }elseif ($tipo == "fecha") {
+                        $desde = $respuesta["desde"];
+                        $hasta = $respuesta["hasta"];
+                        $res = $this->saveFecha($idRespuesta, $desde,$hasta,$update);//($idRespuesta, $texto,$update);
                     }
                 }
             }
