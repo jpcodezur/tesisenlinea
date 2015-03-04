@@ -145,6 +145,10 @@ class FormularioEditDao {
                         $texto = $this->getTexto($unInput->getId());
                         $unInput->setControl($texto);
                         break;
+                    case "fecha":
+                        $fecha = $this->getFecha($unInput->getId());
+                        $unInput->setControl($fecha);
+                        break;
 
                     default:
                         break;
@@ -155,7 +159,25 @@ class FormularioEditDao {
 
         return $inputs;
     }
+    
+    public function getFecha($id){
+        $fecha = new \Usuarios\Model\Entity\Fecha();
 
+        $sql = "SELECT * FROM input_fecha WHERE id_input=" . $id;
+
+        $result = $this->adapter->query($sql)->execute();
+
+        if ($result) {
+            foreach ($result as $res) {
+                $fecha->setId($res["id"]);
+                $fecha->setTipoFecha($res["tipo_fecha"]);
+                return $fecha;
+            }
+        }
+
+        return $fecha;
+    }
+    
     public function getTexto($id){
         $input = new Input();
 

@@ -218,13 +218,13 @@ class InputDao {
     public function save($unaEntity) {
 
         $validate = new SaveInput("", $this, $this->params);
-        
-        
-        
+
+
+
         $respuesta = $validate->validate($unaEntity);
 
         $respuesta->id = false;
-        
+
         if ($respuesta->getError() === false) {
             $respuesta = $validate->validateName($unaEntity->getNombre());
         }
@@ -336,7 +336,7 @@ class InputDao {
         $respuesta = $validate->validate($unaEntity);
 
         $respuesta->id = false;
-        
+
         if ($respuesta->getError() === false) {
             $respuesta = $validate->validateName($unaEntity->getNombre());
         }
@@ -405,6 +405,15 @@ class InputDao {
                 }
 
                 break;
+            case "fecha":
+                $sql = "UPDATE input_fecha set tipo_fecha='" . $entity->getTipoFecha() . "' WHERE id_input=" . $entity->getIdInput() . "";
+
+                $result = $this->adapter->query($sql)->execute();
+                if ($result) {
+                    $response->setError(false);
+                }
+
+                break;
             case "dropdown":
 
                 $sql = "UPDATE input_select SET tipo='" . $entity->getTipo() . "',respuestas_requeridas='" . $entity->getRespuestasRequeridas() . "' "
@@ -416,7 +425,7 @@ class InputDao {
                     $sql = "DELETE FROM select_collections "
                             . "WHERE id_input=" . $entity->getIdInput();
                     $result = $this->adapter->query($sql)->execute();
-                    
+
                     if ($result) {
                         foreach ($entity->getValues() as $value) {
                             $sql = "INSERT INTO select_collections (id_input,id_select,value,orden) VALUES("
@@ -476,7 +485,15 @@ class InputDao {
                 }
 
                 break;
+            case "fecha":
+                $sql = "INSERT INTO input_fecha (id_input,tipo_fecha) ";
+                $sql .= "VALUES ('" . $entity->getIdInput() . "','" . $entity->getTipoFecha() . "')";
+                $result = $this->adapter->query($sql)->execute();
+                if ($result) {
+                    $response->setError(false);
+                }
 
+                break;
             default:
                 break;
         }
@@ -546,7 +563,9 @@ class InputDao {
 
         return $inputs;
     }
-    
-    public function dummi(){}
+
+    public function dummi() {
+        
+    }
 
 }

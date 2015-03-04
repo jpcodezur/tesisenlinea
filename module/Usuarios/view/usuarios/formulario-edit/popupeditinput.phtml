@@ -36,6 +36,12 @@
             </li>
 
             <li class="dropdown">
+                <a data-toggle="tab" href="#fecha" tipo="fecha">
+                    Fecha
+                </a>
+            </li>
+            
+            <li class="dropdown">
                 <a data-toggle="tab" href="#" tipo="imagen">
                     Imagen
                 </a>
@@ -104,7 +110,25 @@
                     </div>
                 </div>
             </div>
-
+            <div id="fecha" class="tab-pane in active">
+                <div class="widget-main">
+                    <label>
+                        <?php $tipoFecha = "" ?>
+                        <?php if($this->input->getTipo()=="fecha"): ?>
+                        <?php
+                        $fecha = $this->input->getControl();
+                        $tipoFecha = $fecha->getTipoFecha();
+                        ?>
+                        <?php endif; ?>
+                        <input <?php echo ($tipoFecha == "simple")?"checked='checked'":"" ?> name="radio-fecha" type="radio" value="simple"/>
+                            <span class="lbl"> Simple</span>
+                    </label>
+                    <label>
+                            <input <?php echo ($tipoFecha == "rango")?"checked='checked'":"" ?> name="radio-fecha" type="radio" value="rango"/>
+                            <span class="lbl"> Rango de fechas</span>
+                    </label>
+                </div>
+            </div>
             <div id="dropdown1" class="tab-pane">
                 <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
             </div>
