@@ -711,7 +711,7 @@
                         tamanio = $("#tamanio-label").text(),
                         label = $("textarea.mention").val(),
                         tipo = $("ul#myTab li.active a").attr("tipo"),
-                        obligatorio = ($(".inputs-text-control-edit input[name=obligatorio]").prop('checked') == true) ? "1" : "0";
+                        obligatorio = ($("input[name=obligatorio]").prop('checked') == true) ? "1" : "0";
 
                 input_data = {};
 
@@ -864,7 +864,7 @@
                         id_pagina = $(".wizard-steps li.active").attr("id_page"),
                         nombre = $("input[name=nombre]").val(),
                         label = $(".mention").val(),
-                        obligatorio = ($(".inputs-text-control-add input[name=obligatorio]").prop('checked') == true) ? "1" : "0",
+                        obligatorio = ($("input[name=obligatorio]").prop('checked') == true) ? "1" : "0",
                         tipo = $("#myTab li.active a").attr("tipo"),
                         ayuda = $("input[name=ayuda]").val(),
                         tamanio = $("#tamanio-label").text(),
