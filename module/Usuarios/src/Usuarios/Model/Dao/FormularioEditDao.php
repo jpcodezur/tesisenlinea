@@ -180,7 +180,7 @@ class FormularioEditDao {
     }
     
     public function getTexto($id){
-        $input = new Input();
+        $input = new \Usuarios\Model\Entity\Texto();
 
         $sql = "SELECT * FROM input_texto WHERE id_input=" . $id;
 
@@ -190,6 +190,7 @@ class FormularioEditDao {
             foreach ($result as $res) {
                 $input->setId($res["id"]);
                 $input->setRespuestasRequeridas($res["respuestas_requeridas"]);
+                $input->setEjemplo($res["ejemplo"]);
                 return $input;
             }
         }
