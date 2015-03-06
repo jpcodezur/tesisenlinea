@@ -55,7 +55,7 @@ class InputController extends AbstractActionController {
             $unaEntity->setLabel($this->getRequest()->getPost("label", null));
             $unaEntity->setRequired($this->getRequest()->getPost("obligatorio", null));
             $unaEntity->setTipo($this->getRequest()->getPost("tipo", null));
-            $unInput->setTamanio($this->getRequest()->getPost("tamanio", null));
+            $unaEntity->setTamanio($this->getRequest()->getPost("tamanio", null));
             $unaEntity->setEstado(1);
             $unaEntity->setOrden($this->getRequest()->getPost("orden", null));
             $unaEntity->setIdPagina($this->getRequest()->getPost("id_pagina", null));
