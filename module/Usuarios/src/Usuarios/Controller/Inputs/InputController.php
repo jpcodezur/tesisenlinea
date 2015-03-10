@@ -60,6 +60,7 @@ class InputController extends AbstractActionController {
             $unaEntity->setOrden($this->getRequest()->getPost("orden", null));
             $unaEntity->setIdPagina($this->getRequest()->getPost("id_pagina", null));
             $unaEntity->setAyuda($this->getRequest()->getPost("ayuda", null));
+            $unaEntity->setLinkAyuda($this->getRequest()->getPost("link_ayuda", null));
             
             $input_data = $this->getRequest()->getPost("input_data", null);
             
@@ -167,6 +168,7 @@ class InputController extends AbstractActionController {
             $unInput->setTipo($this->getRequest()->getPost("tipo", null));
             $unInput->setAyuda($this->getRequest()->getPost("ayuda", null));
             $unInput->setRequired($this->getRequest()->getPost("obligatorio", null));
+            $unInput->setLinkAyuda($this->getRequest()->getPost("link_ayuda", null));
             
             $input_data = $this->getRequest()->getPost("input_data", null);
             

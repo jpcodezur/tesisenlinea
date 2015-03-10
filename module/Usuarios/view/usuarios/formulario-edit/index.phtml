@@ -419,6 +419,7 @@
                     success: function (data) {
 
                         $(".bootbox .modal-body").html(data);
+                        
                         $('#numero-respuestas')
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
@@ -427,6 +428,10 @@
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
                                 });
+                        
+                        setTimeout(function(){
+                            $(".chzn-select").chosen(); 
+                        },2000)
                         
                         t = "Largo";
                         v = 3;
@@ -483,7 +488,7 @@
                         var tipoinput = $(data).find("#tipoinput").val();
                         
                         $(".bootbox .modal-body").html(data);
-                        
+                        $(".chzn-select").chosen(); 
                         $(".bootbox .modal-body").find("#myTab li").each(function(){
                             anchor = $(this).find("a");
                             if(anchor.attr("tipo") == tipoinput){
@@ -710,6 +715,7 @@
                         ayuda = $("input[name=ayuda]").val(),
                         tamanio = $("#tamanio-label").text(),
                         label = $("textarea.mention").val(),
+                        link_ayuda = $("input[name=link_ayuda]").val(),
                         tipo = $("ul#myTab li.active a").attr("tipo"),
                         obligatorio = ($("input[name=obligatorio]").prop('checked') == true) ? "1" : "0";
 
@@ -754,6 +760,8 @@
                         tamanio:tamanio,
                         tipo: tipo,
                         ayuda: ayuda,
+                        ayuda: ayuda,
+                        link_ayuda:link_ayuda,
                         input_data: input_data,
                         obligatorio: obligatorio
                     },
@@ -868,6 +876,7 @@
                         tipo = $("#myTab li.active a").attr("tipo"),
                         ayuda = $("input[name=ayuda]").val(),
                         tamanio = $("#tamanio-label").text(),
+                        link_ayuda = $("input[name=link_ayuda]").val(),
                         orden = $("#inputs-collections").find(".item-input").length + 1;
 
                 input_data = {};
@@ -908,6 +917,7 @@
                         nombre: nombre,
                         label: label,
                         tamanio:tamanio,
+                        link_ayuda:link_ayuda,
                         obligatorio: obligatorio,
                         tipo: tipo,
                         ayuda:ayuda,

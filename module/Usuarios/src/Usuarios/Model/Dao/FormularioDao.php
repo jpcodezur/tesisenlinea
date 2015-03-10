@@ -297,6 +297,7 @@ class FormularioDao {
                 $unInput->setTipo($r["tipo_input"]);
                 $unInput->setAyuda($r["ayuda"]);
                 $unInput->setTamanio($r["tamanio"]);
+                $unInput->setLinkAyuda($r["link_ayuda"]);
                 
                 if($this->isInputMagic($r["id_pagina"],$r["nombre"])){
                     $unInput->setIsMagic(true);

@@ -18,7 +18,16 @@ class Input {
     private $respuestasRequeridas;
     private $isMagic;
     private $tamanio;
+    private $linkAyuda;
     
+    function getLinkAyuda() {
+        return $this->linkAyuda;
+    }
+
+    function setLinkAyuda($linkAyuda) {
+        $this->linkAyuda = $linkAyuda;
+    }
+
     function getTamanio() {
         return $this->tamanio;
     }

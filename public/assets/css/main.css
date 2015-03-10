@@ -103,3 +103,31 @@ select.validacion{
 .input-icon.input-icon-right > [class*="icon-"] {
     right: -26px !important;
 }
+::-webkit-input-placeholder { 
+    color:#BCBCBC;
+    font-style: italic;
+}
+::-moz-placeholder { 
+    color:#BCBCBC;
+    font-style: italic;
+} /* firefox 19+ */
+:-ms-input-placeholder {
+    color:#BCBCBC;
+    font-style: italic;
+} /* ie */
+input:-moz-placeholder { 
+    color:#BCBCBC;
+    font-style: italic;
+}
+.link_ayuda{
+    float: left;
+    padding-left: 32px;
+    padding-top: 4px;
+}
+.tab-content {
+    overflow: visible !important;
+}
+
+#allow_files_chzn ul{
+    margin-top: -11px;
+}

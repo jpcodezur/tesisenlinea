@@ -45,6 +45,9 @@
                         <div class="help-block" id="input-size-slider"></div>
                     </div>
                 </div>
+                <div class="control-group">
+                    <input type="text" name="link_ayuda" placeholder="Link Ayuda" style="width: 350px;" value="<?php echo $this->input->getLinkAyuda() ?>">
+                </div>
             </div>
         </div>
     </div>
@@ -63,13 +66,13 @@
                 </a>
             </li>
 
-            <li class="dropdown">
+            <li>
                 <a data-toggle="tab" href="#fecha" tipo="fecha">
                     Fecha
                 </a>
             </li>
             
-            <li class="dropdown">
+            <li>
                 <a data-toggle="tab" href="#" tipo="imagen">
                     Imagen
                 </a>
@@ -163,8 +166,15 @@
                     </label>
                 </div>
             </div>
-            <div id="dropdown1" class="tab-pane">
-                <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+            <div id="imagen" class="tab-pane row">
+                    <input name="image_max_size" placeholder="Max size (Mb)" type="text" value="" />
+                    <!--<input name="image_allow_files" placeholder="Allowed files (default jpg,bmp)" type="text" value="" />-->
+                    <!--<label for="form-field-select-3">Allowed files (default jpg,bmp)</label>-->
+                    <select multiple="multiple" class="chzn-select" id="allow-files" data-placeholder="Allowed files">
+                            <option value="jpg">JPG</option>
+                            <option value="png">PNG</option>
+                            <option value="bmp">PNG</option>
+                    </select>
             </div>
 
             <div id="dropdown2" class="tab-pane">
