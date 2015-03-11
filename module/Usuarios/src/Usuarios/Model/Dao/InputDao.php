@@ -237,7 +237,7 @@ class InputDao {
 
             $connection->beginTransaction();
 
-            $sql = "INSERT INTO inputs (nombre,label,required,tipo_input,estado,orden,id_pagina,tamanio,ayuda) VALUES(";
+            $sql = "INSERT INTO inputs (nombre,label,required,tipo_input,estado,orden,id_pagina,tamanio,link_ayuda,ayuda) VALUES(";
 
             $sql .= "'" . $unaEntity->getNombre() . "',";
             $sql .= "'" . $unaEntity->getLabel() . "',";
@@ -247,6 +247,7 @@ class InputDao {
             $sql .= "'" . $unaEntity->getOrden() . "',";
             $sql .= "'" . $unaEntity->getIdPagina() . "',";
             $sql .= "'" . $unaEntity->getTamanio() . "',";
+            $sql .= "'" . $unaEntity->getLinkAyuda() . "',";
             $sql .= "'" . $unaEntity->getAyuda() . "'";
             $sql .= ")";
 
@@ -350,7 +351,7 @@ class InputDao {
 
             $connection->beginTransaction();
 
-            $sql = "UPDATE inputs set required = '" . $unaEntity->getRequired() . "', nombre='" . $unaEntity->getNombre() . "', tamanio='" . $unaEntity->getTamanio() . "',label='" . $unaEntity->getLabel() . "',ayuda='" . $unaEntity->getAyuda() . "'";
+            $sql = "UPDATE inputs set required = '" . $unaEntity->getRequired() . "', link_ayuda='" . $unaEntity->getLinkAyuda() . "', nombre='" . $unaEntity->getNombre() . "', tamanio='" . $unaEntity->getTamanio() . "',label='" . $unaEntity->getLabel() . "',ayuda='" . $unaEntity->getAyuda() . "'";
             $sql .= " WHERE id =" . $unaEntity->getId();
 
             $result = $this->adapter->query($sql)->execute();

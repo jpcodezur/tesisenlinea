@@ -46,29 +46,30 @@
                                                         <div class="control-group inputs-respuestas">
                                                             <label nom="<?php echo $input->getNombre() ?>" id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
                                                             <div class="controls">
-                                                                <span class="span6 input-icon input-icon-right">
-                                                                    <?php 
+                                                                <?php 
                                                                     $tamanio = $input->getTamanio();
                                                                     
                                                                     switch ($tamanio) {
                                                                         case "Largo":
-                                                                            $tamanio = "100%";
+                                                                            $tamanio = "50";
                                                                             break;
                                                                         case "Mediano":
-                                                                            $tamanio = "50%";
+                                                                            $tamanio = "25";
 
                                                                             break;
                                                                         case "Pequeño":
-                                                                            $tamanio = "25%";
+                                                                            $tamanio = "12.5";
                                                                             break;
                                                                         default:
+                                                                            $tamanio = "50";
                                                                             break;
                                                                     }
                                                                     
                                                                     ?>
+                                                                <span class="span6 input-icon input-icon-right" style="width: <?php echo $tamanio ?>% !important">
                                                                     <?php if($input->getTipo()=="texto"):?>
                                                                         <?php if($input->getControl()->getRespuestasRequeridas() > 0 ):?>
-                                                                    <input style="width: <?php echo $tamanio ?> !important" 
+                                                                    <input  
                                                                            placeholder="<?php echo $input->getControl()->getEjemplo() ?>" 
                                                                            value="<?php echo $input->getRespuesta() ?>" 
                                                                            id_input="<?php echo $input->getId() ?>" 
@@ -90,7 +91,7 @@
                                                                     }
                                                                     $valuesSelected = array();
                                                                     ?>
-                                                                    <select style="width: <?php echo $tamanio ?> !important" class="<?php echo $sc ?><?php echo ($stipo == "multi")? "chzn-select":"" ?>" <?php echo ($stipo == "multi")?"multiple='multiple'":"" ?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
+                                                                    <select style="width: <?php echo $tamanio*2 ?>% !important" class="<?php echo $sc ?><?php echo ($stipo == "multi")? "chzn-select":"" ?>" <?php echo ($stipo == "multi")?"multiple='multiple'":"" ?> id_input="<?php echo $input->getId() ?>" tipo="<?php echo $input->getTipo() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required" : ""?>>
                                                                         <option value="">SELECCIONAR</option>
                                                                         <?php $control = $input->getControl();?>
                                                                         <?php foreach($control->getValues() as $value):?>
@@ -113,7 +114,7 @@
                                                                                 <div class="control-group">
                                                                                         <div class="row-fluid input-append">
                                                                                                 <input 
-                                                                                                    style="width: calc(<?php echo $tamanio ?> - 36px) ! important;"
+                                                                                                    style="width: calc(<?php echo $tamanio*2 ?>% - 36px) ! important;"
                                                                                                     id_input="<?php echo $input->getId() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>"
                                                                                                     tipo="fecha" tipofecha="simple" class="span10 date-picker fechadatepicker" id="id-date-picker-1" type="text" data-date-format="dd-mm-yyyy" 
                                                                                                     value="<?php echo $input->getRespuesta() ?>"
@@ -134,7 +135,7 @@
                                                                                                 </span>
 
                                                                                                 <input 
-                                                                                                    style="width: calc(<?php echo $tamanio ?> - 27px) ! important;"
+                                                                                                    style="width: calc(<?php echo $tamanio*2 ?>% - 27px) ! important;"
                                                                                                     id_input="<?php echo $input->getId() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>"
                                                                                                     tipo="fecha" tipofecha="rango" class="span10 fechadatepicker fechadatepicker-rango" type="text" name="date-range-picker" id="id-date-range-picker-1" 
                                                                                                     value="<?php echo $input->getRespuesta() ?>"
@@ -149,8 +150,10 @@
                                                                     <?php if($input->getAyuda()):?>    
                                                                     <i class="tooltip-success icon-question-sign" data-rel="tooltip" data-placement="right" title="<?php echo $input->getAyuda(); ?>"></i>
                                                                     <?php endif;?>
-                                                                    
                                                                 </span>
+                                                                <?php if($input->getLinkAyuda()):?>    
+                                                                <a class="link_ayuda" target="_blank" href="<?php echo $input->getLinkAyuda(); ?>">Tutorial</a>
+                                                                <?php endif;?>
                                                                 <!--<span class="help-inline">Something may have gone wrong</span>-->
                                                             </div>
                                                         </div>

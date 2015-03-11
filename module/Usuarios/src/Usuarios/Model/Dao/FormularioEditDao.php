@@ -132,6 +132,7 @@ class FormularioEditDao {
                 $unInput->setNombre($r["nombre"]);
                 $unInput->setRequired($r["required"]);
                 $unInput->setTipo($r["tipo_input"]);
+                $unInput->setLinkAyuda($r["link_ayuda"]);
                 $unInput->setAyuda($r["ayuda"]);
                 $unInput->setTamanio($r["tamanio"]);
                 switch ($r["tipo_input"]) {
