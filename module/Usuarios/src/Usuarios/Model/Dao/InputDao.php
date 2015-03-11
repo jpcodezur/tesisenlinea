@@ -416,6 +416,15 @@ class InputDao {
                 }
 
                 break;
+            case "imagen":
+                /*$sql = "UPDATE input_imagen WHERE id_input=" . $entity->getIdInput() . "";
+
+                $result = $this->adapter->query($sql)->execute();
+                if ($result) {
+                    $response->setError(false);
+                }*/
+
+                break;
             case "dropdown":
 
                 $sql = "UPDATE input_select SET tipo='" . $entity->getTipo() . "',respuestas_requeridas='" . $entity->getRespuestasRequeridas() . "' "
@@ -490,6 +499,15 @@ class InputDao {
             case "fecha":
                 $sql = "INSERT INTO input_fecha (id_input,tipo_fecha) ";
                 $sql .= "VALUES ('" . $entity->getIdInput() . "','" . $entity->getTipoFecha() . "')";
+                $result = $this->adapter->query($sql)->execute();
+                if ($result) {
+                    $response->setError(false);
+                }
+
+                break;
+            case "imagen":
+                $sql = "INSERT INTO input_imagen (id_input) ";
+                $sql .= "VALUES ('" . $entity->getIdInput() . "')";
                 $result = $this->adapter->query($sql)->execute();
                 if ($result) {
                     $response->setError(false);
