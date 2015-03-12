@@ -78,8 +78,9 @@
                                                                         <?php if($input->getControl()->getRespuestasRequeridas() > 0 ):?>
                                                                         <?php for($i = 0; $i < $input->getControl()->getRespuestasRequeridas(); $i++):?>
                                                                         <input  
+                                                                               numero_respuesta ="<?php echo $i+1 ?>"
                                                                                placeholder="<?php echo $input->getControl()->getEjemplo() ?>" 
-                                                                               value="<?php echo $input->getRespuesta() ?>" 
+                                                                               value="<?php echo $input->getRespuesta($i+1) ?>" 
                                                                                id_input="<?php echo $input->getId() ?>" 
                                                                                tipo="<?php echo $input->getTipo() ?>" 
                                                                                id_pagina="<?php echo $input->getIdPagina() ?>"  
@@ -88,7 +89,7 @@
                                                                                <?php $validacion = strtolower($input->getControl()->getValidacion()) ?>
                                                                                type="<?php echo ($validacion != "" && $validacion != "validacion")?$validacion:"text" ?>" 
                                                                                id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
-                                                                        <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
+                                                                        <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta($i+1) ?>"/>
                                                                         <?php endfor; ?>
                                                                     <?php endif; ?>
                                                                     <?php elseif($input->getTipo()=="dropdown"):?>
@@ -543,11 +544,15 @@
 
                     if(respuesta.tipo == "texto"){
                         $(this).find("input[type=text]").each(function(){
-                            respuesta.id_input = $(this).attr("id_input");
-                            respuesta.texto = $(this).val();
-                            respuesta.nombre = $(this).attr("name");
-                            respuesta.id_pagina = $(this).attr("id_pagina");
-                            respuestas.push(respuesta);
+                            respuesta_temp = {};
+                            respuesta_temp.id = respuesta.id;
+                            respuesta_temp.tipo = respuesta.tipo;
+                            respuesta_temp.id_input = $(this).attr("id_input");
+                            respuesta_temp.numeroRespuesta = $(this).attr("numero_respuesta");
+                            respuesta_temp.texto = $(this).val();
+                            respuesta_temp.nombre = $(this).attr("name");
+                            respuesta_temp.id_pagina = $(this).attr("id_pagina");
+                            respuestas.push(respuesta_temp);
                         })
                     }else{
                         if(respuesta.tipo == "fecha"){

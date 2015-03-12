@@ -204,8 +204,8 @@ class FormularioDao {
         return $result;
     }
     
-    public function getRespuestaTexto($idInput,$idAlumno) {
-        $sql = "SELECT rt.texto as texto from respuesta_texto as rt "
+    public function getRespuestaTexto($idInput,$idAlumno,$numeroRespuestea="1") {
+        $sql = "SELECT rt.texto as texto, numero_respuesta from respuesta_texto as rt "
                 . "INNER JOIN respuestas as r on r.id = rt.id_respuesta "
                 . "WHERE r.id_input = $idInput "
                 . "AND r.estado = 1 "
@@ -218,13 +218,14 @@ class FormularioDao {
         if ($res) {
             $result = $res->execute();
             foreach ($result as $rres) {
-                foreach ($rres as $r) {
-                    return $r;
-                }
+                    $obj = new \stdClass();
+                    $obj->texto = $rres["texto"];
+                    $obj->numero_respuesta = $rres["numero_respuesta"];
+                    $results[]  = $obj;
             }
         }
 
-        return $result;
+        return $results;
     }
 
     public function getPaginas() {
@@ -304,14 +305,12 @@ class FormularioDao {
                 }
                 
                 $respuesta = $this->getRespuestaTexto($r["id"],$idAlumno);
+                if($unInput->getTipo() == "texto"){
+                    $unInput->setRespuesta($respuesta);
+                }
                 
                 if($unInput->getTipo() == "fecha"){
                     $respuesta = $this->getRespuestaFecha($r["id"],$idAlumno);
-                }
-                
-                $unInput->setRespuesta("");
-                
-                if (is_string($respuesta)) {
                     $unInput->setRespuesta($respuesta);
                 }
                 
