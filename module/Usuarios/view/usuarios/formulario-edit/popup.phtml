@@ -155,3 +155,18 @@
         margin-left: 0;
     }
 </style>
+<script>
+    var clickeada = false;
+    $(document).ready(function(){
+        $(document).on("click", "#myTab li", function(){
+            console.log("click"); 
+           if($(this).find("a").attr("tipo") == "imagen"){
+               if(!clickeada){
+                    $(".chzn-select").chosen(); 
+                    clickeada = true;
+               }
+           }
+        });
+        
+    });
+</script>

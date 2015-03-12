@@ -377,7 +377,7 @@ class FormularioDao {
             }
         }
         
-        return false;
+        return "";
     }
     
     public function getImagen($id){
@@ -395,7 +395,7 @@ class FormularioDao {
                 $input->setExtAllow($res["ext_allow"]);
                 $input->setIdInput($res["id_input"]);
                 $archivo = "";
-                $this->getRespuestaImagen($idUsuario,$res["id"]);
+                $archivo = $this->getRespuestaImagen($idUsuario,$res["id_input"]);
                 $input->setArchivo($archivo);
                 return $input;
             }

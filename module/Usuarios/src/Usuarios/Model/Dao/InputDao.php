@@ -417,13 +417,12 @@ class InputDao {
 
                 break;
             case "imagen":
-                /*$sql = "UPDATE input_imagen WHERE id_input=" . $entity->getIdInput() . "";
-
-                $result = $this->adapter->query($sql)->execute();
+                
+                $result = true;
+                
                 if ($result) {
                     $response->setError(false);
-                }*/
-
+                }
                 break;
             case "dropdown":
 

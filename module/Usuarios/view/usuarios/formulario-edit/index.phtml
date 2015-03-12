@@ -350,15 +350,6 @@
                         
             });
 
-            $(document).on("click", "#input-add-header .close", function () {
-                $.ajax({
-                    url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "deletetempselect")) ?>",
-                    success: function (data) {
-
-                    }
-                });
-            });
-
             $(document).on("click", "#add-select-value", function (e) {
                 e.preventDefault();
 
@@ -429,9 +420,7 @@
                                 .on('change', function () {
                                 });
                         
-                        setTimeout(function(){
-                            $(".chzn-select").chosen(); 
-                        },2000)
+                        //$(".chzn-select").chosen(); 
                         
                         t = "Largo";
                         v = 3;
@@ -488,7 +477,7 @@
                         var tipoinput = $(data).find("#tipoinput").val();
                         
                         $(".bootbox .modal-body").html(data);
-                        $(".chzn-select").chosen(); 
+                        //$(".chzn-select").chosen(); 
                         $(".bootbox .modal-body").find("#myTab li").each(function(){
                             anchor = $(this).find("a");
                             if(anchor.attr("tipo") == tipoinput){
@@ -560,16 +549,17 @@
                         });
                         
                         $(function () {
-                        $("#values-select").sortable({
-                            connectWith: "#values-select",
-                            stop: function ( ) {
-                                saveOrdenValue();
-                            }
+                            $("#values-select").sortable({
+                                connectWith: "#values-select",
+                                stop: function ( ) {
+                                    saveOrdenValue();
+                                }
+                            });
+                            $('#values-select input').bind('click.sortable mousedown.sortable', function (ev) {
+                                ev.target.focus();
+                            });
                         });
-                        $('#values-select input').bind('click.sortable mousedown.sortable', function (ev) {
-                            ev.target.focus();
-                        });
-                    });
+                        
                         var textareaval = $(".textarea-mention").val();
                         $('textarea.mention').val(textareaval);
                     }

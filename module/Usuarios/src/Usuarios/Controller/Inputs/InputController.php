@@ -193,9 +193,8 @@ class InputController extends AbstractActionController {
                         $unControl = new \Usuarios\Model\Entity\Fecha();
                         $unControl->setTipoFecha($input_data["tipo_fecha"]);
                         break;
-                    case "image":
-                        $unInput = new \Usuarios\Model\Entity\Imagen();
-                        
+                    case "imagen":
+                        $unControl = new \Usuarios\Model\Entity\Imagen();
                         break;
                     default:
                     default:
