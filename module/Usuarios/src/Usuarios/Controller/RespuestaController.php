@@ -44,7 +44,9 @@ class RespuestaController extends AbstractActionController {
     
     public function addsAction() {
         
-        $respuestas = $_POST;
+        $respuestas = json_decode($_POST["respuestas"]);
+        
+        $respuestas["files"] = $_FILES;
         
         $response = $this->dao->addRespuestas($respuestas);
         
