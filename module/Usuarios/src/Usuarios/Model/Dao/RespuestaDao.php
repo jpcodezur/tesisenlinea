@@ -24,24 +24,33 @@ class RespuestaDao {
         return $archivo;
     }
     
-    public function saveImagen($idRespuesta, $archivo,$update) {
+    public function saveImagen($idRespuesta, $archivo,$update,$estado) {
         
-        if($archivo){
+        if($archivo && $archivo != "imagen"){
             $archivo = mysql_escape_string(file_get_contents($archivo["tmp_name"]));
         }
         
         $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
-        
-        if(!$update){
-            $sql = "INSERT INTO respuesta_imagen (id_respuesta,archivo,id_usuario) VALUES ($idRespuesta,'".$archivo."','".$idUsuario."')";
+        if($estado == "baja"){
+            $sql = "UPDATE respuesta_imagen set archivo='' WHERE id_respuesta=".$idRespuesta." AND id_usuario = '".$idUsuario."'";
         }else{
-            $archivo_ant = $this->getCurrentFile($idRespuesta,$idUsuario);
-            if($archivo && $archivo != "imagen"){
-                $sql = "UPDATE respuesta_imagen set archivo='".$archivo."' WHERE id_respuesta=".$idRespuesta." AND id_usuario = '".$idUsuario."'";
+            if(!$update){
+                $sql = "INSERT INTO respuesta_imagen (id_respuesta,archivo,id_usuario) VALUES ($idRespuesta,'".$archivo."','".$idUsuario."')";
+            }else{
+                $archivo_ant = $this->getCurrentFile($idRespuesta,$idUsuario);
+                if($archivo && $archivo != "imagen"){
+                    $sql = "UPDATE respuesta_imagen set archivo='".$archivo."' WHERE id_respuesta=".$idRespuesta." AND id_usuario = '".$idUsuario."'";
+                }
+
             }
         }
         
-        $ret = $this->adapter->query($sql)->execute();
+        $ret = null;
+        
+        if($sql){
+            $ret = $this->adapter->query($sql)->execute();
+        }
+        
         return $ret;
     }
     
@@ -259,7 +268,8 @@ class RespuestaDao {
                                 $documento = $archivo;
                             }
                         }
-                        $res = $this->saveImagen($idRespuesta, $documento,$update);
+                        $estado = $respuesta->estado;
+                        $res = $this->saveImagen($idRespuesta, $documento,$update,$estado);
                     }
                 }
             //}

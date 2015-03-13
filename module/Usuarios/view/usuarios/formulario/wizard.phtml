@@ -66,7 +66,10 @@
                                                                     }
                                                                     
                                                                     if($input->getTipo()=="imagen"){
-                                                                            $tamanio = "22";
+                                                                        $tamanio = "22";
+                                                                        if($input->getControl()->getArchivo()){
+                                                                            $tamanio = "27";
+                                                                        }
                                                                     }
                                                                     
                                                                     ?>
@@ -154,16 +157,19 @@
                                                                         
                                                                     <?php elseif($input->getTipo()=="imagen"):?>
                                                                     <div class="widget-main">
-                                                                        <?php if(true): ?>
-                                                                            <img width="38" src="data:image/jpeg;base64,<?php echo base64_encode($input->getControl()->getArchivo()); ?>">
-                                                                        <?php endif; ?>
+                                                                        
                                                                             <input 
+                                                                                estado=""
                                                                                 type="file" 
                                                                                 id_input="<?php echo $input->getId() ?>" 
                                                                                 tipo="<?php echo $input->getTipo() ?>" 
                                                                                 id_pagina="<?php echo $input->getIdPagina() ?>"  
                                                                                 name="<?php echo $input->getNombre() ?>" 
-                                                                                id="id-input-file-2" <?php echo ($input->getRequired()) ? "required='required'" : "" ?> />
+                                                                                class="id-input-file" <?php echo ($input->getRequired()) ? "required='required'" : "" ?> />
+                                                                            <?php if($archivo = $input->getControl()->getArchivo()): ?>
+                                                                            <img class="imagen-control" width="38" src="data:image/jpeg;base64,<?php echo base64_encode($archivo); ?>">
+                                                                            <a href="#" class="remove remove-imagen"><i class="icon-remove"></i></a>
+                                                                        <?php endif; ?>
                                                                     </div>
                                                                     <?php endif;?>
                                                                     <?php if($input->getAyuda()):?>    
@@ -274,6 +280,16 @@
     </div><!--/.row-fluid-->
 </div><!--/.page-content-->
 <style>
+    .ace-file-input{
+        float: left;
+    }
+    .imagen-control {
+        border: 3px solid #438eb9;
+        float: left;
+        height: 36px;
+        margin-right: 5px;
+        margin-top: -6px;
+    }
     .tooltip-inner {
         max-width: 250px !important;
         width: 250px;
@@ -554,11 +570,12 @@
                             
                         }else{
                             if(respuesta.tipo == "imagen"){
-                                
-                                formData.append("fileName",$("#id-input-file-2")[0].files[0]);
+                                var nombre = $(this).find("input[type=file]").attr("name");
+                                formData.append(nombre,$(this).find("input[type=file]")[0].files[0]);
                                 respuesta.id_input = $(this).find("input[type=file]").attr("id_input");
                                 respuesta.archivo = $(this).find("input[type=file]").val();
                                 respuesta.nombre = $(this).find("input[type=file]").attr("name");
+                                respuesta.estado = $(this).find("input[type=file]").attr("estado");
                                 respuesta.id_pagina = $(this).find("input[type=file]").attr("id_pagina");
                                 //respuesta.archivo = imagen;
                             }else{
@@ -608,9 +625,14 @@
         
         function huboCambiosEnInputs(){
             var cambios = false;
+            $(".inputs-respuestas").find("input[type=file]").each(function(){
+                console.log($(this).attr("estado"));
+                if($(this).attr("estado") != ""){
+                    cambios = true;
+                }
+            });
             $(".inputs-respuestas").each(function(){
                 obj = $(this).find("input[tipo=texto]");
-                
                 if(obj.length){
                     if(obj.length == 1){
                         a = obj.val() + "";
@@ -795,7 +817,11 @@
                 $(this).next().focus();
         });
         
-        $('#id-input-file-1 , #id-input-file-2').ace_file_input({
+        $('.id-input-file').change(function(){
+            $(this).attr("estado","change");
+        })
+        
+        $('.id-input-file').ace_file_input({
                 no_file:'No File ...',
                 btn_choose:'Choose',
                 btn_change:'Change',
@@ -807,6 +833,12 @@
                 //onchange:''
                 //
         });
-
+        
+        $(".remove-imagen").click(function(e){
+            e.preventDefault();
+            $(this).prev().remove();
+            $(this).parent().find("input[type=file]").attr("estado","baja");
+            $(this).remove();
+        })
     });
 </script>
