@@ -54,11 +54,27 @@ class RespuestaDao {
         return $ret;
     }
     
-    public function saveTexto($idRespuesta, $texto,$update) {
+    public function buscarRespuestasPorNumero($idRespuesta,$numeroRespuesta){
+        $sql = "SELECT id FROM respuesta_texto WHERE id_respuesta = $idRespuesta AND numero_respuesta=$numeroRespuesta";
+        $ret = $this->adapter->query($sql)->execute();
+        foreach($res as $r){
+            return $r["id"];
+        }
+        
+        return false;
+    }
+    
+    public function saveTexto($idRespuesta, $texto,$update,$numeroRespuesta="1") {
+        $exist = $this->buscarRespuestasPorNumero($idRespuesta,$numeroRespuesta);
+        
+        if(!$exist){
+            $update = false;
+        }
+        
         if(!$update){
-            $sql = "INSERT INTO respuesta_texto (id_respuesta,texto) VALUES ($idRespuesta,'".$texto."')";
+            $sql = "INSERT INTO respuesta_texto (id_respuesta,texto,numero_respuesta) VALUES ($idRespuesta,'".$texto."','".$numeroRespuesta."')";
         }else{
-            $sql = "UPDATE respuesta_texto set texto='".$texto."' WHERE id_respuesta=".$idRespuesta;
+            $sql = "UPDATE respuesta_texto set texto='".$texto."' WHERE id_respuesta=".$idRespuesta." AND numero_respuesta=".$numeroRespuesta;
         }
         
         return $this->adapter->query($sql)->execute();
@@ -230,7 +246,7 @@ class RespuestaDao {
         $response->setError(false);
 
         foreach ($post as $respuesta) {
-            //foreach ($respuestas as $respuesta) {
+            //varias_respuestas
                 $idInput = $respuesta->id_input;
                 $tipo = $respuesta->tipo;
                 $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
@@ -253,7 +269,11 @@ class RespuestaDao {
 
                 if ($res) {
                     if ($tipo == "texto") {
-                        $res = $this->saveTexto($idRespuesta, $texto,$update);
+                        $numeroRespuesta = $respuesta->numeroRespuesta;
+                        if($texto == "f1" || $texto == "f2"|| $texto == "f3" || $texto == "f4"){
+                            $a = 0;
+                        }
+                        $res = $this->saveTexto($idRespuesta, $texto,$update,$numeroRespuesta);
                     }elseif ($tipo == "dropdown") {
                         $res = $this->saveDropdown($idRespuesta, $texto,$update);
                     }elseif ($tipo == "fecha") {

@@ -63,8 +63,17 @@ class Input {
         $this->ayuda = $ayuda;
     }
 
-    function getRespuesta() {
-        return $this->respuesta;
+    function getRespuesta($id=1) {
+        $id = $id;
+        if(is_array($this->respuesta)){
+        foreach($this->respuesta as $r){
+            if($r->numero_respuesta == $id){
+                return $r->texto;
+            }
+        }
+        }else{
+            return $this->respuesta;
+        }
     }
 
     function setRespuesta($respuesta) {
