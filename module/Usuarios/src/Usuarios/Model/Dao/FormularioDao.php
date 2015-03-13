@@ -331,6 +331,10 @@ class FormularioDao {
                         $fecha = $this->getFecha($unInput->getId());
                         $unInput->setControl($fecha);
                         break;
+                    case "imagen":
+                        $imagen = $this->getImagen($unInput->getId());
+                        $unInput->setControl($imagen);
+                        break;
                     default:
                         break;
                 }
@@ -352,6 +356,47 @@ class FormularioDao {
             foreach ($result as $res) {
                 $input->setId($res["id"]);
                 $input->setTipoFecha($res["tipo_fecha"]);
+                return $input;
+            }
+        }
+
+        return $input;
+    }
+    
+    public function getRespuestaImagen($idUsuario,$idInput){
+        
+        $sql = "SELECT ri.archivo from respuesta_imagen as ri "
+                . "INNER JOIN respuestas as r on r.id = ri.id_respuesta "
+                . "INNER JOIN inputs as i on i.id = r.id_input "
+                . "WHERE ri.id_usuario = $idUsuario AND r.id_input = $idInput";
+        
+        $result = $this->adapter->query($sql)->execute();
+        if ($result) {
+            foreach ($result as $res) {
+                return $res["archivo"];
+            }
+        }
+        
+        return false;
+    }
+    
+    public function getImagen($id){
+        $input = new \Usuarios\Model\Entity\Imagen();
+
+        $sql = "SELECT * FROM input_imagen WHERE id_input=" . $id;
+
+        $result = $this->adapter->query($sql)->execute();
+        $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
+        
+        if ($result) {
+            foreach ($result as $res) {
+                $input->setId($res["id"]);
+                $input->setMaxSize($res["max_size"]);
+                $input->setExtAllow($res["ext_allow"]);
+                $input->setIdInput($res["id_input"]);
+                $archivo = "";
+                $this->getRespuestaImagen($idUsuario,$res["id"]);
+                $input->setArchivo($archivo);
                 return $input;
             }
         }

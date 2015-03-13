@@ -13,6 +13,38 @@ class RespuestaDao {
         $this->adapter = $adapter;
     }
 
+    public function getCurrentFile($idRespuesta,$idUsuario){
+        $sql = "SELECT archivo FROM respuesta_imagen WHERE id_respuesta = $idRespuesta AND id_usuario=".$idUsuario."";
+        $res = $this->adapter->query($sql)->execute();
+        $archivo = false;
+        foreach($res as $r){
+            $archivo = $r["archivo"];
+        }
+        
+        return $archivo;
+    }
+    
+    public function saveImagen($idRespuesta, $archivo,$update) {
+        
+        if($archivo){
+            $archivo = mysql_escape_string(file_get_contents($archivo["tmp_name"]));
+        }
+        
+        $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
+        
+        if(!$update){
+            $sql = "INSERT INTO respuesta_imagen (id_respuesta,archivo,id_usuario) VALUES ($idRespuesta,'".$archivo."','".$idUsuario."')";
+        }else{
+            $archivo_ant = $this->getCurrentFile($idRespuesta,$idUsuario);
+            if($archivo && $archivo != "imagen"){
+                $sql = "UPDATE respuesta_imagen set archivo='".$archivo."' WHERE id_respuesta=".$idRespuesta." AND id_usuario = '".$idUsuario."'";
+            }
+        }
+        
+        $ret = $this->adapter->query($sql)->execute();
+        return $ret;
+    }
+    
     public function saveTexto($idRespuesta, $texto,$update) {
         if(!$update){
             $sql = "INSERT INTO respuesta_texto (id_respuesta,texto) VALUES ($idRespuesta,'".$texto."')";
@@ -188,12 +220,12 @@ class RespuestaDao {
         $response = new \Usuarios\MisClases\Respuesta();
         $response->setError(false);
 
-        foreach ($post as $respuestas) {
-            foreach ($respuestas as $respuesta) {
-                $idInput = $respuesta["id_input"];
-                $tipo = $respuesta["tipo"];
+        foreach ($post as $respuesta) {
+            //foreach ($respuestas as $respuesta) {
+                $idInput = $respuesta->id_input;
+                $tipo = $respuesta->tipo;
                 $idUsuario = $_SESSION["miSession"]["usuario"]->getId();
-                $texto = $respuesta["texto"];
+                $texto = $respuesta->texto;
                 $connection = $this->adapter->getDriver()->getConnection();
 
                 $update = $this->search($idInput,$idUsuario);
@@ -216,12 +248,21 @@ class RespuestaDao {
                     }elseif ($tipo == "dropdown") {
                         $res = $this->saveDropdown($idRespuesta, $texto,$update);
                     }elseif ($tipo == "fecha") {
-                        $desde = $respuesta["desde"];
-                        $hasta = $respuesta["hasta"];
+                        $desde = $respuesta->desde;
+                        $hasta = $respuesta->hasta;
                         $res = $this->saveFecha($idRespuesta, $desde,$hasta,$update);//($idRespuesta, $texto,$update);
+                    }elseif ($tipo == "imagen") {
+                        $documento = $respuesta->archivo;
+                        foreach($post["files"] as $archivo){
+                            $n = $archivo["name"];
+                            if($n == $documento){
+                                $documento = $archivo;
+                            }
+                        }
+                        $res = $this->saveImagen($idRespuesta, $documento,$update);
                     }
                 }
-            }
+            //}
         }
         
         if ($res) {

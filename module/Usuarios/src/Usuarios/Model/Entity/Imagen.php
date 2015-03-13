@@ -7,7 +7,26 @@ class Imagen {
     private $id;
     private $idInput;
     private $archivo;
+    private $maxSize;
+    private $extAllow;
     
+    function getMaxSize() {
+        return $this->maxSize;
+    }
+
+    function getExtAllow() {
+        return $this->extAllow;
+    }
+
+    function setMaxSize($maxSize) {
+        $this->maxSize = $maxSize;
+    }
+
+    function setExtAllow($extAllow) {
+        $this->extAllow = $extAllow;
+    }
+
+        
     function getId() {
         return $this->id;
     }

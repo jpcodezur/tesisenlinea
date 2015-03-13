@@ -82,6 +82,7 @@
         <div class="tab-content">
             <div id="home" class="tab-pane in active">
                 <div class="widget-main">
+                    <?php if($this->input->getTipo()=="texto"):?>
                     <input type="text" name="ejemplo" placeholder="Ejemplo" value="<?php echo $this->input->getControl()->getEjemplo()?>">
                     <select class="validacion">
                         <option>Validacion</option>
@@ -91,6 +92,7 @@
                     <label>Respuestas requeridas</label>
                     <input type="text" class="input-mini" id="numero-respuestas"  value="<?php echo ($this->input->getTipo()=="texto")?$this->input->getControl()->getRespuestasRequeridas():"1"; ?>"/>
                     <div class="space-6"></div>
+                    <?php endif; ?>
                 </div>
             </div>
 

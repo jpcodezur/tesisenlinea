@@ -41,7 +41,7 @@
                                         <?php foreach ($this->paginas as $pagina): ?>
                                             <div class="step-pane <?php echo ($count === 1 ) ? "active" : "" ?>" id="step<?php echo $count ?>">
                                                 <h4 class="header green"><?php echo $pagina->getTitulo() ?></h4>
-                                                <form class="form-horizontal" id="sample-form" >
+                                                <form enctype="multipart/form-data" class="form-horizontal" id="sample-form" >
                                                     <?php foreach ($pagina->getInputs() as $input): ?>
                                                         <div class="control-group inputs-respuestas">
                                                             <label nom="<?php echo $input->getNombre() ?>" id="label-<?php echo $input->getNombre() ?>" class="control-label" for=""><?php echo $input->getLabel() ?></label>
@@ -66,26 +66,28 @@
                                                                     }
                                                                     
                                                                     if($input->getTipo()=="imagen"){
-                                                                            $tamanio = "20";
+                                                                            $tamanio = "22";
                                                                     }
                                                                     
                                                                     ?>
                                                                 <span class="span6 input-icon input-icon-right" style="width: <?php echo $tamanio ?>% !important">
                                                                     <?php if($input->getTipo()=="texto"):?>
                                                                         <?php if($input->getControl()->getRespuestasRequeridas() > 0 ):?>
-                                                                    <input  
-                                                                           placeholder="<?php echo $input->getControl()->getEjemplo() ?>" 
-                                                                           value="<?php echo $input->getRespuesta() ?>" 
-                                                                           id_input="<?php echo $input->getId() ?>" 
-                                                                           tipo="<?php echo $input->getTipo() ?>" 
-                                                                           id_pagina="<?php echo $input->getIdPagina() ?>"  
-                                                                           name="<?php echo $input->getNombre() ?>" 
-                                                                           class="span12 <?php echo ($input->getIsMagic())?"isMagic":"" ?>" 
-                                                                           <?php $validacion = strtolower($input->getControl()->getValidacion()) ?>
-                                                                           type="<?php echo ($validacion != "" && $validacion != "validacion")?$validacion:"text" ?>" 
-                                                                           id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
-                                                                        <?php endif; ?>
-                                                                    <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
+                                                                        <?php for($i = 0; $i < $input->getControl()->getRespuestasRequeridas(); $i++):?>
+                                                                        <input  
+                                                                               placeholder="<?php echo $input->getControl()->getEjemplo() ?>" 
+                                                                               value="<?php echo $input->getRespuesta() ?>" 
+                                                                               id_input="<?php echo $input->getId() ?>" 
+                                                                               tipo="<?php echo $input->getTipo() ?>" 
+                                                                               id_pagina="<?php echo $input->getIdPagina() ?>"  
+                                                                               name="<?php echo $input->getNombre() ?>" 
+                                                                               class="span12 <?php echo ($input->getIsMagic())?"isMagic":"" ?>" 
+                                                                               <?php $validacion = strtolower($input->getControl()->getValidacion()) ?>
+                                                                               type="<?php echo ($validacion != "" && $validacion != "validacion")?$validacion:"text" ?>" 
+                                                                               id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
+                                                                        <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta() ?>"/>
+                                                                        <?php endfor; ?>
+                                                                    <?php endif; ?>
                                                                     <?php elseif($input->getTipo()=="dropdown"):?>
                                                                     <?php
                                                                     $sc = "";
@@ -152,7 +154,16 @@
                                                                         
                                                                     <?php elseif($input->getTipo()=="imagen"):?>
                                                                     <div class="widget-main">
-                                                                            <input type="file" id="id-input-file-2" />
+                                                                        <?php if(true): ?>
+                                                                            <img width="38" src="data:image/jpeg;base64,<?php echo base64_encode($input->getControl()->getArchivo()); ?>">
+                                                                        <?php endif; ?>
+                                                                            <input 
+                                                                                type="file" 
+                                                                                id_input="<?php echo $input->getId() ?>" 
+                                                                                tipo="<?php echo $input->getTipo() ?>" 
+                                                                                id_pagina="<?php echo $input->getIdPagina() ?>"  
+                                                                                name="<?php echo $input->getNombre() ?>" 
+                                                                                id="id-input-file-2" <?php echo ($input->getRequired()) ? "required='required'" : "" ?> />
                                                                     </div>
                                                                     <?php endif;?>
                                                                     <?php if($input->getAyuda()):?>    
@@ -283,6 +294,9 @@
     }
     .input-append .add-on{
         width: 25px;
+    }
+    .input-icon.input-icon-right > input {
+        margin-bottom: 2px;
     }
 </style>
 <script>
@@ -493,6 +507,7 @@
         }
         
         function saveRespuestas(){
+            var formData = new FormData();
             var huboCambios = huboCambiosEnInputs();    
             if(huboCambios){
                 respuestas = [];
@@ -501,26 +516,30 @@
 
                     respuesta.id = $(this).find("input[type=text]").attr("id");
                     respuesta.tipo = $(this).find("input[type=text]").attr("tipo");
-                    tipo = "text";
                     
                     if(!respuesta.tipo || respuesta.tipo == "undefined"){
                         respuesta.tipo = $(this).find("input[type=email]").attr("tipo");
-                        tipo = "email";
                     }
                     
+                    if(!respuesta.tipo || respuesta.tipo == "undefined"){
+                        respuesta.tipo = $(this).find("input[type=file]").attr("tipo");
+                    }
 
                     if(respuesta.tipo == "texto"){
-                        respuesta.id_input = $(this).find("input[type="+tipo+"]").attr("id_input");
-                        respuesta.texto = $(this).find("input[type="+tipo+"]").val();
-                        respuesta.nombre = $(this).find("input[type="+tipo+"]").attr("name");
-                        respuesta.id_pagina = $(this).find("input[type="+tipo+"]").attr("id_pagina");
+                        $(this).find("input[type=text]").each(function(){
+                            respuesta.id_input = $(this).attr("id_input");
+                            respuesta.texto = $(this).val();
+                            respuesta.nombre = $(this).attr("name");
+                            respuesta.id_pagina = $(this).attr("id_pagina");
+                            respuestas.push(respuesta);
+                        })
                     }else{
                         if(respuesta.tipo == "fecha"){
                             tipo = $(this).find(".fechadatepicker").attr("tipofecha");
-                            respuesta.id_input = $(this).find("input[type="+tipo+"]").attr("id_input");
-                            respuesta.texto = $(this).find("input[type="+tipo+"]").val();
-                            respuesta.nombre = $(this).find("input[type="+tipo+"]").attr("name");
-                            respuesta.id_pagina = $(this).find("input[type="+tipo+"]").attr("id_pagina");
+                            respuesta.id_input = $(this).find(".fechadatepicker").attr("id_input");
+                            respuesta.texto = $(this).find(".fechadatepicker").val();
+                            respuesta.nombre = $(this).find(".fechadatepicker").attr("name");
+                            respuesta.id_pagina = $(this).find(".fechadatepicker").attr("id_pagina");
                             if(tipo == "simple"){
                                 val = $(this).find(".fechadatepicker").val();
                                 respuesta.desde = val;
@@ -534,22 +553,39 @@
                             }
                             
                         }else{
-                            respuesta.tipo = $(this).find("select").attr("tipo");
-                            respuesta.nombre = $(this).find("select").attr("name");
-                            respuesta.id_pagina = $(this).find("select").attr("id_pagina");
-                            respuesta.id_input = $(this).find("select").attr("id_input");
-
-
-                            if(!$(this).find(".chzn-select").length){
-                                respuesta.texto = $(this).find("select option:selected").val();
+                            if(respuesta.tipo == "imagen"){
+                                
+                                formData.append("fileName",$("#id-input-file-2")[0].files[0]);
+                                respuesta.id_input = $(this).find("input[type=file]").attr("id_input");
+                                respuesta.archivo = $(this).find("input[type=file]").val();
+                                respuesta.nombre = $(this).find("input[type=file]").attr("name");
+                                respuesta.id_pagina = $(this).find("input[type=file]").attr("id_pagina");
+                                //respuesta.archivo = imagen;
                             }else{
-                                respuesta.texto = $(this).find(".chzn-select").val()
+                                respuesta.tipo = $(this).find("select").attr("tipo");
+                                respuesta.nombre = $(this).find("select").attr("name");
+                                respuesta.id_pagina = $(this).find("select").attr("id_pagina");
+                                respuesta.id_input = $(this).find("select").attr("id_input");
+
+
+                                if(!$(this).find(".chzn-select").length){
+                                    respuesta.texto = $(this).find("select option:selected").val();
+                                }else{
+                                    respuesta.texto = $(this).find(".chzn-select").val()
+                                }
                             }
+                            
                         }
                     }
-
-                    respuestas.push(respuesta);
+                    
+                    if(respuesta.tipo != "texto"){
+                        respuestas.push(respuesta);
+                    }
                 });
+                
+                console.log(JSON.stringify(respuestas));
+                
+                formData.append("respuestas",JSON.stringify(respuestas));
 
                 $(".main-container").css("opacity",0.3);
                 $("#ajax_loader").show();
@@ -557,7 +593,10 @@
                 $.ajax({
                     url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "adds")) ?>",
                     type:"post",
-                    data:{respuestas:respuestas},
+                    data : formData,
+                    contentType : false,
+                    processData : false,
+                    /*data:{respuestas:respuestas,imagen:imagen},*/
                     success:function(data){
                         actualizoLabels();
                     }
@@ -573,12 +612,24 @@
                 obj = $(this).find("input[tipo=texto]");
                 
                 if(obj.length){
-                    a = obj.val() + "";
-                    b = $(this).find("input[type=hidden]").val() + "";
-                    if(a !== b){
-                        console.log("obj in1: "+obj.val());
-                        cambios = true;
-                        $(this).find("input[type=hidden]").val(a)
+                    if(obj.length == 1){
+                        a = obj.val() + "";
+                        b = $(this).find("input[type=hidden]").val() + "";
+                        if(a !== b){
+                            console.log("obj in1: "+obj.val());
+                            cambios = true;
+                            $(this).find("input[type=hidden]").val(a)
+                        }
+                    }else{
+                        $(this).find("input[tipo=texto]").each(function(){
+                            a = $(this).val() + "";
+                            b = $(this).next().val() + "";
+                            if(a !== b){
+                                console.log("obj in1: "+$(this).val());
+                                cambios = true;
+                                $(this).next().val(a)
+                            }
+                        });
                     }
                 }else{
                     
@@ -667,6 +718,8 @@
         
         $(".btn-next").mousedown(function(){
             $("#sample-form").submit();
+            var r = $('#sample-form').valid();
+            console.log("valid: "+r);
             if($('#sample-form').valid()){
                 saveRespuestas();
             }
@@ -754,5 +807,6 @@
                 //onchange:''
                 //
         });
+
     });
 </script>
