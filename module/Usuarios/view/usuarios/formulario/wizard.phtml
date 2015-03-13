@@ -33,9 +33,19 @@
                                                 <?php $count++; ?>
                                             <?php endforeach; ?>
                                         </ul>
+                                            <div class="row-fluid wizard-actions wizard-actions-top">
+                                                <a class="btn btn-prev">
+                                                    <i class="icon-arrow-left"></i>
+                                                    Prev
+                                                </a>
+
+                                                <a class="btn btn-success btn-next" data-last="Finish ">
+                                                    Next
+                                                    <i class="icon-arrow-right icon-on-right"></i>
+                                                </a>
+                                            </div>
                                     </div>
 
-                                    <hr />
                                     <div class="step-content row-fluid position-relative" id="step-container">
                                         <?php $count = 1; ?>
                                         <?php foreach ($this->paginas as $pagina): ?>
@@ -166,7 +176,7 @@
                                                                                 tipo="<?php echo $input->getTipo() ?>" 
                                                                                 id_pagina="<?php echo $input->getIdPagina() ?>"  
                                                                                 name="<?php echo $input->getNombre() ?>" 
-                                                                                class="id-input-file" <?php echo ($input->getRequired()) ? "required='required'" : "" ?> />
+                                                                                class="id-input-file" <?php //echo ($input->getRequired()) ? "required='required'" : "" ?> />
                                                                             <?php if($archivo = $input->getControl()->getArchivo()): ?>
                                                                             <img class="imagen-control" width="38" src="data:image/jpeg;base64,<?php echo base64_encode($archivo); ?>">
                                                                             <a href="#" class="remove remove-imagen"><i class="icon-remove"></i></a>
@@ -281,6 +291,10 @@
     </div><!--/.row-fluid-->
 </div><!--/.page-content-->
 <style>
+    .wizard-actions-top {
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
     .ace-file-input{
         float: left;
     }
@@ -406,6 +420,14 @@
     }
 
     $(document).ready(function () {
+        
+        $(document).on("click", ".wizard-actions-top a.btn-prev", function () {
+            $("button.btn-prev").trigger("click");
+        })
+
+        $(document).on("click", ".wizard-actions-top a.btn-next", function () {
+            $("button.btn-next").trigger("click");
+        })
         
         $(".wizard-steps").hide();
         
@@ -760,7 +782,9 @@
             rules: {
                 <?php foreach ($this->paginas as $pagina): ?>
                     <?php foreach ($pagina->getInputs() as $input): ?>
-                        <?php echo ($input->getRequired())?$input->getNombre().": 'required',":"" ?><?php echo "\n"?>
+                        <?php if($input->getTipo()!= "imagen"):?>
+                            <?php echo ($input->getRequired())?$input->getNombre().": 'required',":"" ?><?php echo "\n"?>
+                        <?php endif;?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
             },
@@ -837,6 +861,15 @@
                 //blacklist:'exe|php'
                 //onchange:''
                 //
+        });
+        
+        $(function(){
+           $(".id-input-file").each(function(){
+               var img = $(this).parent().find("imagen-control")
+               if(!img.length){
+                   $(this).val("imagen");   
+               }
+           }) 
         });
         
         $(".remove-imagen").click(function(e){
