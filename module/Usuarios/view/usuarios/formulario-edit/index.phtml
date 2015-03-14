@@ -44,9 +44,19 @@
                                                 <?php $count++; ?>
                                             <?php endforeach; ?>
                                         </ul>
+                                        <div class="row-fluid wizard-actions wizard-actions-top">
+                                            <a class="btn btn-prev">
+                                                <i class="icon-arrow-left"></i>
+                                                Prev
+                                            </a>
+
+                                            <a class="btn btn-success btn-next" data-last="Finish ">
+                                                Next
+                                                <i class="icon-arrow-right icon-on-right"></i>
+                                            </a>
+                                        </div>
                                     </div>
 
-                                    <hr />
                                     <div class="step-content row-fluid position-relative" id="step-container">
 
                                         <div class="widget-header widget-header-blue widget-header-flat">
@@ -183,10 +193,13 @@
     </div><!--/.row-fluid-->
 </div><!--/.page-content-->
 <form method="post" id="form_reload_page">
-    <input type="hidden" name="last_page" value="<?php echo (isset($_POST["last_page"]))?$_POST["last_page"]:"0" ?>">
+    <input type="hidden" name="last_page" value="<?php echo (isset($_POST["last_page"])) ? $_POST["last_page"] : "0" ?>">
 </form>
 <style>
-    
+    .wizard-actions-top {
+        margin-bottom: 10px;
+        margin-top: 20px;
+    }
     .table-popup{
         margin-bottom: 10px;
     }
@@ -220,7 +233,7 @@
         margin-bottom: 10px !important;
         overflow: hidden;
     }
-    
+
     .mentions-input-box .mentions > div{
         font-size: 13px !important; 
         font-weight: normal;
@@ -240,7 +253,7 @@
     .mentions-input-box .mentions > div > strong {
         background: none repeat scroll 0 0 steelblue !important;
     }
-    
+
     .modal-body h3{
         margin:0 5px 0 5px;
     }
@@ -266,45 +279,55 @@
     .item-input strong{
         margin-right: 6px;
     }
-    
+
     .select-value-input input[type=text]{
         background-color: #d9edf7;
         border:none;
         margin:0;
     }
     .select-value-input input[type=text]{:disabled {
-        background-color: #d9edf7 !important;
-    }
-    #values-select{
-        margin-top: 10px;
-    }
-    select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-        margin-bottom: 10px !important;
-    }
-    
+                                             background-color: #d9edf7 !important;
+                                         }
+                                         #values-select{
+                                             margin-top: 10px;
+                                         }
+                                         select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+                                             margin-bottom: 10px !important;
+                                         }
+
     </style>
     <script>
         $(document).ready(function () {
-            
+
+            $(document).on("click", ".wizard-actions-top a.btn-prev", function () {
+                console.log("t1");
+                $("button.btn-prev").trigger("click");
+            })
+
+            $(document).on("click", ".wizard-actions-top a.btn-next", function () {
+                console.log("t2");
+                $("button.btn-next").trigger("click");
+            })
+
             $(".wizard-steps").hide();
-        
+
             actualizoPaginas();
 
             $(".wizard-steps").show();
-            
-            $(document).on("focus",".modal-body input[type=text]",function(){
+
+            $(document).on("focus", ".modal-body input[type=text]", function () {
                 $(".modal-body .alert-danger").remove();
             })
-            
-            if($("input[name=last_page]").val()){
-                $(".wizard-steps li").each(function(){
-                    if($(this).attr("id_page")==$("input[name=last_page]").val()){
+
+            if ($("input[name=last_page]").val()) {
+                $(".wizard-steps li").each(function () {
+                    if ($(this).attr("id_page") == $("input[name=last_page]").val()) {
                         $(this).addClass("complete");
                         $(this).click();
                     }
                 })
             }
-            
+
             $(document).on("click", ".del-input-select-value-on-edit", function (e) {
                 e.preventDefault();
                 inp = $(this);
@@ -318,7 +341,7 @@
                             }
                         })
                     } else {
-                         inp.parent().parent().parent().remove();
+                        inp.parent().parent().parent().remove();
 
 
                     }
@@ -345,9 +368,9 @@
             $(document).on("click", ".edit-input-select-value", function (e) {
                 e.preventDefault();
                 var input = $(this).parent().parent().find("input[class=value-option]");
-                        input.attr("disabled", false);
-                        input.focus();
-                        
+                input.attr("disabled", false);
+                input.focus();
+
             });
 
             $(document).on("click", "#add-select-value", function (e) {
@@ -369,7 +392,7 @@
                             '<button data-dismiss="alert" class="close" type="button">' +
                             '<i class="ace-icon fa fa-times"></i>' +
                             '</button>' +
-                            '<input id_select="'+idselect+'" id_input="' + idunput + '" name="input-select-value-' + idunput + '" id="input-select-value-' + idunput + '" class="value-option" type="text" value="' + valor + '" disabled="disabled">' +
+                            '<input id_select="' + idselect + '" id_input="' + idunput + '" name="input-select-value-' + idunput + '" id="input-select-value-' + idunput + '" class="value-option" type="text" value="' + valor + '" disabled="disabled">' +
                             '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
                             '<a id="" class="red remove del-input-select-value" style="">' +
                             '<i class="icon-trash bigger-130"></i>' +
@@ -410,7 +433,7 @@
                     success: function (data) {
 
                         $(".bootbox .modal-body").html(data);
-                        
+
                         $('#numero-respuestas')
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
@@ -419,25 +442,25 @@
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
                                 });
-                        
+
                         //$(".chzn-select").chosen(); 
-                        
+
                         t = "Largo";
                         v = 3;
-                        
-                        $( "#input-size-slider" ).css('width','200px').slider({
-                                value:v,
-                                range: "min",
-                                min: 1,
-                                max: 3,
-                                step: 1,
-                                slide: function( event, ui ) {
-                                        var sizing = ['', 'Pequeño', 'Mediano', 'Largo'];
-                                        var val = parseInt(ui.value);
-                                        $("#tamanio-label").text(sizing[val]);
-                                }
+
+                        $("#input-size-slider").css('width', '200px').slider({
+                            value: v,
+                            range: "min",
+                            min: 1,
+                            max: 3,
+                            step: 1,
+                            slide: function (event, ui) {
+                                var sizing = ['', 'Pequeño', 'Mediano', 'Largo'];
+                                var val = parseInt(ui.value);
+                                $("#tamanio-label").text(sizing[val]);
+                            }
                         });
-                        
+
                         $(document).on("change", "#esmulti", function () {
 
                             if ($(this).is(":checked")) {
@@ -473,14 +496,14 @@
                     url: "formulario_edit/popupeditinput",
                     data: {idinput: idinput},
                     success: function (data) {
-                        
+
                         var tipoinput = $(data).find("#tipoinput").val();
-                        
+
                         $(".bootbox .modal-body").html(data);
                         //$(".chzn-select").chosen(); 
-                        $(".bootbox .modal-body").find("#myTab li").each(function(){
+                        $(".bootbox .modal-body").find("#myTab li").each(function () {
                             anchor = $(this).find("a");
-                            if(anchor.attr("tipo") == tipoinput){
+                            if (anchor.attr("tipo") == tipoinput) {
                                 anchor.trigger("click");
                             }
                         })
@@ -494,34 +517,34 @@
                                 .ace_spinner({value: 1, min: 0, max: 200, step: 1, btn_up_class: 'btn-info', btn_down_class: 'btn-info'})
                                 .on('change', function () {
                                 });
-                        
+
                         t = $("#tamanio-hidden").val();
-                        
+
                         v = 1;
-                        
-                        if(t == "Largo"){
+
+                        if (t == "Largo") {
                             v = 3;
                         }
-                        if(t == "Mediano"){
+                        if (t == "Mediano") {
                             v = 2;
                         }
-                        if(t == "Pequeño"){
+                        if (t == "Pequeño") {
                             v = 1;
                         }
-                        
+
                         $("#tamanio-label").text(t);
-                        
-                        $( "#input-size-slider" ).css('width','200px').slider({
-                                value:v,
-                                range: "min",
-                                min: 1,
-                                max: 3,
-                                step: 1,
-                                slide: function( event, ui ) {
-                                        var sizing = ['', 'Pequeño', 'Mediano', 'Largo'];
-                                        var val = parseInt(ui.value);
-                                        $("#tamanio-label").text(sizing[val]);
-                                }
+
+                        $("#input-size-slider").css('width', '200px').slider({
+                            value: v,
+                            range: "min",
+                            min: 1,
+                            max: 3,
+                            step: 1,
+                            slide: function (event, ui) {
+                                var sizing = ['', 'Pequeño', 'Mediano', 'Largo'];
+                                var val = parseInt(ui.value);
+                                $("#tamanio-label").text(sizing[val]);
+                            }
                         });
 
                         $(document).on("change", "#esmulti", function () {
@@ -532,7 +555,7 @@
                                 $("#numero-respuestas-select").attr("disabled", true);
                             }
                         });
-                        
+
                         $(function () {
                             $('textarea.mention').mentionsInput({
                                 onDataRequest: function (mode, query, callback) {
@@ -547,7 +570,7 @@
                             });
 
                         });
-                        
+
                         $(function () {
                             $("#values-select").sortable({
                                 connectWith: "#values-select",
@@ -559,7 +582,7 @@
                                 ev.target.focus();
                             });
                         });
-                        
+
                         var textareaval = $(".textarea-mention").val();
                         $('textarea.mention').val(textareaval);
                     }
@@ -582,7 +605,7 @@
                             },
                             success: function (data) {
                                 var respuesta = data[0];
-                                item.remove();                        
+                                item.remove();
                                 $('.bootbox').modal('toggle');
                             }
                         });
@@ -637,7 +660,7 @@
                                     setTimeout(function () {
                                         $('.bootbox').modal('toggle');
                                         //window.location.reload();
-                                        $("input[name=last_page]").val( $("ul.wizard-steps li.active").attr("id_page") );
+                                        $("input[name=last_page]").val($("ul.wizard-steps li.active").attr("id_page"));
                                         $("#form_reload_page").submit();
                                     }, 2000);
                                 }
@@ -690,7 +713,7 @@
                             setTimeout(function () {
                                 $('.bootbox').modal('toggle');
                                 //window.location.reload();
-                                $("input[name=last_page]").val( $("ul.wizard-steps li.active").attr("id_page") );
+                                $("input[name=last_page]").val($("ul.wizard-steps li.active").attr("id_page"));
                                 $("#form_reload_page").submit();
                             }, 2000);
                         }
@@ -716,7 +739,7 @@
                     input_data.ejemplo = $("input[name=ejemplo]").val();
                     input_data.validacion = $("select.validacion option:selected").val();
                 }
-                
+
                 if (tipo == "fecha") {
                     input_data.tipo_fecha = $("input[name=radio-fecha]:checked").val();
                 }
@@ -747,11 +770,11 @@
                         idinput: idinput,
                         nombre: nombre,
                         label: label,
-                        tamanio:tamanio,
+                        tamanio: tamanio,
                         tipo: tipo,
                         ayuda: ayuda,
                         ayuda: ayuda,
-                        link_ayuda:link_ayuda,
+                                link_ayuda: link_ayuda,
                         input_data: input_data,
                         obligatorio: obligatorio
                     },
@@ -775,7 +798,7 @@
                             setTimeout(function () {
                                 $('.bootbox').modal('toggle');
                                 //window.location.reload();
-                                $("input[name=last_page]").val( $("ul.wizard-steps li.active").attr("id_page") );
+                                $("input[name=last_page]").val($("ul.wizard-steps li.active").attr("id_page"));
                                 $("#form_reload_page").submit();
                             }, 2000);
                         }
@@ -876,7 +899,7 @@
                     input_data.ejemplo = $("input[name=ejemplo]").val();
                     input_data.validacion = $("select.validacion option:selected").val();
                 }
-                
+
                 if (tipo == "fecha") {
                     input_data.tipo_fecha = $("input[name=radio-fecha]:checked").val();
                 }
@@ -906,18 +929,18 @@
                         id_pagina: id_pagina,
                         nombre: nombre,
                         label: label,
-                        tamanio:tamanio,
-                        link_ayuda:link_ayuda,
+                        tamanio: tamanio,
+                        link_ayuda: link_ayuda,
                         obligatorio: obligatorio,
                         tipo: tipo,
-                        ayuda:ayuda,
+                        ayuda: ayuda,
                         input_data: input_data,
                         orden: orden
                     },
                     success: function (data) {
                         var respuesta = data.response;
 
-                        
+
 
                         var div = "danger";
                         if (respuesta.error == false) {
