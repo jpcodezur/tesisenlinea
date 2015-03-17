@@ -1,4 +1,5 @@
 <?php $inputs_ayuda = array();?>
+<?php $inputs_validar = array();?>
 <div class="page-content">
     <div class="page-header position-relative">
         <h1>
@@ -88,6 +89,12 @@
                                                                     <?php if($input->getTipo()=="texto"):?>
                                                                         <?php if($input->getControl()->getRespuestasRequeridas() > 0 ):?>
                                                                         <?php for($i = 0; $i < $input->getControl()->getRespuestasRequeridas(); $i++):?>
+                                                                        <?php $validacion = strtolower($input->getControl()->getValidacion()) ?>
+                                                                        <?php
+                                                                        if($validacion != "" && $validacion != "validacion"){
+                                                                            $inputs_validar[] = $input;
+                                                                        }
+                                                                        ?>
                                                                         <input  
                                                                                numero_respuesta ="<?php echo $i+1 ?>"
                                                                                placeholder="<?php echo $input->getControl()->getEjemplo() ?>" 
@@ -97,9 +104,9 @@
                                                                                id_pagina="<?php echo $input->getIdPagina() ?>"  
                                                                                name="<?php echo $input->getNombre() ?>" 
                                                                                class="span12 <?php echo ($input->getIsMagic())?"isMagic":"" ?>" 
-                                                                               <?php $validacion = strtolower($input->getControl()->getValidacion()) ?>
-                                                                               type="<?php echo ($validacion != "" && $validacion != "validacion")?$validacion:"text" ?>" 
-                                                                               id="" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
+                                                                               
+                                                                               type="<?php echo ($validacion == "email" && $validacion != "validacion")?$validacion:"text" ?>" 
+                                                                               id="<?php echo $input->getNombre() ?>" <?php echo ($input->getRequired()) ? "required='required'" : "" ?>/>
                                                                         <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" type="text" id="" value="<?php echo $input->getRespuesta($i+1) ?>"/>
                                                                         <?php endfor; ?>
                                                                     <?php endif; ?>
@@ -791,6 +798,11 @@
                             <?php echo ($input->getRequired())?$input->getNombre().": 'required',":"" ?><?php echo "\n"?>
                         <?php endif;?>
                     <?php endforeach; ?>
+                <?php endforeach; ?>
+                <?php foreach($inputs_validar as $input):?>
+                     <?php echo $input->getNombre() ?>: {
+                            number: true
+                        }   
                 <?php endforeach; ?>
             },
 

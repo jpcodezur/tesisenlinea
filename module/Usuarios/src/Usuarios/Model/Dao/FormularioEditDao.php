@@ -193,6 +193,7 @@ class FormularioEditDao {
                 $input->setId($res["id"]);
                 $input->setRespuestasRequeridas($res["respuestas_requeridas"]);
                 $input->setEjemplo($res["ejemplo"]);
+                $input->setValidacion($res["validacion"]);
                 return $input;
             }
         }
