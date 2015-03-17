@@ -1,3 +1,4 @@
+<?php $inputs_ayuda = array();?>
 <div class="page-content">
     <div class="page-header position-relative">
         <h1>
@@ -187,8 +188,9 @@
                                                                     <i class="tooltip-success icon-question-sign" data-rel="tooltip" data-placement="right" title="<?php echo $input->getAyuda(); ?>"></i>
                                                                     <?php endif;?>
                                                                 </span>
-                                                                <?php if($input->getLinkAyuda()):?>    
-                                                                <a class="link_ayuda" target="_blank" href="<?php echo $input->getLinkAyuda(); ?>">Tutorial</a>
+                                                                <?php if($input->getLinkAyuda()):?>  
+                                                                <?php $inputs_ayuda[] = $input; ?>
+                                                                <a class="link_ayuda" id="link_ayuda_<?php echo $input->getNombre() ?>" target="_blank" href="#">Tutorial</a>
                                                                 <?php endif;?>
                                                                 <!--<span class="help-inline">Something may have gone wrong</span>-->
                                                             </div>
@@ -471,14 +473,17 @@
                     },
                     success:function(data){
                         str = data[0];
+                        
+                        if(str == false){
+                            str = "(Completar campo padre)";
+                        }
+                        
                         span.text(str);
                         $(".main-container").css("opacity",1);
                         $("#ajax_loader").hide();
                     }
                 })
             });
-            
-            
         }
 
         function arrobaToSpan() {
@@ -878,5 +883,23 @@
             $(this).parent().find("input[type=file]").attr("estado","baja");
             $(this).remove();
         })
+        
+        <?php foreach($inputs_ayuda as $input):?>
+        $(document).on("click", "#link_ayuda_<?php echo $input->getNombre() ?>", function (e) {
+            e.preventDefault();
+            bootbox.dialog({});
+            $.ajax({
+                url: "formulario/popup",
+                data: "",
+                success: function (data) {
+                    $(document).find(".modal-body").html(data);
+                    var html = <?php echo (json_encode($input->getLinkAyuda())); ?>;
+                    console.log(html);    
+                    $(document).find(".contenedor-video").html(html); 
+                    
+                }
+            });
+        });
+        <?php endforeach; ?>
     });
 </script>
