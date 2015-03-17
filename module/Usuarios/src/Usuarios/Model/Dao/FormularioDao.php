@@ -188,10 +188,9 @@ class FormularioDao {
 
         $results = array();
 
-        $res = $this->adapter->query($sql);
+        $result = $this->adapter->query($sql)->execute();
 
-        if ($res) {
-            $result = $res->execute();
+        if ($result) {
             foreach ($result as $rres) {
                 $hasta = "";
                 if($rres["hasta"]){
@@ -201,7 +200,7 @@ class FormularioDao {
             }
         }
 
-        return $result;
+        return "";
     }
     
     public function getRespuestaTexto($idInput,$idAlumno,$numeroRespuestea="1") {
