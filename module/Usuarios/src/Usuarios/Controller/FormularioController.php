@@ -36,6 +36,12 @@ class FormularioController extends AbstractActionController {
     public function IndexAction() {
         die("500");
     }
+    
+    public function popupAction(){
+        $view = new ViewModel();
+        $view->setTerminal(true);
+        return $view;
+    }
 
     public function wizardAction(){
         
