@@ -84,9 +84,23 @@
                 <div class="widget-main">
                     <?php if($this->input->getTipo()=="texto"):?>
                     <input type="text" name="ejemplo" placeholder="Ejemplo" value="<?php echo $this->input->getControl()->getEjemplo()?>">
-                    <select class="validacion">
+                    <script>
+                    $(document).ready(function(){
+                        var val = "<?php echo $this->input->getControl()->getValidacion()?>";
+                        $("#<?php echo $this->input->getNombre()?> option").each(function(){
+                            s = $(this).text().toLowerCase();
+                            console.log(s + " vs " + val);
+                            if(s == val){
+                                $(this).attr("selected",true);
+                                $(this).change();
+                            }
+                        })
+                    })
+                    </script>
+                    <select id="<?php echo $this->input->getNombre()?>" class="validacion">
                         <option value="text">Sin Validacion</option>
                         <option value="email">Email</option>
+                        <option value="numerico">Numerico</option>
                     </select>
                     <label>Respuestas requeridas</label>
                     <input type="text" class="input-mini" id="numero-respuestas"  value="<?php echo ($this->input->getTipo()=="texto")?$this->input->getControl()->getRespuestasRequeridas():"1"; ?>"/>
