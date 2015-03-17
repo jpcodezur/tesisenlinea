@@ -277,9 +277,6 @@ class RespuestaDao {
                 if ($res) {
                     if ($tipo == "texto") {
                         $numeroRespuesta = $respuesta->numeroRespuesta;
-                        if ($texto == "f1" || $texto == "f2" || $texto == "f3" || $texto == "f4") {
-                            $a = 0;
-                        }
                         $res = $this->saveTexto($idRespuesta, $texto, $update, $numeroRespuesta);
                     } elseif ($tipo == "dropdown") {
                         $res = $this->saveDropdown($idRespuesta, $texto, $update);
