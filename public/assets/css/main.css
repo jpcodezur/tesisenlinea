@@ -30,7 +30,10 @@
     margin-bottom: 10px;
     margin-right: 10px;
     text-align: right;
-    width: 15%;
+    width: 100%;
+}
+.wizard-actions-top a{
+    cursor:pointer;
 }
 .label_float_left{float: left; width: 300px;}
 #form-field-select-1,textarea.mention{width: 530px !important;}
@@ -130,4 +133,16 @@ input:-moz-placeholder {
 
 #allow_files_chzn ul{
     margin-top: -11px;
+}
+@media screen and ( max-height: 700px ){
+  .modal-body{
+            font-size: 11px !important;
+            padding: 5px !important;
+    }
+    .inputs-text-control {
+            margin-top: 0 !important;
+    }
+    .tab-content {
+            padding: 5px !important;
+    }
 }

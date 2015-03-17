@@ -114,7 +114,11 @@
                     <label class="control-label" style="float: left;">Multi</label>
                     <div class="span3">
                         <label>
-                            <input type="checkbox" class="ace-switch ace-switch-2" id="esmulti" name="esmulti">
+                            <?php
+                            $control = $this->input->getControl();
+                            $chktipo = $control->getTipo();
+                            ?>
+                            <input type="checkbox" <?php echo ($chktipo == "multi")?"checked='checked'":""?> class="ace-switch ace-switch-2" id="esmulti" name="esmulti">
                             <span class="lbl"></span>
                         </label>
                     </div>
