@@ -49,7 +49,7 @@
         </div>
     </div>
     
-    <div class="tabbable">
+    <div class="tabbable tabbable-bottom">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active">
                 <a data-toggle="tab" href="#home" tipo="texto">
@@ -131,16 +131,18 @@
                 </div>
             </div>
             <div id="imagen" class="tab-pane row">
+                <div class="imagen-panel-left">
                 <label>Tamaño Maximo (Mb)</label>
                     <input name="image_max_size" placeholder="Max size (Mb)" type="text" value="2" />
-                    <!--<input name="image_allow_files" placeholder="Allowed files (default jpg,bmp)" type="text" value="" />-->
-                    <!--<label for="form-field-select-3">Allowed files (default jpg,bmp)</label>-->
+                </div>
+                <div class="imagen-panel-right">
                 <label>Archivos permitidos</label>
-                    <select multiple="multiple" class="chzn-select" id="allow-files" data-placeholder="Allowed files">
-                            <option value="jpg" selected="selected">JPG</option>
-                            <option value="png" selected="selected">PNG</option>
-                            <option value="bmp" selected="selected">PNG</option>
-                    </select>
+                <select multiple="multiple" class="chzn-select" id="allow-files" data-placeholder="Allowed files">
+                    <option value="jpg" selected="selected">JPG</option>
+                    <option value="png" selected="selected">PNG</option>
+                    <option value="bmp" selected="selected">PNG</option>
+                </select>
+                </div>
             </div>
 
             <div id="dropdown2" class="tab-pane">

@@ -146,3 +146,12 @@ input:-moz-placeholder {
             padding: 5px !important;
     }
 }
+
+.tabbable-bottom{
+    position: relative;
+    z-index: 1;
+}
+
+.mentions-input-box .mentions {
+    display:none !important;
+}
