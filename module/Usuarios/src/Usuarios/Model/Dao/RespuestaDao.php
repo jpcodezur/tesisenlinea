@@ -286,6 +286,7 @@ class RespuestaDao {
                         $res = $this->saveFecha($idRespuesta, $desde, $hasta, $update); //($idRespuesta, $texto,$update);
                     } elseif ($tipo == "imagen") {
                         $documento = $respuesta->archivo;
+                        $documento = str_replace("C:\\fakepath\\", "", $documento);
                         foreach ($post["files"] as $archivo) {
                             $n = $archivo["name"];
                             if ($n == $documento) {

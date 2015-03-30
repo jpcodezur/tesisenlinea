@@ -196,6 +196,19 @@
     <input type="hidden" name="last_page" value="<?php echo (isset($_POST["last_page"])) ? $_POST["last_page"] : "0" ?>">
 </form>
 <style>
+    .imagen-panel-left{
+        float:left;                
+        margin-right: 10px;
+    }
+    .imagen-panel-left label{
+        margin-bottom: 0;
+    }
+    .imagen-panel-right{
+        float:left;
+    }
+    .imagen-panel-right label{
+        margin-bottom: 9px;
+    }
     .wizard-actions-top {
         margin-bottom: 10px;
         margin-top: 20px;
@@ -229,9 +242,10 @@
         font-size: 13px;
         font-weight: normal;
         position:relative;
-        height: 39px !important;
+        height: 48px !important;
         margin-bottom: 10px !important;
         overflow: hidden;
+        padding: 2px !important;
     }
 
     .mentions-input-box .mentions > div{
