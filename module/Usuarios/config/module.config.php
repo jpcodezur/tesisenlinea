@@ -47,7 +47,7 @@ return array(
                                 'label' => 'Add',
                                 'route' => 'usuarios',
                                 'controller'=>'usuario',
-                                'action' => 'add'
+                                'action' => 'add',
                             )
                         ),
                      ),

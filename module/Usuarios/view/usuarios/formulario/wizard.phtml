@@ -802,9 +802,7 @@ $inputs_validar_email = array();
                 });
                 
                 resetImagenes();
-                
                 paso_html = $("div.active .inputs-respuestas").parent().html();
-                
                 setControlesPlugin();
             }
         })
@@ -813,7 +811,7 @@ $inputs_validar_email = array();
             $("div.active .inputs-respuestas").find("input[type=file]").each(function(){
                 var file_html = $(this);
                 
-                var nom = "";
+                var nom = " ";
                 
                 nom = $(this).parent().find("label span").attr("data-title");
                 
