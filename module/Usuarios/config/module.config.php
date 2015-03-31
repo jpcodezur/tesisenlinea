@@ -20,7 +20,7 @@ return array(
         'driver'         =>'Pdo',
         'dsn'            =>'mysql:dbname=tu_tesis_en_linea;host=localhost',
         'username' => 'root',
-        'password' => '',
+        'password' => 'talinaes',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
