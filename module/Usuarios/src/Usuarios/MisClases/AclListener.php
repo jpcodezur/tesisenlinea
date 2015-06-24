@@ -65,6 +65,8 @@ class AclListener implements ListenerAggregateInterface{
             ->addResource(new Resource('usuarios:respuesta'))
             ->addResource(new Resource('usuarios:formulario'))
             ->addResource(new Resource('usuarios:popup'))
+            ->addResource(new Resource('login:registrarse'))
+            ->addResource(new Resource('login:recuperarpass'))
             //->allow('agente', 'usuarios:index', array('index'))
             ->allow('admin')
             //->allow('agente')

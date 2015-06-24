@@ -13,14 +13,17 @@ $form->prepare();
             <i class="icon-user"></i>
         </span>
     </label>
-    <p><?php echo $this->formElementErrors($nombre); ?></p>
+    <!--<p><?php // echo $this->formElementErrors($nombre); ?></p>-->
 
     <label>
         <span class="block input-icon input-icon-right">
+            <?php $password = $form->get('clave'); ?>
             <?php echo $this->formInput($form->get('clave')->setAttribute('placeholder', 'Password')->setAttribute('class', 'span12')) ?>
             <i class="icon-lock"></i>
         </span>
     </label>
+    
+    <!--<p><?php // echo $this->formElementErrors($password); ?></p>-->
 
     <div class="space"></div>
 

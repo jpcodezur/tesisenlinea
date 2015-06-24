@@ -12,13 +12,16 @@ class Usuario {
     private $avatar;
     private $tipo;
     private $alertas;
+    private $estado;
+    private $claveActivacion;
 
-    public function __construct($id = null, $nombre = null, $apellido = null, $email = null, $clave = null) {
+    public function __construct($id = null, $nombre = null, $apellido = null, $email = null, $clave = null, $estado = 1) {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->apellido = $apellido;
         $this->email = $email;
         $this->clave = $clave;
+        $this->estado = $estado;
     }
     
     public function getId() {
@@ -65,6 +68,10 @@ class Usuario {
         $this->tipo = $param;
     }
     
+    public function setEstado($param) {
+        $this->estado = $param;
+    }
+    
     public function setAlertas($param) {
         $this->alertas = $param;
     }
@@ -85,5 +92,11 @@ class Usuario {
         $this->clave = $param;
     }
     
+    public function setClaveActivacion($param){
+        $this->claveActivacion = $param;
+    }
+    public function getClaveActivacion(){
+        return $this->claveActivacion;
+    }
+    
 }
-

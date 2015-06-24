@@ -99,10 +99,13 @@
 
                                             <div class="toolbar clearfix">
                                                 <div>
-                                                    <a href="#" onclick="show_box('forgot-box'); return false;" class="forgot-password-link">
-                                                        <i class="icon-arrow-left"></i>
-                                                        I forgot my password
-                                                    </a>
+                                                    <!--<a href="" onclick="show_box('forgot-box'); return false;" class="forgot-password-link">-->
+<!--                                                        <i class="icon-arrow-left"></i>-->
+                                                        <a class="forgot-password-link" href="<?php echo $this->basePath("usuarios/login/recuperarpass"); ?>">
+                                                            <i class="icon-arrow-left"></i>
+                                                            ¿Olvidó su contraseña?
+                                                        </a>
+                                                    <!--</a>-->
                                                 </div>
                                             </div>
                                         </div><!--/widget-body-->
