@@ -47,7 +47,7 @@ class UsuarioController extends AbstractActionController {
             $id = $this->request->getQuery('id');
         }
         $this->usuarioDao = $this->getServiceLocator()->get('UsuarioDao');
-        
+
         $usuario = $this->usuarioDao->getUsuario($id);
 
         return new ViewModel(array("usuario" => $usuario));
@@ -258,20 +258,21 @@ class UsuarioController extends AbstractActionController {
 
         $user = $_SESSION["miSession"]["usuario"];
         $this->usuarioDao = $this->getServiceLocator()->get('UsuarioDao');
-//        $usuario = $this->usuarioDao->getUserByEmail($user->getEmail());
+//      $usuario = $this->usuarioDao->getUserByEmail($user->getEmail());
 
         $pass = $this->getRequest()->getPost('pass', null);
         $repass = $this->getRequest()->getPost('pass-conf', null);
 
         if ($pass == "" || $repass == "") {
             $mensaje = "<p style='color:red'>Debe completar ambos campos!!!</p>";
-//            $this->layout()->setTemplate('usuarios/usuario/settings.phtml');
             return new ViewModel(array("mensaje" => $mensaje));
         }
-
         if ($pass !== $repass) {
             $mensaje = "<p style='color:red'>Las contraseñas no coinciden!!!</p>";
-//            $this->layout()->setTemplate('usuarios/usuario/settings.phtml');
+            return new ViewModel(array("mensaje" => $mensaje));
+        }
+        if (strlen($pass) <= 4) {
+            $mensaje = "<p style='color:red'>Las contraseña debe tener un mínimo de 4 caracteres!!!</p>";
             return new ViewModel(array("mensaje" => $mensaje));
         }
 
@@ -283,12 +284,9 @@ class UsuarioController extends AbstractActionController {
         $to = $user->getEmail();
         $asunto = "Tu Tesis en Linea - Contraseña cambiada";
         $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
-//        $unEmail->sendEmail($body);
-
+//      $unEmail->sendEmail($body);
 
         $mensaje = "<p style='color:green'>Su contraseña ha sido cambiada con éxito.</p>";
-
-//        $this->layout()->setTemplate('usuarios/usuario/settings.phtml');
         return new ViewModel(array("mensaje" => $mensaje));
     }
 
