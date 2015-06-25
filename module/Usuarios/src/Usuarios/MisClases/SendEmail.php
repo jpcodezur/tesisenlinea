@@ -9,15 +9,15 @@ use Zend\Mime\Part as MimePart;
 use Zend\Mail\Transport\SmtpOptions;
 
 class SendEmail {
-    
+
     private $message;
-    
-    public function __construct($to,$from,$subject) {
+
+    public function __construct($to, $from, $subject) {
 
         $this->message = new Message();
         $this->message->addTo($to)
-                      ->addFrom($from)
-                      ->setSubject($subject);
+                ->addFrom($from)
+                ->setSubject($subject);
     }
 
     public function sendEmail($message) {
@@ -29,8 +29,14 @@ class SendEmail {
             'connection_class' => 'login',
             'connection_config' => array(
                 'ssl' => 'tls',
-                'username' => 'chelosur85@gmail.com',
-                'password' => 'gooxw4122'
+//                'username' => 'chelosur85@gmail.com',
+//                'password' => 'gooxw4122'
+                'username' => 'atfede@gmail.com',
+                'password' => 'asdflkjh1',
+                
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
             ),
             'port' => 587,
         ));

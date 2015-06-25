@@ -206,7 +206,8 @@ class UsuarioDao implements IUsuarioDao {
             $usu = $usu;
         }
 
-        return $usu["id"];
+//        return $usu["id"];
+        return $usu;
     }
     
     public function buscarPorNombre($nombre) {

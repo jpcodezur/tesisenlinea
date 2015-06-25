@@ -18,12 +18,10 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ControllerProviderInterface;
-
 use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
 use Usuarios\MisClases\ShowAlertas;
 use Usuarios\MisClases\ShowMensajes;
-
 use Usuarios\MisClases\AclListener;
 
 class Module implements AutoloaderProviderInterface, ServiceProviderInterface, ConfigProviderInterface, ControllerProviderInterface {
@@ -33,33 +31,28 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
         $sharedEvents = $events->getSharedManager();
         $sharedEvents->attach(__NAMESPACE__, 'dispatch', array($this, 'initAuth'), 100);
     }
-/*
-    public function initAlerts(MvcEvent $e) {
-        $application = $e->getApplication();
-        
-    }*/
-    
+
+    /*
+      public function initAlerts(MvcEvent $e) {
+      $application = $e->getApplication();
+
+      } */
+
     public function initAuth(MvcEvent $e) {
-        
+
         $application = $e->getApplication();
         $matches = $e->getRouteMatch();
         $controller = $matches->getParam("controller");
         $action = $matches->getParam("action");
-
-
-        if ($controller === "Usuarios\Controller\Login" && in_array($action, array('index', 'autenticar'))) {
+        if ($controller === "Usuarios\Controller\Login" && in_array($action, array('index', 'autenticar', 'registrarse', 'recuperarpass'))) {
             return;
         }
-
         $sm = $application->getServiceManager();
-
         $auth = $sm->get('Usuarios\Model\Login');
-
         if (!$auth->isLoggedIn()) {
             $controller = $e->getTarget();
             return $controller->redirect()->toRoute('usuarios', array('controller' => 'login'));
         }
-        
     }
 
     public function getAutoloaderConfig() {
@@ -82,20 +75,19 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
 
     public function onBootstrap($e) {
         $eventManager = $e->getApplication()->getEventManager();
-        
+
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-        
+
         $aclListener = new AclListener();
         $aclListener->attach($eventManager);
-        
+
         $alertas = new ShowAlertas();
         $alertas->attach($eventManager);
-        
+
         $alertas = new ShowMensajes();
         $alertas->attach($eventManager);
     }
-    
 
     public function getServiceConfig() {
         return array(
@@ -108,23 +100,23 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                     return $dbAdapter;
                 },
                 #EntidadDao
-                'AlertaDao'=>function($sm){
-                    return $this->getEntidadDao($sm,"AlertaTableGateway","Usuarios\Model\Dao\AlertaDao");
+                'AlertaDao' => function($sm) {
+                    return $this->getEntidadDao($sm, "AlertaTableGateway", "Usuarios\Model\Dao\AlertaDao");
                 },
-                'MensajeDao'=>function($sm){
-                    return $this->getEntidadDao($sm,"MensajeTableGateway","Usuarios\Model\Dao\MensajeDao");
+                'MensajeDao' => function($sm) {
+                    return $this->getEntidadDao($sm, "MensajeTableGateway", "Usuarios\Model\Dao\MensajeDao");
                 },
                 'UsuarioDao' => function($sm) {
-                    return $this->getEntidadDao($sm,"UsuarioTableGateway","Usuarios\Model\Dao\UsuarioDao");
+                    return $this->getEntidadDao($sm, "UsuarioTableGateway", "Usuarios\Model\Dao\UsuarioDao");
                 },
                 'PaginaDao' => function($sm) {
-                    return $this->getEntidadDao($sm,"PaginaTableGateway","Usuarios\Model\Dao\PaginaDao");
+                    return $this->getEntidadDao($sm, "PaginaTableGateway", "Usuarios\Model\Dao\PaginaDao");
                 },
                 'InputDao' => function($sm) {
                     return $this->getAdapter($sm);
                 },
                 'PreguntaDao' => function($sm) {
-                    return $this->getEntidadDao($sm,"PreguntaTableGateway","Usuarios\Model\Dao\PreguntaDao");
+                    return $this->getEntidadDao($sm, "PreguntaTableGateway", "Usuarios\Model\Dao\PreguntaDao");
                 },
                 'FormularioDao' => function($sm) {
                     return $this->getAdapter($sm);
@@ -165,7 +157,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                     $dbAdapter = $sm->get('db');
                     return new \Usuarios\Model\Login($dbAdapter);
                 },
-                //Plugins
+            //Plugins
             ),
         );
     }
@@ -248,40 +240,38 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                         $instance->setDao($locator->get('InputDao'));
                     }
                 },
-                        
             )
         );
-    } 
+    }
 
-    public function getTableGateway($sm,$obj) {
-        
+    public function getTableGateway($sm, $obj) {
+
         $dbAdapter = $this->getAdapter($sm);
-        
+
         $resultSetPrototype = new ResultSet();
 
         $arr = array();
-        
+
         $obj = new $obj();
-        
+
         foreach ($obj as $key => $value) {
             $arr[$key] = $value;
         }
-        
+
         $data = new \ArrayObject($arr);
         $resultSetPrototype->setArrayObjectPrototype($data);
-        
-        return array("dbAdapter" => $dbAdapter,"resultSetPrototype"=>$resultSetPrototype);
+
+        return array("dbAdapter" => $dbAdapter, "resultSetPrototype" => $resultSetPrototype);
     }
-    
-    public function getAdapter($sm){
+
+    public function getAdapter($sm) {
         return $dbAdapter = $sm->get('db');
     }
-    
-    public function getEntidadDao($sm,$tableGateway,$entidadDao){
+
+    public function getEntidadDao($sm, $tableGateway, $entidadDao) {
         $tableGateway = $sm->get($tableGateway);
         $dao = new $entidadDao($tableGateway);
         return $dao;
     }
 
 }
-

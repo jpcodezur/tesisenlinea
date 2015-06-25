@@ -120,6 +120,10 @@ class LoginController extends AbstractActionController {
                         'action' => 'index'
             ));
         } else {
+//            $mensaje = "<p style='color:red'>Datos incorrectos.</p>";
+//                    $this->layout()->setTemplate('usuarios/login/login.phtml');
+//                    return new ViewModel(array("mensaje" => $mensaje));
+
             return $this->redirect()->toRoute('usuarios', array(
                         'controller' => 'login',
                         'action' => 'index'
@@ -142,6 +146,28 @@ class LoginController extends AbstractActionController {
 
             $user = new Usuario();
             $email = $this->getRequest()->getPost('email-user', null);
+            $re_email = $this->getRequest()->getPost('reemail-user', null);
+            $nombre = $this->getRequest()->getPost('first-name-user', null);
+            $apellido = $this->getRequest()->getPost('last-name-user', null);
+            $password = $this->getRequest()->getPost('pass-user', null);
+            $re_password = $this->getRequest()->getPost('pass_conf', null);
+            $tipo = $this->getRequest()->getPost('level-user', null);
+
+            if (isset($email, $re_email)) {
+                if ($email !== $re_email) {
+                    $mensaje = "<p style='color:red'>Error: La dirección de correo debe coincidir en ambos campos.</p>";
+                    $this->layout()->setTemplate('usuarios/login/login.phtml');
+                    return new ViewModel(array("mensaje" => $mensaje));
+                }
+            }
+
+            if (isset($password, $re_password)) {
+                if ($password !== $re_password) {
+                    $mensaje = "<p style='color:red'>Error: La contraseña debe coincidir en ambos campos.</p>";
+                    $this->layout()->setTemplate('usuarios/login/login.phtml');
+                    return new ViewModel(array("mensaje" => $mensaje));
+                }
+            }
 
             if (!$this->noExisteEmail($email)) {
                 $this->layout()->setTemplate('usuarios/login/login.phtml');
@@ -150,10 +176,7 @@ class LoginController extends AbstractActionController {
                     "mensaje" => "<p style='color:red'>Ya existe un usuario con ese email.</p>"));
             }
 
-            $nombre = $this->getRequest()->getPost('first-name-user', null);
-            $apellido = $this->getRequest()->getPost('last-name-user', null);
-            $password = $this->getRequest()->getPost('pass-user', null);
-            $tipo = $this->getRequest()->getPost('level-user', null);
+
 
             $user->setEmail($email);
             $user->setNombre($nombre);
@@ -162,6 +185,7 @@ class LoginController extends AbstractActionController {
             $user->setTipo($tipo);
             $user->setEstado(0);
             $user->setClaveActivacion(md5($email));
+
 
 
             if ($this->usuarioDao->guardar($user)) {
@@ -191,32 +215,32 @@ class LoginController extends AbstractActionController {
                 $to = $user->getEmail();
                 $asunto = "Tu Tesis en Linea - Activar cuenta";
 
-                $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
-                $unEmail->sendEmail($body);
+//              $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
+                $unEmail = new SendEmail($to, "atfede@gmail.com", $asunto);
+//                $unEmail->sendEmail($body);
 
 
-                $mensaje = "<p style='color:green'>Usuario creado satisfacotiamente. Verifique su email para activar su cuenta.</p>";
+                $mensaje = "<p style='color:green'>Usuario creado satisfactoriamente. Verifique su email para activar su cuenta.</p>";
 
-                /*return $this->redirect()->toRoute('usuarios', array(
-                            'controller' => 'index',
-                            'action' => 'index',
-                            'mensaje' => $mensaje*/
-                        
+                /* return $this->redirect()->toRoute('usuarios', array(
+                  'controller' => 'index',
+                  'action' => 'index',
+                  'mensaje' => $mensaje */
+
                 $this->layout()->setTemplate('usuarios/login/login.phtml');
-                return new ViewModel(array("mensaje" => $mensaje ));
-                
+                return new ViewModel(array("mensaje" => $mensaje));
             } else {
 
                 $mensaje = "<p style='color:red'>Error creando la cuenta</p>";
 
                 $this->layout()->setTemplate('usuarios/login/login.phtml');
-                return new ViewModel(array("mensaje" => $mensaje ));
+                return new ViewModel(array("mensaje" => $mensaje));
             }
         }
 
 
         $this->layout()->setTemplate('usuarios/login/login.phtml');
-        return new ViewModel(array("mensaje" => "Hola")); //crear nuevo View
+//        return new ViewModel(array("mensaje" => "Hola")); //crear nuevo View
     }
 
     public function noExisteEmail($pEmail) {
@@ -232,7 +256,6 @@ class LoginController extends AbstractActionController {
                 return 0;
             }
         }
-
         return 1;
     }
 
@@ -255,6 +278,45 @@ class LoginController extends AbstractActionController {
                     'action' => 'index',
                     'mensaje' => $mensaje
         ));
+    }
+
+    public function recuperarpassAction() {
+
+        $user = new Usuario();
+        $email = $this->getRequest()->getPost('email-user', null);
+
+        if ($email == "") {
+            $mensaje = "<p style='color:red'></p>";
+            $this->layout()->setTemplate('usuarios/login/recuperarpass.phtml');
+            return new ViewModel(array("mensaje" => $mensaje));
+        }
+
+        $this->usuarioDao = $this->getServiceLocator()->get('UsuarioDao');
+        $usuario = $this->usuarioDao->getUserByEmail($email);
+
+        $randomPass = md5(date("Y-m-h h:m:s"));
+        $randomPass = substr($randomPass, 0, 6);
+        
+        $user->setEmail($usuario["email"]);
+        $user->setNombre($usuario["nombre"]);
+        $user->setApellido($usuario["apellido"]);
+        $user->setTipo($usuario["tipo"]);
+        $user->setEstado($usuario["estado"]);
+        $user->setClave($randomPass);        
+        
+        $body = "Su nueva contraseña es: " . $randomPass . "'";
+        $to = $email;
+        $asunto = "Tu Tesis en Linea - Recuperar contraseña";
+
+        $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
+//        $unEmail->sendEmail($body);
+        
+        $this->usuarioDao->guardar($user);
+
+        $mensaje = "<p style='color:green'>Verifique su email para recuperar su contraseña.</p>";
+
+        $this->layout()->setTemplate('usuarios/login/recuperarpass.phtml');
+        return new ViewModel(array("mensaje" => $mensaje));
     }
 
 }

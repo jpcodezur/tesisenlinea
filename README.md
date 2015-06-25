@@ -1,5 +1,3 @@
-//hola
-
 ZendSkeletonApplication
 =======================
 
