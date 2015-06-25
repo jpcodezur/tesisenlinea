@@ -4,14 +4,13 @@ namespace Usuarios\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-
 use Zend\Authentication\AuthenticationService;
 use Usuarios\Model\Entity\Usuario;
 use Usuarios\Model\Dao\UsuarioDao;
-
 use Usuarios\Form\Usuario\UsuarioEdit;
 use Usuarios\Form\Usuario\UsuarioAdd;
 use Usuarios\Form\Usuario\UsuarioValidator;
+use Usuarios\MisClases\SendEmail;
 
 class UsuarioController extends AbstractActionController {
 
@@ -24,33 +23,34 @@ class UsuarioController extends AbstractActionController {
     public function __construct() {
         $this->auth = new AuthenticationService();
     }
-    
-    public function setTableGateway($tableGateway){
+
+    public function setTableGateway($tableGateway) {
         $this->tableGateway = $tableGateway;
     }
-    
-    public function setUsuarioDao($usuarioDao){
+
+    public function setUsuarioDao($usuarioDao) {
         $this->usuarioDao = $usuarioDao;
     }
-    
-    public function setAdapter($adapter){
+
+    public function setAdapter($adapter) {
         $this->adapter = $adapter;
     }
 
     public function IndexAction() {
         
     }
-    
+
     public function profileAction() {
         $id = null;
-        
+
         if ($this->request->isGet()) {
             $id = $this->request->getQuery('id');
         }
+        $this->usuarioDao = $this->getServiceLocator()->get('UsuarioDao');
         
-        $usuario = UsuarioDao::getUsuario($id);
-        
-        return new ViewModel(array("usuario"=>$usuario));
+        $usuario = $this->usuarioDao->getUsuario($id);
+
+        return new ViewModel(array("usuario" => $usuario));
     }
 
     public function getConfig($config) {
@@ -65,13 +65,13 @@ class UsuarioController extends AbstractActionController {
         $usuario = $this->getServiceLocator()->get('UsuarioDao');
         $result = $this->usuarioDao->obtenerTodos();
         $paginator = $result["paginator"];
-        $pn = (int) $this->getEvent()->getRouteMatch()->getParam('id',1);
+        $pn = (int) $this->getEvent()->getRouteMatch()->getParam('id', 1);
         $paginator->setCurrentPageNumber($pn);
         return new ViewModel(array("usuarios" => $result["usuarios"], "paginator" => $paginator));
     }
 
     public function addAction() {
-        $form = new UsuarioAdd("UsuarioAdd", $this->tableGateway,$this->adapter);
+        $form = new UsuarioAdd("UsuarioAdd", $this->tableGateway, $this->adapter);
 
         if ($this->request->isPost()) {
             $userValidator = new UsuarioValidator();
@@ -79,7 +79,7 @@ class UsuarioController extends AbstractActionController {
             $data = $this->request->getPost();
 
             $form->setData($data);
-            
+
             if ($form->isValid()) {
 
                 $user = new Usuario();
@@ -132,34 +132,33 @@ class UsuarioController extends AbstractActionController {
         return new ViewModel(array("form" => $form,
             "save" => false));
     }
-    
-    public function editAction(){
-        
+
+    public function editAction() {
+
         if ($this->request->isGet()) {
             $id = $this->request->getQuery('id');
-        
+
             $usuario = $this->usuarioDao->getUsuario($id);
 
-            $form = new UsuarioEdit("UsuarioEdit", $usuario, $this->adapter,$id);
+            $form = new UsuarioEdit("UsuarioEdit", $usuario, $this->adapter, $id);
 
-            return new ViewModel(array("form" => $form,"save" => false,"usuario"=>$usuario));
-            
+            return new ViewModel(array("form" => $form, "save" => false, "usuario" => $usuario));
         }
-        
+
         if ($this->request->isPost()) {
             $id = $this->getRequest()->getPost('id-user', null);
             $usuario = $this->usuarioDao->getUsuario($id);
             $userValidator = new UsuarioValidator();
-            $form = new UsuarioEdit("UsuarioEdit", $usuario, $this->adapter,$id);
+            $form = new UsuarioEdit("UsuarioEdit", $usuario, $this->adapter, $id);
             $form->setInputFilter($userValidator);
             $data = $this->request->getPost();
 
             $form->setData($data);
-            
+
             $valid = $form->isValid();
-            
-            if (true/*$valid*/) {
-                
+
+            if (true/* $valid */) {
+
                 $user = new Usuario();
 
                 $upload = new \Zend\File\Transfer\Transfer();
@@ -172,13 +171,13 @@ class UsuarioController extends AbstractActionController {
                         $avatar = file_get_contents($info["tmp_name"]);
                     }
                 }
-                
+
                 $email = $this->getRequest()->getPost('email-user', null);
                 $nombre = $this->getRequest()->getPost('first-name-user', null);
                 $apellido = $this->getRequest()->getPost('last-name-user', null);
                 $password = $this->getRequest()->getPost('pass-user', null);
                 $tipo = $this->getRequest()->getPost('level-user', null);
-                
+
                 $user->setId($id);
                 $user->setEmail($email);
                 $user->setNombre($nombre);
@@ -188,12 +187,12 @@ class UsuarioController extends AbstractActionController {
                 $user->setTipo($tipo);
 
                 $result = $this->usuarioDao->update($user);
-                
-                if ($result["error"]=="0") {
+
+                if ($result["error"] == "0") {
                     return new ViewModel(array(
                         "form" => $form,
                         "save" => true,
-                        "usuario"=>$result["usuario"]));
+                        "usuario" => $result["usuario"]));
                 } else {
                     return new ViewModel(array(
                         "form" => $form,
@@ -232,27 +231,72 @@ class UsuarioController extends AbstractActionController {
 
         return 1;
     }
-    
+
     public function deleteAction() {
         if ($this->request->isGet()) {
 
-            $id = (int) $this->getEvent()->getRouteMatch()->getParam('id',null);
-            if(!$id){
+            $id = (int) $this->getEvent()->getRouteMatch()->getParam('id', null);
+            if (!$id) {
                 $id = $this->request->getQuery('id');
             }
-            
-            if($id){
+
+            if ($id) {
                 $result = $this->usuarioDao->delete($id);
             }
-            
+
             if ($result) {
                 return $this->redirect()->toRoute('usuarios', array(
                             'controller' => 'usuario',
                             'action' => 'list',
-                            'id'=>'1'
+                            'id' => '1'
                 ));
             }
         }
+    }
+
+    public function savesettingsAction() {
+
+        $user = $_SESSION["miSession"]["usuario"];
+        $this->usuarioDao = $this->getServiceLocator()->get('UsuarioDao');
+//        $usuario = $this->usuarioDao->getUserByEmail($user->getEmail());
+
+        $pass = $this->getRequest()->getPost('pass', null);
+        $repass = $this->getRequest()->getPost('pass-conf', null);
+
+        if ($pass == "" || $repass == "") {
+            $mensaje = "<p style='color:red'>Debe completar ambos campos!!!</p>";
+//            $this->layout()->setTemplate('usuarios/usuario/settings.phtml');
+            return new ViewModel(array("mensaje" => $mensaje));
+        }
+
+        if ($pass !== $repass) {
+            $mensaje = "<p style='color:red'>Las contraseñas no coinciden!!!</p>";
+//            $this->layout()->setTemplate('usuarios/usuario/settings.phtml');
+            return new ViewModel(array("mensaje" => $mensaje));
+        }
+
+        $user->setClave(md5($pass));
+
+        $this->usuarioDao->update($user);
+
+        $body = "Su nueva contraseña es: " . $pass . "'";
+        $to = $user->getEmail();
+        $asunto = "Tu Tesis en Linea - Contraseña cambiada";
+        $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
+//        $unEmail->sendEmail($body);
+
+
+        $mensaje = "<p style='color:green'>Su contraseña ha sido cambiada con éxito.</p>";
+
+//        $this->layout()->setTemplate('usuarios/usuario/settings.phtml');
+        return new ViewModel(array("mensaje" => $mensaje));
+    }
+
+    public function settingsAction() {
+//        $this->layout()->setTemplate('usuarios/usuario/settings');
+        return new ViewModel(array(
+            "save" => false,
+            "mensaje" => "<p style='color:red'>En settings</p>"));
     }
 
 }

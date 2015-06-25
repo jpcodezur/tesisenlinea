@@ -32,22 +32,18 @@ class LoginController extends AbstractActionController {
         $this->login = $login;
     }
 
-    //xx
     public function setUsuarioDao($usuarioDao) {
         $this->usuarioDao = $usuarioDao;
     }
 
-    //xx
     public function setTableGateway($tableGateway) {
         $this->tableGateway = $tableGateway;
     }
 
-    //xx
     public function setAdapter($adapter) {
         $this->adapter = $adapter;
     }
 
-    //xx
     public function getConfig($config) {
         if (!$this->config) {
             $sm = $this->getServiceLocator();
@@ -137,10 +133,6 @@ class LoginController extends AbstractActionController {
     }
 
     public function registrarseAction() {
-//        $usuario = $this->getServiceLocator()->get('UsuarioDao');
-//        $instance->setUsuarioDao($locator->get('UsuarioDao'));
-//        $usuario = UsuarioDao::getUsuario($id);
-//        $form = new UsuarioAdd("UsuarioAdd", $this->tableGateway, $this->adapter);
 
         if ($this->request->isPost()) {
 
@@ -176,8 +168,6 @@ class LoginController extends AbstractActionController {
                     "mensaje" => "<p style='color:red'>Ya existe un usuario con ese email.</p>"));
             }
 
-
-
             $user->setEmail($email);
             $user->setNombre($nombre);
             $user->setApellido($apellido);
@@ -185,8 +175,6 @@ class LoginController extends AbstractActionController {
             $user->setTipo($tipo);
             $user->setEstado(0);
             $user->setClaveActivacion(md5($email));
-
-
 
             if ($this->usuarioDao->guardar($user)) {
 
@@ -222,22 +210,15 @@ class LoginController extends AbstractActionController {
 
                 $mensaje = "<p style='color:green'>Usuario creado satisfactoriamente. Verifique su email para activar su cuenta.</p>";
 
-                /* return $this->redirect()->toRoute('usuarios', array(
-                  'controller' => 'index',
-                  'action' => 'index',
-                  'mensaje' => $mensaje */
-
                 $this->layout()->setTemplate('usuarios/login/login.phtml');
                 return new ViewModel(array("mensaje" => $mensaje));
             } else {
-
                 $mensaje = "<p style='color:red'>Error creando la cuenta</p>";
 
                 $this->layout()->setTemplate('usuarios/login/login.phtml');
                 return new ViewModel(array("mensaje" => $mensaje));
             }
         }
-
 
         $this->layout()->setTemplate('usuarios/login/login.phtml');
 //        return new ViewModel(array("mensaje" => "Hola")); //crear nuevo View
@@ -296,21 +277,21 @@ class LoginController extends AbstractActionController {
 
         $randomPass = md5(date("Y-m-h h:m:s"));
         $randomPass = substr($randomPass, 0, 6);
-        
+
         $user->setEmail($usuario["email"]);
         $user->setNombre($usuario["nombre"]);
         $user->setApellido($usuario["apellido"]);
         $user->setTipo($usuario["tipo"]);
         $user->setEstado($usuario["estado"]);
-        $user->setClave($randomPass);        
-        
+        $user->setClave($randomPass);
+
         $body = "Su nueva contraseña es: " . $randomPass . "'";
         $to = $email;
         $asunto = "Tu Tesis en Linea - Recuperar contraseña";
 
         $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
 //        $unEmail->sendEmail($body);
-        
+
         $this->usuarioDao->guardar($user);
 
         $mensaje = "<p style='color:green'>Verifique su email para recuperar su contraseña.</p>";
