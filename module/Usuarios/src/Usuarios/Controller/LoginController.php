@@ -203,10 +203,8 @@ class LoginController extends AbstractActionController {
                 $to = $user->getEmail();
                 $asunto = "Tu Tesis en Linea - Activar cuenta";
 
-//              $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
-                $unEmail = new SendEmail($to, "atfede@gmail.com", $asunto);
-//                $unEmail->sendEmail($body);
-
+              $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
+//            $unEmail->sendEmail($body);
 
                 $mensaje = "<p style='color:green'>Usuario creado satisfactoriamente. Verifique su email para activar su cuenta.</p>";
 
