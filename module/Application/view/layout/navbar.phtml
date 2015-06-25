@@ -127,14 +127,15 @@ $totalMensajes = count($mensajes);
 
                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
                         <li>
-                            <a href="#">
+                            <a href="<?php echo $this->basePath('usuarios/usuario/settings'); ?>">
+                            <!--<a href='http://localhost/tutesisenlinea/public/usuarios/settings'>-->
                                 <i class="icon-cog"></i>
                                 Settings
                             </a>
                         </li>
 
                         <li>
-                            <a href="#">
+                            <a href="<?php echo $this->basePath('usuarios/usuario/profile'); ?>">
                                 <i class="icon-user"></i>
                                 Profile
                             </a>

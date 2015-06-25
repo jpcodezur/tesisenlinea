@@ -302,8 +302,12 @@ class UsuarioDao implements IUsuarioDao {
             "nombre" => $user->getNombre(),
             "apellido" => $user->getApellido(),
             "email" => $user->getEmail(),
-            "tipo" => $user->getTipo(),
+            "tipo" => $user->getTipo()
         );
+        
+        if($user->getClave()){
+            $data["md5"] = $user->getClave();
+        }
 
         if ($user->getAvatar()) {
             $data["avatar"] = $user->getAvatar();
