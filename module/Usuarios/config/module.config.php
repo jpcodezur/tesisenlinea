@@ -18,11 +18,11 @@ return array(
     ),
     'db' => array(
         'driver' =>'Pdo',
-//      'dsn' =>'mysql:dbname=tu_tesis_en_linea;host=localhost',
-        'dsn' => 'mysql:dbname=tesis_en_linea;host=127.0.0.1',
+      'dsn' =>'mysql:dbname=tu_tesis_en_linea;host=localhost',
+//        'dsn' => 'mysql:dbname=tesis_en_linea;host=127.0.0.1',
         'username' => 'root',
-//      'password' => 'talinaes',
-        'password' => 'lsnsdmsdp1',
+      'password' => 'talinaes',
+//        'password' => 'lsnsdmsdp1',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),

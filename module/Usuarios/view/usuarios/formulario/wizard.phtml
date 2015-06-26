@@ -399,17 +399,54 @@ $inputs_validar_email = array();
         });
 
     }
+    
+    var respuestasT = [];
+
+    function buscarInArray(string,array){
+        for(var i in array){
+            if(array[i].word == string){
+                return i;
+            }
+        }
+        
+        return false;
+    }
 
     function getRespuesta(word) {
-        $.ajax({
-            async: false,
-            url: "<?php echo $this->url("usuarios", array("controller" => "formulario", "action" => "resparent")) ?>",
-            data: {word: word},
-            type: "post",
-            success: function (data) {
-                resparent = data.join();
-            }
-        })
+        
+        pos = buscarInArray(word,respuestasT);
+        
+        $("#ajax_loader").append("<span id='cargando-datos-alumno'>Cargando datos alumno</span>");
+        $(".main-container").css("opacity",0.3);
+        $("#ajax_loader").show();
+        
+        if(pos === false){
+            $.ajax({
+                async: false,
+                url: "<?php echo $this->url("usuarios", array("controller" => "formulario", "action" => "resparent")) ?>",
+                data: {word: word},
+                type: "post",
+                success: function (data) {
+                    if(data){
+                        resparent = data.join();
+                    }else{
+                        resparent = data;
+                    }
+                    
+                    obj = {};
+                    obj.word = word;
+                    obj.resparent = resparent;
+                    respuestasT.push(obj);
+                }
+            })
+            
+        }else{
+            resparent = respuestasT[pos].resparent;
+        }
+        
+        $(".main-container").css("opacity",1);
+        $("#ajax_loader").hide();
+        $("#cargando-datos-alumno").remove();
     }
 
     function seteoInputs(){
@@ -483,40 +520,45 @@ $inputs_validar_email = array();
             }
         })
         
-        function actualizoLabels(){
+        //Ultima actualizacion
+        
+        function actualizoLabels(inputsModificados){
             
-            $(".resp-span").each(function () {
-                $(".main-container").css("opacity",0.3);
-                $("#ajax_loader").show();
-                span = $(this);
-                nom = $(this).attr("nom");
-                tipo = $(this).attr("tipo");
-                
-                $.ajax({
-                    url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "actualizospan")) ?>",
-                    type:"post",
-                    async:false,
-                    data:{
-                        nom:nom,
-                        tipo:tipo
-                    },
-                    success:function(data){
-                        str = data[0];
-                        
-                        if(str == false){
-                            str = "(Completar campo padre)";
+            for(var i in inputsModificados){
+                var nom = inputsModificados[i].nom;
+                $('.resp-span[nom="'+nom+'"]').each(function () {
+                    $(".main-container").css("opacity",0.3);
+                    $("#ajax_loader").show();
+                    span = $(this);
+                    nom = $(this).attr("nom");
+                    tipo = $(this).attr("tipo");
+
+                    $.ajax({
+                        url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "actualizospan")) ?>",
+                        type:"post",
+                        async:false,
+                        data:{
+                            nom:nom,
+                            tipo:tipo
+                        },
+                        success:function(data){
+                            str = data[0];
+
+                            if(str == false){
+                                str = "(Completar campo padre)";
+                            }
+
+                            span.text(str);
+                            $(".main-container").css("opacity",1);
+                            $("#ajax_loader").hide();
                         }
-                        
-                        span.text(str);
-                        $(".main-container").css("opacity",1);
-                        $("#ajax_loader").hide();
-                    }
-                })
-            });
+                    })
+                });
+            }
         }
 
         function arrobaToSpan() {
-
+            
             $(".inputs-respuestas").each(function () {
                 var txt = $(this).find("label").text();
                 txt = txt.trim();
@@ -556,7 +598,7 @@ $inputs_validar_email = array();
                 type:"post",
                 data:{respuesta:respuesta},
                 success:function(data){
-                    actualizoLabels();
+                    actualizoLabels([{nom:respuesta.nombre}]);
                 }
             })
             
@@ -581,8 +623,9 @@ $inputs_validar_email = array();
         
         function saveRespuestas(){
             var formData = new FormData();
-            var huboCambios = huboCambiosEnInputs();    
-            if(huboCambios){
+            var huboCambios = huboCambiosEnInputs(); 
+            //cambios = {retorno:true,campo:$(this).attr("name")};
+            if(huboCambios.retorno){
                 respuestas = [];
                 $("#step-container .active .inputs-respuestas").each(function(){
                     respuesta = {};
@@ -666,7 +709,7 @@ $inputs_validar_email = array();
 
                 $(".main-container").css("opacity",0.3);
                 $("#ajax_loader").show();
-
+                
                 $.ajax({
                     url:"<?php echo $this->url("usuarios", array("controller" => "respuesta", "action" => "adds")) ?>",
                     type:"post",
@@ -675,7 +718,9 @@ $inputs_validar_email = array();
                     processData : false,
                     /*data:{respuestas:respuestas,imagen:imagen},*/
                     success:function(data){
-                        actualizoLabels();
+                        actualizoLabels(huboCambios.campos);
+                        $(".main-container").css("opacity",1);
+                        $("#ajax_loader").hide();
                     }
                 })
 
@@ -700,10 +745,11 @@ $inputs_validar_email = array();
         }
         
         function huboCambiosEnInputs(){
-            var cambios = false;
+            var cambios = {retorno:false,campos:[]};
             $("div.active .inputs-respuestas").find("input[type=file]").each(function(){
                 if($(this).attr("estado") != ""){
-                    cambios = true;
+                    cambios.retorno=true;
+                    cambios.campos.push({nom:obj.attr("name")});
                 }
             });
             $("div.active .inputs-respuestas").each(function(){
@@ -713,7 +759,8 @@ $inputs_validar_email = array();
                         a = obj.val() + "";
                         b = $(this).find("input[type=hidden]").val() + "";
                         if(a !== b){
-                            cambios = true;
+                            cambios.retorno=true;
+                            cambios.campos.push({nom:obj.attr("name")});
                             $(this).find("input[type=hidden]").val(a)
                         }
                     }else{
@@ -721,7 +768,8 @@ $inputs_validar_email = array();
                             a = $(this).val() + "";
                             b = $(this).next().val() + "";
                             if(a !== b){
-                                cambios = true;
+                                cambios.retorno=true;
+                                cambios.campos.push({nom:obj.attr("name")});
                                 $(this).next().val(a)
                             }
                         });
@@ -733,7 +781,8 @@ $inputs_validar_email = array();
                         a = obj.val() + "";
                         b = $(this).find("input[type=hidden]").val() + "";
                         if(a !== b){
-                            cambios = true;
+                            cambios.retorno=true;
+                            cambios.campos.push({nom:obj.attr("name")});
                             $(this).find("input[type=hidden]").val(a)
                         }
                     }else{
@@ -770,14 +819,16 @@ $inputs_validar_email = array();
 
                             if(type == "string" && type2 == "string"){
                                 if(selectVal != selVal2){
-                                    cambios = true;
+                                    cambios.retorno=true;
+                                    cambios.campos.push({nom:obj.attr("name")});
                                     $(this).find("input[type=hidden]").val(selectVal);
                                 }
                             }else{
                                 v = intersection(selectVal, selVal2);
 
                                 if(!v){
-                                    cambios = true;
+                                    cambios.retorno=true;
+                                    cambios.campos.push({nom:obj.attr("name")});
                                 }
                             }
                             
@@ -1047,7 +1098,7 @@ $inputs_validar_email = array();
            $(".id-input-file").each(function(){
                var img = $(this).parent().find("imagen-control")
                if(!img.length){
-                   $(this).val("imagen");   
+                   //$(this).val("imagen");   
                }
            }) 
         });
