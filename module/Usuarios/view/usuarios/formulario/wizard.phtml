@@ -477,7 +477,7 @@ $inputs_validar_email = array();
         seteoInputs();
         return true;
     }
-
+   
     $(document).ready(function () {
         
         var $wizard = $('#fuelux-wizard').wizard();
@@ -1128,5 +1128,23 @@ $inputs_validar_email = array();
             });
         });
         <?php endforeach; ?>
+
+        $("select.isMagic").each(function(){
+           var name = $(this).attr("name");
+           $('.resp-span[nom="'+name+'"]').each(function(){
+                var row = $(this).parent().parent();
+                value = row.find("input[type=text]").val();
+                 if(value==""){
+                     row.hide();
+                 }
+           });
+        });
+        
+        $(document).on("change", "#step-container select.isMagic", function(){
+            name = $(this).attr("name");
+            $('.resp-span[nom="'+name+'"]').each(function(){
+                $(this).parent().parent().show();
+            })
+        });
     });
 </script>
