@@ -321,6 +321,26 @@ class UsuarioDao implements IUsuarioDao {
 
         return array("error" => "1", "usuario" => $user);
     }
+	
+	public function updatePassword($user) {
+        $result = false;
+
+        $data = array(
+			"md5" => md5($usuario->getClave()),
+        );
+
+        if ($user->getAvatar()) {
+            $data["avatar"] = $user->getAvatar();
+        }
+        
+        $result = $this->tableGateway->update($data, array("id" => $user->getId()));
+        
+        if($result){
+            return array("error" => "0", "usuario" => $user);
+        }
+
+        return array("error" => "1", "usuario" => $user);
+    }
 
     public function delete($id) {
         $respuesta = new Respuesta();

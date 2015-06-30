@@ -290,7 +290,7 @@ class LoginController extends AbstractActionController {
         $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
 //        $unEmail->sendEmail($body);
 
-        $this->usuarioDao->guardar($user);
+        $this->usuarioDao->updatePassword($user);
 
         $mensaje = "<p style='color:green'>Verifique su email para recuperar su contraseña.</p>";
 
