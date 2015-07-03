@@ -29,10 +29,8 @@ class SendEmail {
             'connection_class' => 'login',
             'connection_config' => array(
                 'ssl' => 'tls',
-//                'username' => 'chelosur85@gmail.com',
-//                'password' => 'gooxw4122'
-                'username' => 'atfede@gmail.com',
-                'password' => 'asdflkjh1',
+                'username' => 'testcodezur@gmail.com',
+                'password' => 'q1w2e3r4Q!W"E#R$',
                 
                 'verify_peer' => false,
                 'verify_peer_name' => false,

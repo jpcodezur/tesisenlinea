@@ -281,7 +281,7 @@ class UsuarioDao implements IUsuarioDao {
             "md5" => md5($usuario->getClave()),
             "tipo" => $usuario->getTipo(),
             "fechaReg" => date("Y-m-d"),
-            "estado" => "1",
+            "estado" => "0",
         );
 
         $avatar = $usuario->getAvatar();

@@ -218,6 +218,7 @@ class LoginController extends AbstractActionController {
             }
         }
 
+//      $this->layout()->setTemplate('usuarios/login/success.phtml');
         $this->layout()->setTemplate('usuarios/login/login.phtml');
 //        return new ViewModel(array("mensaje" => "Hola")); //crear nuevo View
     }
@@ -288,7 +289,7 @@ class LoginController extends AbstractActionController {
         $asunto = "Tu Tesis en Linea - Recuperar contraseña";
 
         $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
-//        $unEmail->sendEmail($body);
+        $unEmail->sendEmail($body);
 
         $this->usuarioDao->updatePassword($user);
 
