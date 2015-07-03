@@ -271,7 +271,7 @@ class UsuarioController extends AbstractActionController {
             $mensaje = "<p style='color:red'>Las contraseñas no coinciden!!!</p>";
             return new ViewModel(array("mensaje" => $mensaje));
         }
-        if (strlen($pass) <= 4) {
+        if (strlen($pass) < 4) {
             $mensaje = "<p style='color:red'>Las contraseña debe tener un mínimo de 4 caracteres!!!</p>";
             return new ViewModel(array("mensaje" => $mensaje));
         }
