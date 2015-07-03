@@ -55,6 +55,10 @@ class Usuario {
     public function getAlertas(){
         return $this->alertas;
     }
+    
+    public function getEstado() {
+        return $this->estado;
+    }
 
     public function setNombre($param) {
         $this->nombre = $param;

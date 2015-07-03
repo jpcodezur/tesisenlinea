@@ -44,7 +44,8 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
         $matches = $e->getRouteMatch();
         $controller = $matches->getParam("controller");
         $action = $matches->getParam("action");
-        if ($controller === "Usuarios\Controller\Login" && in_array($action, array('index', 'autenticar', 'registrarse', 'recuperarpass'))) {
+        
+        if ($controller === "Usuarios\Controller\Login" && in_array($action, array('index', 'autenticar', 'registrarse', 'recuperarpass','validarclave'))) {
             return;
         }
         $sm = $application->getServiceManager();
@@ -169,6 +170,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                     if ($instance instanceof \Usuarios\Controller\LoginController) {
                         $locator = $sm->getServiceLocator();
                         $instance->setLogin($locator->get('Usuarios\Model\Login'));
+                        $instance->setUsuarioDao($locator->get('UsuarioDao'));
                     }
                 },
                 'Usuarios\Controller\Index' => function ($instance, $sm) {

@@ -217,7 +217,7 @@ $inputs_validar_email = array();
 
                                     <hr />
                                     <div class="row-fluid wizard-actions">
-                                        <button class="btn btn-danger " data-last="Finish">
+                                        <button class="btn-volver btn btn-danger " data-last="Finish">
                                             Volver
                                             <i class="icon-backward icon-on-right"></i>
                                         </button>
@@ -1155,5 +1155,22 @@ $inputs_validar_email = array();
                 $(this).parent().parent().show();
             })
         });
+        
+        $(".btn-volver").mousedown(function(){
+            $("#sample-form").submit();
+            var r = $('#sample-form').valid();
+            if($('#sample-form').valid()){
+                saveRespuestas();
+                
+                $("div.active .inputs-respuestas").find("input[type=text]").each(function(){
+                    $(this).attr("value", $(this).val());
+                });
+                
+                resetImagenes();
+                paso_html = $("div.active .inputs-respuestas").parent().html();
+                setControlesPlugin();
+                $("button.btn-prev").trigger("click");
+            }
+        })
     });
 </script>

@@ -16,7 +16,33 @@ class UsuarioDao implements IUsuarioDao {
         $this->tableGateway = $tableGateway;
         $this->adapter = $adapter;
     }
+    
+    public function validarClave($clave){
+        
 
+        $select = $this->tableGateway->getSql()->select();
+
+        $select->where(array("clave_activacion" => $clave));
+
+        $usuarios =  $this->tableGateway->selectWith($select);
+        
+        foreach($usuarios as $usuario){
+            
+            $unUsuario = new Usuario();
+            $unUsuario->setId($usuario["id"]);
+            $unUsuario->setNombre($usuario["nombre"]);
+            $unUsuario->setApellido($usuario["apellido"]);
+            $unUsuario->setEmail($usuario["email"]);
+            $unUsuario->setTipo($usuario["tipo"]);
+            $unUsuario->setEstado(1);
+            //localhost/tutesisenlinea/public/usuarios/login/validarclave?clave=876af2e403e5480056c6a6eda9d99967
+            $this->update($unUsuario);
+            return true;
+        }
+        
+        return false;
+    }
+    
     public function obtenerTodos() {
 
         $usuarios = array();
@@ -283,6 +309,10 @@ class UsuarioDao implements IUsuarioDao {
             "fechaReg" => date("Y-m-d"),
             "estado" => "0",
         );
+        
+        if($usuario->getClaveActivacion()){
+            $data["clave_activacion"] = $usuario->getClaveActivacion();
+        }
 
         $avatar = $usuario->getAvatar();
         
@@ -302,7 +332,8 @@ class UsuarioDao implements IUsuarioDao {
             "nombre" => $user->getNombre(),
             "apellido" => $user->getApellido(),
             "email" => $user->getEmail(),
-            "tipo" => $user->getTipo()
+            "tipo" => $user->getTipo(),
+            "estado" => $user->getEstado()
         );
         
         if($user->getClave()){
@@ -326,7 +357,7 @@ class UsuarioDao implements IUsuarioDao {
         $result = false;
 
         $data = array(
-			"md5" => md5($usuario->getClave()),
+            "md5" => md5($user->getClave()),
         );
 
         if ($user->getAvatar()) {

@@ -10,6 +10,7 @@ use Usuarios\Form\Login\LoginValidator;
 use Usuarios\Model\Login as LoginService;
 use Zend\Session\Container;
 use Usuarios\Model\Entity\Usuario;
+use Usuarios\Model\Dao\UsuarioDao;
 //xx
 use Zend\Authentication\AuthenticationService;
 use Zend\Mail;
@@ -27,7 +28,7 @@ class LoginController extends AbstractActionController {
     public function __construct() {
         $this->auth = new AuthenticationService();
     }
-
+    
     public function setLogin(LoginService $login) {
         $this->login = $login;
     }
@@ -199,12 +200,12 @@ class LoginController extends AbstractActionController {
                 //Envio de link prueba
 
                 $body = "click en el link para activar";
-                $body .= "<a href='http://localhost/tesisenlinea/public/usuarios/login/validarclave?clave=" . $user->getClaveActivacion() . "'>Activar</a>";
+                $body .= "<a href='http://64.22.74.53/tutesisenlinea/public/usuarios/login/validarclave?clave=" . $user->getClaveActivacion() . "'>Activar</a>";
                 $to = $user->getEmail();
                 $asunto = "Tu Tesis en Linea - Activar cuenta";
 
               $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
-//            $unEmail->sendEmail($body);
+            $unEmail->sendEmail($body);
 
                 $mensaje = "<p style='color:green'>Usuario creado satisfactoriamente. Verifique su email para activar su cuenta.</p>";
 
@@ -277,6 +278,7 @@ class LoginController extends AbstractActionController {
         $randomPass = md5(date("Y-m-h h:m:s"));
         $randomPass = substr($randomPass, 0, 6);
 
+        $user->setId($usuario["id"]);
         $user->setEmail($usuario["email"]);
         $user->setNombre($usuario["nombre"]);
         $user->setApellido($usuario["apellido"]);
