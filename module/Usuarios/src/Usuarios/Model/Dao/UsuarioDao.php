@@ -229,7 +229,8 @@ class UsuarioDao implements IUsuarioDao {
         $usu = null;
         
         foreach($usuarios as $usu){
-            $usu = $usu;
+            $usu = new Usuario($usu["id"], $usu["nombre"], 
+                    $usu["apellido"], $usu["email"], $usu["md5"], $usu["estado"]);
         }
 
 //        return $usu["id"];

@@ -300,5 +300,30 @@ class LoginController extends AbstractActionController {
         $this->layout()->setTemplate('usuarios/login/recuperarpass.phtml');
         return new ViewModel(array("mensaje" => $mensaje));
     }
+    
+    public function cambiarpassAction(){
+        $pass = $_POST["password"];
+        $repass = $_POST["repassword"];
+        
+        $mensaje = "Usuario modificado";
+        
+        if(strlen($pass)<4){
+            $mensaje = "Error: La password debe ser de almenos 4 caracteres";
+        }
+        
+        if($pass != $repass){
+            $mensaje = "Passwords no coinciden";
+        }
+        
+        $user = $_SESSION["miSession"]["usuario"];
+        $user->setClave(($pass));
+        $this->usuarioDao->updatePassword($user);
+        
+        return $this->redirect()->toRoute('usuarios', array(
+                    'controller' => 'usuario',
+                    'action' => 'profile',
+                    'param1' => $mensaje
+        ));
+    }
 
 }

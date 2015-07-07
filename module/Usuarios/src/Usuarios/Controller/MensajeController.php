@@ -79,6 +79,8 @@ class MensajeController extends AbstractActionController {
         
         $idReceptores = $this->getRequest()->getPost('emisor-id', null);
         
+        $res = array("error" => "");
+        
         if(!$idReceptores){
             $idReceptores = trim($idReceptores);
             $idReceptores = $this->getRequest()->getPost('para', null);
@@ -93,6 +95,7 @@ class MensajeController extends AbstractActionController {
         
         if(isset($_SESSION["miSession"]["usuario"])){
             $idEmisor = $_SESSION["miSession"]["usuario"]->getId();
+            $idEmisor = $idEmisor;
         }
         
         if(isset($idEmisor,$idReceptores) && $idEmisor){
@@ -109,10 +112,13 @@ class MensajeController extends AbstractActionController {
             $unMensaje->setEstado("1");
             
             foreach($idReceptores as $receptor){
-                $idReceptor = $this->usuarioDao->getUserByEmail($receptor);
+                $receptor = $this->usuarioDao->getUserByEmail($receptor);
+                $idReceptor = $receptor->getId();
                 $unMensaje->setIdReceptor($idReceptor);
                 $res = $this->mensajeDao->guardar($unMensaje);
             }
+            
+            
             
             if($res["error"] == "0"){
                 return new ViewModel(array("enviado" => true));

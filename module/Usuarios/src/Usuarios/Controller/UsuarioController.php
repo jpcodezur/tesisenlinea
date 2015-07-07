@@ -42,7 +42,9 @@ class UsuarioController extends AbstractActionController {
 
     public function profileAction() {
         $id = null;
-
+                
+        $mensaje = $this->params()->fromRoute('param1','');
+        
         if ($this->request->isGet()) {
             $id = $this->request->getQuery('id');
         }
@@ -50,7 +52,7 @@ class UsuarioController extends AbstractActionController {
 
         $usuario = $this->usuarioDao->getUsuario($id);
 
-        return new ViewModel(array("usuario" => $usuario));
+        return new ViewModel(array("usuario" => $usuario,"mensaje"=>$mensaje));
     }
 
     public function getConfig($config) {

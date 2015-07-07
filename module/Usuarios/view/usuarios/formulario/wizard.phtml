@@ -190,11 +190,14 @@ $inputs_validar_email = array();
                                                                                 tipo="<?php echo $input->getTipo() ?>" 
                                                                                 id_pagina="<?php echo $input->getIdPagina() ?>"  
                                                                                 name="<?php echo $input->getNombre() ?>" 
-                                                                                class="control id-input-file" <?php //echo ($input->getRequired()) ? "required='required'" : "" ?> />
-                                                                            <?php if($archivo = $input->getControl()->getArchivo()): ?>
-                                                                            <img class="imagen-control" width="38" src="data:image/jpeg;base64,<?php echo base64_encode($archivo); ?>">
-                                                                            <a href="#" class="remove remove-imagen"><i class="icon-remove"></i></a>
-                                                                        <?php endif; ?>
+                                                                                class="control id-input-file" <?php //echo ($input->getRequired()) ? "required='required'" : "" ?> 
+                                                                                onchange="setImagenAjax(event)"
+                                                                                />
+                                                                                <?php if($archivo = $input->getControl()->getArchivo()): ?>
+                                                                                    <img class="imagen-control" width="38" src="data:image/jpeg;base64,<?php echo base64_encode($archivo); ?>">
+                                                                                    <a href="#" class="remove remove-imagen"><i class="icon-remove"></i></a>
+                                                                                <?php endif; ?>
+                                                                        
                                                                     </div>
                                                                     <?php endif;?>
                                                                     <?php if($input->getAyuda()):?>    
@@ -486,6 +489,45 @@ $inputs_validar_email = array();
         seteoInputs();
         return true;
     }
+    
+    function setImagenAjax(event){
+
+            /*var reader = new FileReader();
+            
+            $("input[name='"+selectedFile.name+"']").remove();
+            
+            var html = "<a  href=\"#\" class=\"remove remove-imagen\"><i class=\"icon-remove\"></i></a>";            
+                html += "<img src='"+pResult.+"' >";
+            
+            acefileinput.parent().append(html); 
+            reader.readAsDataURL(selectedFile);*/
+ 
+            var selectedFile = event.target.files[0];
+            var inputName = event.target.name;
+            
+            $("input[name="+inputName+"]").parent().parent().find("img").remove();
+            $("input[name="+inputName+"]").parent().parent().find("a.remove-imagen").remove();
+            $("input[name="+inputName+"]").parent().parent().append('<img width="38" src="" class="imagen-control">');
+            $("input[name="+inputName+"]").parent().parent().append('<a class="remove remove-imagen" href="#"><i class="icon-remove"></i></a>');
+            
+            var reader = new FileReader();
+
+            var imgtag = document.getElementsByClassName("imagen-control");
+            
+            if(selectedFile.name.indexOf(".jpg")===-1){
+                alert("La imagen debe ser jpg");
+            }
+            
+            imgtag.title = selectedFile.name;
+
+            reader.onload = function(event) {
+              //imgtag.src = event.target.result;
+              
+              $("input[name="+inputName+"]").parent().parent().find("img").attr("src",event.target.result);
+            };
+
+            reader.readAsDataURL(selectedFile);
+        }
    
     $(document).ready(function () {
         
@@ -690,7 +732,11 @@ $inputs_validar_email = array();
                                 respuesta.nombre = $(this).find("input[type=file]").attr("name");
                                 respuesta.estado = $(this).find("input[type=file]").attr("estado");
                                 respuesta.id_pagina = $(this).find("input[type=file]").attr("id_pagina");
+                                
+                                $("div.active .inputs-respuestas").find("input[type=file]").attr("estado","");
                                 //respuesta.archivo = imagen;
+                                //var img = setImagenAjax($(this).parent(),$(this).find("input[type=file]")[0].files[0],$(this).find("input[type=file]")[0]);
+                                
                             }else{
                                 respuesta.tipo = $(this).find("select").attr("tipo");
                                 respuesta.nombre = $(this).find("select").attr("name");
@@ -730,6 +776,11 @@ $inputs_validar_email = array();
                         actualizoLabels(huboCambios.campos);
                         $(".main-container").css("opacity",1);
                         $("#ajax_loader").hide();
+                    },
+                    error:function(){
+                        $(".main-container").css("opacity",1);
+                        $("#ajax_loader").hide();
+                        alert("Error guardando\n");
                     }
                 })
 
@@ -767,7 +818,7 @@ $inputs_validar_email = array();
                     if(obj.length == 1){
                         a = obj.val() + "";
                         b = $(this).find("input[type=hidden]").val() + "";
-                        if(a !== b){
+                        if(a != b){
                             cambios.retorno=true;
                             cambios.campos.push({nom:obj.attr("name")});
                             $(this).find("input[type=hidden]").val(a)
@@ -861,7 +912,7 @@ $inputs_validar_email = array();
                     $(this).attr("value", $(this).val());
                 });
                 
-                resetImagenes();
+                //resetImagenes();
                 paso_html = $("div.active .inputs-respuestas").parent().html();
                 setControlesPlugin();
             }
@@ -898,11 +949,11 @@ $inputs_validar_email = array();
         });
         
         $(".btn-prev").mousedown(function(){
-            if(paso_html){
+            /*if(paso_html){
                 $("div.active .inputs-respuestas").parent().html(paso_html);
                 paso_html = "";
                 setControlesPlugin();
-            }
+            }*/
         });
         /*
         function seteoHiddens(){
@@ -1166,11 +1217,21 @@ $inputs_validar_email = array();
                     $(this).attr("value", $(this).val());
                 });
                 
-                resetImagenes();
+                //resetImagenes();
                 paso_html = $("div.active .inputs-respuestas").parent().html();
                 setControlesPlugin();
                 $("button.btn-prev").trigger("click");
             }
         })
+        
+        /*$(document).find(".imagen-control").each(function(){
+            $(this).parent().find(".ace-file-input").hide();
+        });
+
+        $(document).on("mousedown","a.remove-imagen",function(){
+            $(this).parent().find(".ace-file-input").show();
+        });*/
+        
+        
     });
 </script>
