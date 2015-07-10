@@ -28,7 +28,7 @@ class LoginController extends AbstractActionController {
     public function __construct() {
         $this->auth = new AuthenticationService();
     }
-    
+
     public function setLogin(LoginService $login) {
         $this->login = $login;
     }
@@ -204,8 +204,8 @@ class LoginController extends AbstractActionController {
                 $to = $user->getEmail();
                 $asunto = "Tu Tesis en Linea - Activar cuenta";
 
-              $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
-            $unEmail->sendEmail($body);
+                $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
+                $unEmail->sendEmail($body);
 
                 $mensaje = "<p style='color:green'>Usuario creado satisfactoriamente. Verifique su email para activar su cuenta.</p>";
 
@@ -278,12 +278,12 @@ class LoginController extends AbstractActionController {
         $randomPass = md5(date("Y-m-h h:m:s"));
         $randomPass = substr($randomPass, 0, 6);
 
-        $user->setId($usuario["id"]);
-        $user->setEmail($usuario["email"]);
-        $user->setNombre($usuario["nombre"]);
-        $user->setApellido($usuario["apellido"]);
-        $user->setTipo($usuario["tipo"]);
-        $user->setEstado($usuario["estado"]);
+        $user->setId($usuario->getId());
+        $user->setEmail($usuario->getEmail());
+        $user->setNombre($usuario->getNombre());
+        $user->setApellido($usuario->getApellido());
+        $user->setTipo($usuario->getTipo());
+        $user->setEstado($usuario->getEstado());
         $user->setClave($randomPass);
 
         $body = "Su nueva contraseña es: " . $randomPass . "'";
@@ -300,25 +300,62 @@ class LoginController extends AbstractActionController {
         $this->layout()->setTemplate('usuarios/login/recuperarpass.phtml');
         return new ViewModel(array("mensaje" => $mensaje));
     }
-    
-    public function cambiarpassAction(){
+
+    public function modificarusuarioAction() {
+        $user = new Usuario();
+        $nom = $_POST["nom"];
+        $apellido = $_POST["apellido"];
+        $email = $_POST["email"];
+
         $pass = $_POST["password"];
         $repass = $_POST["repassword"];
-        
-        $mensaje = "Usuario modificado";
-        
-        if(strlen($pass)<4){
-            $mensaje = "Error: La password debe ser de almenos 4 caracteres";
+
+        $usuario = null;
+
+        if (isset($_SESSION["miSession"]["usuario"])) {
+            $usuario = $_SESSION["miSession"]["usuario"];
         }
-        
-        if($pass != $repass){
-            $mensaje = "Passwords no coinciden";
+
+        if ($usuario) {
+
+            $user->setId($usuario->getId());
+            $user->setEmail($email);
+            $user->setNombre($nom);
+            $user->setApellido($apellido);
+
+            $user->setTipo($usuario->getTipo());
+            $user->setEstado($usuario->getEstado());
+
+            $mensaje = "Usuario modiciado satisfactoriamente";
+
+            $status = true;
+
+            if (strlen($pass) < 4) {
+                $mensaje = "Error: La password debe ser de almenos 4 caracteres";
+            } else {
+                if (strlen($repass) > 0) {
+                    if ($pass != $repass) {
+                        $status = false;
+                        $mensaje = "Passwords no coinciden";
+                    } else {
+                        $user->setClave($pass);
+                        $this->updatePassword->update($user);
+                    }
+                }
+            }
+
+            if ($status) {
+                $upd = $this->usuarioDao->update($user);
+                if(!$upd){
+                    $mensaje = "Error al actualizar";
+                }
+            } else {
+                $mensaje = "Error al actualizar";
+            }
+        } else {
+            $mensaje = "Error al actualizar";
         }
-        
-        $user = $_SESSION["miSession"]["usuario"];
-        $user->setClave(($pass));
-        $this->usuarioDao->updatePassword($user);
-        
+
         return $this->redirect()->toRoute('usuarios', array(
                     'controller' => 'usuario',
                     'action' => 'profile',

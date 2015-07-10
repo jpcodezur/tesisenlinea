@@ -32,7 +32,7 @@ $inputs_validar_email = array();
                                         <ul class="wizard-steps">
                                             <?php $count = 1; ?>
                                             <?php foreach ($this->paginas as $pagina): ?>
-                                                <li data-target="#step<?php echo $count ?>" class="<?php echo ($count === 1 ) ? "active" : "" ?>">
+                                                <li data-target="#step<?php echo $count ?>" class="<?php echo ($this->active == $count)? "active" : "" ?>">
                                                     <span class="step"><?php echo $count; ?></span>
                                                     <span class="title"><?php echo $pagina->getTitulo() ?></span>
                                                 </li>
@@ -55,7 +55,7 @@ $inputs_validar_email = array();
                                     <div class="step-content row-fluid position-relative" id="step-container">
                                         <?php $count = 1; ?>
                                         <?php foreach ($this->paginas as $pagina): ?>
-                                            <div class="step-pane <?php echo ($count === 1 ) ? "active" : "" ?>" id="step<?php echo $count ?>">
+                                            <div class="step-pane <?php echo ($this->active == $count)? "active" : "" ?>" id="step<?php echo $count ?>">
                                                 <h4 class="header green"><?php echo $pagina->getTitulo() ?></h4>
                                                 <form enctype="multipart/form-data" class="form-horizontal" id="sample-form" >
                                                     <?php foreach ($pagina->getInputs() as $input): ?>
@@ -717,10 +717,20 @@ $inputs_validar_email = array();
                                 respuesta.hasta = "";
                             }else{
                                 val = $(this).find(".fechadatepicker").val();
-                                val = $.trim(val);
                                 val = val.split("-");
-                                respuesta.desde = val[0];
-                                respuesta.hasta = val[1];
+                                respuesta.desde = "";
+                                respuesta.hasta = "";
+                                
+                                for(var i in val){
+                                    if(i<3){
+                                        respuesta.desde += val[i]+"-";
+                                    }else{
+                                        respuesta.hasta += val[i]+"-";
+                                    }
+                                }
+                                respuesta.desde = respuesta.desde.substring(0,respuesta.desde.length-1);
+                                respuesta.hasta = respuesta.hasta.substring(0,respuesta.hasta.length-1);
+                                respuesta.hasta = respuesta.hasta;
                             }
                             
                         }else{
@@ -1137,6 +1147,8 @@ $inputs_validar_email = array();
         
         $(document).find('.fechadatepicker-rango').daterangepicker({
             yearRange: '2010:2020',
+            format: 'YYYY-MM-DD',
+            separator:'-',
         }).prev().on(ace.click_event, function(){
                 $(this).next().focus();
         });

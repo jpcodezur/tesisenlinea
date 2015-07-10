@@ -49,8 +49,15 @@ class UsuarioController extends AbstractActionController {
             $id = $this->request->getQuery('id');
         }
         $this->usuarioDao = $this->getServiceLocator()->get('UsuarioDao');
-
+        
         $usuario = $this->usuarioDao->getUsuario($id);
+        
+        if(!$usuario){
+            if(isset($_SESSION["miSession"]["usuario"])){
+                $usuario = $_SESSION["miSession"]["usuario"]; 
+                $usuario = $this->usuarioDao->getUsuario($usuario->getId());
+            }
+        }
 
         return new ViewModel(array("usuario" => $usuario,"mensaje"=>$mensaje));
     }

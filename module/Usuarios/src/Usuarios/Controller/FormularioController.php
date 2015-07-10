@@ -47,6 +47,7 @@ class FormularioController extends AbstractActionController {
         
         $paginas = array();
         
+        $active = 1;
         
         if(isset($_SESSION["miSession"]["usuario"])){
             $usuario = $_SESSION["miSession"]["usuario"]; 
@@ -60,10 +61,12 @@ class FormularioController extends AbstractActionController {
             $paginas = $this->dao->getPaginas(false);
             
             $inputs = $this->dao->getFormulario($pagina);
-        
+            
+            $active = $this->dao->getUltimaPaginaCompletada($usuario->getId());
+            
         }
         
-        return array("paginas" => $paginas,"inputs" => $inputs);
+        return array("paginas" => $paginas,"inputs" => $inputs,"active" => $active);
     }
     
     public function resparentAction(){

@@ -310,11 +310,13 @@ abstract class AbstractTableGateway implements TableGatewayInterface
             $this->initialize();
         }
         $sql = $this->sql;
+        
         $update = $sql->update();
         $update->set($set);
         if ($where !== null) {
             $update->where($where);
         }
+        $str = $sql->getSqlstringForSqlObject($update);
         return $this->executeUpdate($update);
     }
 

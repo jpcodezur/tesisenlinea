@@ -332,6 +332,17 @@ class RespuestaDao {
                         . "INNER JOIN select_collections as sc on sc.id_input = i.id AND sc.id_select = rs.id_select "
                         . "WHERE i.nombre ='" . $nombre . "' AND r.id_usuario=$idAlumno";
                 break;
+            case "fecha":
+                $sql = "SELECT CONCAT(rf.desde,'-',rf.hasta) as texto FROM inputs as i "
+                        . "INNER JOIN respuestas as r on r.id_input = i.id "
+                        . "INNER JOIN respuesta_fecha as rf on rf.id_respuesta = r.id "
+                        . "WHERE i.nombre ='" . $nombre . "' AND r.id_usuario=$idAlumno";
+                
+                        $sql = "SELECT DATEDIFF(CONCAT(rf.desde,' 00:00:00'),CONCAT(rf.hasta,' 00:00:00')) as texto FROM inputs as i "
+                        . "INNER JOIN respuestas as r on r.id_input = i.id "
+                        . "INNER JOIN respuesta_fecha as rf on rf.id_respuesta = r.id "
+                        . "WHERE i.nombre ='" . $nombre . "' AND r.id_usuario=$idAlumno";
+                break;
 
             default:
                 break;

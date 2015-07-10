@@ -57,7 +57,26 @@ class FormularioDao {
         $res = $this->adapter->query($sql);
         return $res->execute();
     }
-
+    
+    public function getUltimaPaginaCompletada($idUsuario){
+        $sql = "SELECT DISTINCT MAX(id_pagina) as ultima 
+                FROM respuestas as r
+                INNER JOIN inputs as i on i.id = r.id_input
+                WHERE id_usuario = $idUsuario";
+        
+        $res = $this->adapter->query($sql);
+        
+        if ($res) {
+            $result = $res->execute();
+            foreach ($result as $r) {
+                $unInput = new Input();
+                return $r["ultima"];
+            }
+        }
+        
+        return 1;
+    }
+    
     public function getFormulario($idPagina) {
         $sql = "SELECT * FROM inputs WHERE estado = 1 AND id_pagina = $idPagina ORDER BY orden ASC";
 
