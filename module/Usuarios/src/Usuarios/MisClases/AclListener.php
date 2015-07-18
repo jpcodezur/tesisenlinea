@@ -78,16 +78,18 @@ class AclListener implements ListenerAggregateInterface {
                     'usuarios:alerta',
                     'usuarios:mensaje',
                     'usuarios:login',
+                    'usuarios:usuario',
                     'usuarios:respuesta',
                     'login:index',
                     'login:login',
                     'usuarios:popup',
-                    'usuarios:usuario',
+                    
                     'login:logout'
 //                        ), array('index', 'wizard', 'msgs', 'resparent', 'adds', 'add', 'actualizospan', 'popup', 'settings', 'savesettings'))
                         ), array(
                             'username','send','msgsenviados','view','modificarusuario',
                             'new','index', 'wizard', 'msgs', 'resparent', 'adds', 'add', 'actualizospan', 'popup', 'settings', 'savesettings', 'profile'))
+                ->deny('agente', array('usuarios:usuario'), array('index'))
                 ->deny('admin', array('usuarios:index', 'usuarios:formulario'), array('list', 'add', 'wizard'));
 
         $application = $e->getApplication();

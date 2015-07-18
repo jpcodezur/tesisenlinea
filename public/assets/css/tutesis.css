@@ -1,0 +1,319 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
+
+
+body {
+    
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+.tel-home-title {
+
+    color: #0076C0;
+    text-align: left;
+    
+    font-size: 2.8em;
+   /* width: 80%;*/
+    padding-top: 7%;
+    padding-left: 0%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+@media (max-width: 980px) {
+
+    .tel-home-title {
+        font-size: 1.8em;
+        padding: 5%;
+    }
+
+}
+
+h1,.tel-wizard-title { font-family: 'Open Sans', sans-serif;}
+
+
+.tel-wizard-title{
+
+    color:#fbbd34 ;
+    font-size: 1.3em;
+    border-bottom: 2px solid #fbbd34;
+    clear: both;
+    margin-top: 50px;
+}
+
+
+
+
+
+.tel-home-about {
+
+    background-color: #fff;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.tel-home-about h1 {
+
+    color: #0076C0;
+}
+
+
+@media (max-width: 980px) {
+
+    .tel-home-about h1 {
+
+        font-size: 1.8em;
+    }
+
+}
+
+.tel-home-about p {
+
+    text-align: justify;
+}
+
+.tel-home-form {
+
+    background-color: #0076C0;
+    min-height: 350px;
+    max-width: 300px;
+    margin-bottom: 25px;
+margin: 30px auto;
+}
+
+.tel-home-form-title{
+
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    
+    
+}
+
+.tel-form-space {
+margin-bottom: 5px;
+
+}
+
+.tel-extra-block{
+    min-height: 400px;
+    color: #fff;
+    background-image: url(../images/Fotolia_73436135_M.jpg);
+    background-repeat: no-repeat;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.tel-extra-block p{
+
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.tel-home-top {
+    min-height: 150px;
+    color: #fff;
+    background-image: url(../images/Fotolia_26820464_M.jpg);
+    background-repeat: no-repeat;
+    background-color: #fff;
+    padding-top: 10px;
+    background-size: 267px 354px;
+    
+    background-position: 30px;
+}
+
+@media (max-width: 980px) {
+
+    .tel-home-top {
+        min-height: 200px;
+        background-size: 250px 175px;
+        background-position: 30px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .tel-home-top {
+    min-height: 0px;
+    background-size: 0px 175px;
+    }
+}
+
+
+.tel-footer {
+
+    background-color: #000;
+    color:#fff;
+}
+
+
+.tel-dashboard-icon {
+
+    text-align: center;
+    margin-top: 20px;
+
+}
+
+.tel-dashboard-icon span{
+
+    color: #0076C0;
+    float: left;
+    clear: both;
+width: 100%;
+}
+
+
+.tel-dashboard-icon-bigtext{
+    
+    font-size: 2em;
+}
+.tel-dashboard-icon-smalltext{
+    font-size: 0.8em;
+}
+
+.tel-dashboard-icon i {
+
+    color: #fff;
+    background-color: #0076C0;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    padding-top: 10px;
+    font-size: 1.8em;
+    clear: both;
+    float: left;
+    margin-left: 40%;
+}
+
+@media (max-width: 980px) {
+    
+    .tel-dashboard-icon i {
+        margin-left: 34%;
+    }
+}
+
+@media (max-width: 360px) {
+    
+    .tel-dashboard-icon i {
+        margin-left: 20%;
+    }
+}
+
+
+.tel-wizard-input {
+
+    min-width: 500px;
+    margin-bottom: 10px;
+}
+
+.step {
+    width: 250px;
+    float: left;
+    
+    
+}
+
+.step .bgline,.step .bgline-active{
+    position: absolute;
+    border-bottom: 2px solid lightgray;
+        display: block;
+    height: 1px;
+    content: " ";
+    width: 250px;
+    margin-top: 16px;
+    /*z-index: -1;*/
+}
+
+.step .bgline-active{
+    border-bottom: 2px solid #0076C0;
+}
+
+.step-form-active,.step-form {
+
+border: 2px solid #0076C0;
+border-radius: 80px;
+width: 30px;
+padding-left: 8px;
+height: 30px;
+padding-top: 2px;
+    margin-left: 110px;
+    background-color: #fff;
+    z-index: 2;
+position: absolute;
+    
+}
+
+.step-form ,.step-form-txt {
+
+    color: lightgray;
+}
+
+.step-form  {
+
+   border: 2px solid lightgray;
+}
+
+
+
+.step-form-active-txt, .step-form-txt  {
+    text-align: center;
+    margin-top: 40px;
+}
+
+/**/
+
+/*
+.step::before {
+    display: block;
+    content: "";
+    width: 100%;
+    height: 1px;
+    font-size: 0px;
+    overflow: hidden;
+    border-top: 4px solid #CED1D6;
+    position: relative;
+    top: 21px;
+    z-index: 1;
+}*/
+
+.tel-home-video {
+width: 95%;
+margin-left: 5%;
+padding-bottom: 20px;
+/*max-height: 400px;*/
+}
+
+.embed-responsive.embed-responsive-16by9 {
+  padding-bottom: 38%;
+}
+
+.embed-responsive .embed-responsive-item,
+.embed-responsive iframe,
+.embed-responsive embed,
+.embed-responsive object {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 90%;
+  height: 100%;
+  border: 0;
+}
+
+
+.nav .navbar-nav .navbar-right {
+    overflow: visible;
+}  
+
+.tel-nav{
+overflow: visible;
+}
+
+.tel-login {
+    color: #fff;
+    margin-top: 10px;
+}
+
+.tel-login:hover {
+    color: #000;
+ 
+}

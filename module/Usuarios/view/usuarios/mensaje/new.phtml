@@ -6,11 +6,16 @@
 
 
     <!--Respuesta-->
+    <div class="panel-heading">
+            <div class="text-muted bootstrap-admin-box-title">Redactar Mensaje</div>
+        </div>
     <form name="form-send-email" id="form-send-email" method="post" action="<?php echo $this->url("usuarios",array("controller"=>"mensaje", "action"=>"send")) ?>">
+        
         <input type="hidden" name="emisor-id" value="">
         <input type="hidden" name="textarea" value="">
         <div class="row-fluid">
             <div id="form_field_select_4_chzn" class="chzn-container chzn-container-multi chzn-with-drop chzn-container-active" title="">
+                <label>Para:</label>
                 <ul class="chzn-choices">
                     <li class="search-field">
                         <input type="text" name="para" id="para" autocomplete="off" placeholder="Para:">
@@ -27,8 +32,8 @@
             </div>
         </div>
         <br>
-        <div>
-            <input name="asunto" id="asunto" placeholder="Asunto:" type="text" value="">
+        <div class="label-msg" style="text-align: center;">
+            <label>Asunto:</label><input name="asunto" id="asunto" placeholder="Asunto:" type="text" value="">
         </div>
         <div name="edit2" class="wysiwyg-editor" id="editor2"></div>
         <hr>
@@ -139,16 +144,12 @@
     background-image:none !important;
     color: #858585 !important;
     border-color: #D5D5D5 !important;
-    width:333px !important;
     position: inherit !important;
 }
 .chzn-container .chzn-results li:hover{
     background: none repeat scroll 0 0 #316AC5;
     color: #FFFFFF;
     cursor:pointer;
-}
-input[name=para],#asunto{
-    width:320px
 }
 </style>
 

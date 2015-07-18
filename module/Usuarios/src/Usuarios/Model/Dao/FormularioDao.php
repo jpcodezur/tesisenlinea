@@ -74,7 +74,7 @@ class FormularioDao {
             }
         }
         
-        return 1;
+        return 0;
     }
     
     public function getFormulario($idPagina) {
@@ -534,7 +534,7 @@ class FormularioDao {
     }
 
     public function getRespuestaPregunta($nomPregunta, $idUsuario, $tipo, $separador) {
-
+        $sql = "";
         if ($tipo == "texto") {
             $sql = "SELECT rt.texto as respuesta FROM respuesta_texto as rt "
                     . "INNER JOIN respuestas as r on r.id = rt.id_respuesta "
@@ -552,13 +552,14 @@ class FormularioDao {
                     . "INNER JOIN inputs as i on i.id = r.id_input "
                     . "WHERE r.id_usuario = $idUsuario AND i.nombre = '" . $nomPregunta . "'";
         }
+        if($sql){
+            $res = $this->adapter->query($sql);
 
-        $res = $this->adapter->query($sql);
-
-        if ($res) {
-            $result = $res->execute();
-            foreach ($result as $r) {
-                $nomPregunta = $r["respuesta"];
+            if ($res) {
+                $result = $res->execute();
+                foreach ($result as $r) {
+                    $nomPregunta = $r["respuesta"];
+                }
             }
         }
 

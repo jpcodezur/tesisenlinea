@@ -17,12 +17,12 @@ return array(
         ),
     ),
     'db' => array(
-        'driver' =>'Pdo',
-        'dsn' =>'mysql:dbname=tu_tesis_en_linea;host=localhost',
-//      'dsn' => 'mysql:dbname=tesis_en_linea;host=127.0.0.1',
+        'driver'         =>'Pdo',
+        'dsn'            =>'mysql:dbname=tu_tesis_en_linea;host=localhost',
+//        'dsn'            =>'mysql:dbname=tesisenlinea;host=localhost',
         'username' => 'root',
         'password' => 'talinaes',
-//      'password' => 'lsnsdmsdp1',
+//        'password' => 'lsnsdmsdp1',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
@@ -97,7 +97,7 @@ return array(
             'usuarios' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/usuarios[/:controller[/:action[/:id]]][/:param1][/:param2]',
+                    'route' => '/usuarios[/:controller[/:action[/:id]]]',
                     'constraints' => array(
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
@@ -114,7 +114,7 @@ return array(
                     'default' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/[:controller[/:action[/:id]]][/:param1][/:param2]',
+                            'route' => '/[:controller[/:action[/:id]]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',

@@ -19,7 +19,20 @@
         <!-- Le styles -->
         <?php
         echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                
+                ->prependStylesheet($this->basePath() . '/assets/css/styles_new.css')
+                /**/
+                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap.css')
+                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-theme.css')
+                //<!-- Bootstrap Admin Theme -->
+                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-admin-theme.css')
+                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-admin-theme-change-size.css')
+                //<!-- Custom  -->
+                ->prependStylesheet($this->basePath() . '/assets/css/tutesis.css')
+                //<!-- Vendors -->
+                //->prependStylesheet($this->basePath() . '/assets/vendors/easypiechart/jquery.easy-pie-chart.css')
+                //->prependStylesheet($this->basePath() . '/assets/vendors/easypiechart/jquery.easy-pie-chart_custom.css')
+                ->prependStylesheet($this->basePath() . '/assets/css/styles_new.css')
+                /**/
                 ->prependStylesheet($this->basePath() . '/assets/css/jquery-mentions/jquery.mentionsInput.css')
                 //->prependStylesheet($this->basePath() . '/assets/css/jquery-mentions/style.css')
                 ->prependStylesheet($this->basePath() . '/assets/css/main.css')
@@ -32,7 +45,7 @@
                 ->prependStylesheet($this->basePath() . '/assets/css/daterangepicker.css')
                 ->prependStylesheet($this->basePath() . '/assets/css/font-awesome.min.css')
                 ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-responsive.min.css')
-                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap.min.css')
+                //->prependStylesheet($this->basePath() . '/assets/css/bootstrap.min.css')
         ?>
 
         <!--[if IE 7]>
@@ -55,6 +68,10 @@
         <!-- Scripts -->
         <?php
         echo $this->headScript()
+                
+                ->prependFile($this->basePath() . '/assets/js/twitter-bootstrap-hover-dropdown.min.js')
+                ->prependFile($this->basePath() . '/assets/js/bootstrap-admin-theme-change-size.js')
+                //->prependFile($this->basePath() . '/assets/vendors/easypiechart/jquery.easy-pie-chart.js')
                 
                 // PAGES
                 ->prependFile($this->basePath() . '/assets/js/jquery-mentions/jquery.mentionsInput.js')
@@ -127,15 +144,16 @@
         </script>
         
     </head>
-    <body>
+    <body class="bootstrap-admin-with-small-navbar">
+        <input type="hidden" name="txtactivestep">
 <?php echo $this->partial('layout/navbar'); ?>
         <div class="main-container container-fluid">
             <a href="#" id="menu-toggler" class="menu-toggler">
                 <span class="menu-text"></span>
             </a>
-<?php echo $this->partial('layout/sidebar'); ?>
-            <div class="main-content">
-            <?php echo $this->partial('layout/breadcrumb'); ?>
+<?php //echo $this->partial('layout/sidebar'); ?>
+            <div class="col-lg-12">
+            <?php //echo $this->partial('layout/breadcrumb'); ?>
             <?php echo $this->partial('layout/modal'); ?>
                 
                 <div class="page-content">

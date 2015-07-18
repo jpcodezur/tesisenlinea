@@ -1,4 +1,4 @@
-<?php $inputs_ayuda = array();?>
+﻿﻿<?php $inputs_ayuda = array();?>
 <?php 
 $inputs_validar_numerico = array();
 $inputs_validar_email = array();
@@ -28,18 +28,24 @@ $inputs_validar_email = array();
                         <div class="widget-body">
                             <div class="widget-main">
                                 <div class="row-fluid">
-                                    <div id="fuelux-wizard" class="row-fluid hide" data-target="#step-container">
+                                    <div id="fuelux-wizard" class="row-fluid" data-target="#step-container">
                                         <ul class="wizard-steps">
                                             <?php $count = 1; ?>
                                             <?php foreach ($this->paginas as $pagina): ?>
-                                                <li data-target="#step<?php echo $count ?>" class="<?php echo ($this->active == $count)? "active" : "" ?>">
+                                                <?php
+                                                    $ultimaPaginaCompleta = 0;
+                                                    if($this->active){
+                                                        $ultimaPaginaCompleta = $this->active;
+                                                    }
+                                                ?>
+                                                <li data-target="#step<?php echo $count ?>" class="<?php echo ($count == 1)? "active" : "" ?>">
                                                     <span class="step"><?php echo $count; ?></span>
                                                     <span class="title"><?php echo $pagina->getTitulo() ?></span>
                                                 </li>
                                                 <?php $count++; ?>
                                             <?php endforeach; ?>
                                         </ul>
-                                            <div class="row-fluid wizard-actions wizard-actions-top">
+                                            <!--<div class="row-fluid wizard-actions wizard-actions-top">
                                                 <a class="btn-prev">
                                                     <i class="icon-arrow-left"></i>
                                                     Volver (cancelar)
@@ -49,7 +55,7 @@ $inputs_validar_email = array();
                                                     Siguiente (Guardar)
                                                     <i class="icon-arrow-right icon-on-right"></i>
                                                 </a>
-                                            </div>
+                                            </div>-->
                                     </div>
 
                                     <div class="step-content row-fluid position-relative" id="step-container">
@@ -164,16 +170,15 @@ $inputs_validar_email = array();
 
                                                                                 <div class="control-group">
                                                                                         <div class="row-fluid input-prepend">
-                                                                                                <span class="add-on">
-                                                                                                        <i class="icon-calendar"></i>
-                                                                                                </span>
-
                                                                                                 <input 
                                                                                                     style="width: calc(<?php echo $tamanio*2 ?>% - 27px) ! important;"
                                                                                                     id_input="<?php echo $input->getId() ?>" id_pagina="<?php echo $input->getIdPagina() ?>"  name="<?php echo $input->getNombre() ?>"
                                                                                                     tipo="fecha" tipofecha="rango" class="control span10 fechadatepicker fechadatepicker-rango" type="text" name="date-range-picker" id="id-date-range-picker-1" 
                                                                                                     value="<?php echo $input->getRespuesta() ?>"
                                                                                                     />
+                                                                                                <span class="add-on">
+                                                                                                        <i class="icon-calendar"></i>
+                                                                                                </span>
                                                                                                 <input type="hidden" name="hidden-<?php echo $input->getNombre() ?>" class="span12 hidden-response" id="" value="<?php echo $input->getRespuesta() ?>"/>
                                                                                         </div>
                                                                                 </div>
@@ -368,6 +373,8 @@ $inputs_validar_email = array();
     var inputs = [];
     var paso_html = "";
     
+    
+    
     jQuery.extend({
     compare: function (arrayA, arrayB) {
         if (arrayA.length != arrayB.length) { return false; }
@@ -529,6 +536,8 @@ $inputs_validar_email = array();
             reader.readAsDataURL(selectedFile);
         }
    
+  
+   
     $(document).ready(function () {
         
         var $wizard = $('#fuelux-wizard').wizard();
@@ -546,13 +555,36 @@ $inputs_validar_email = array();
         
         $(".wizard-steps").hide();
         
+        var $ultimaPaginaCompleta = "<?php echo $ultimaPaginaCompleta ?>";
+        var $totalPasos = $("#step-container .step-pane").length;
+        
+        console.log("$totalPasos: "+$totalPasos)
+        
+        if($ultimaPaginaCompleta == "0"){
+            $("#step1").addClass("active");
+        }else{
+            for(var i = 0; i < $ultimaPaginaCompleta-1; i++){
+                if(i < $totalPasos){
+                    $('#fuelux-wizard').wizard("next");
+                }
+            }
+        }
+        
         actualizoPaginas();
         
         $(".wizard-steps").show();
         
         $(".chzn-select").chosen(); 
         
-        arrobaToSpan();
+        setTimeout(function(){
+            $(".main-container").css("opacity",0.3);
+            $("#ajax_loader").show();
+            setTimeout(function(){
+                arrobaToSpan();
+            },300);
+        },300);
+        
+        
         
         seteoInputs();
         
@@ -1222,7 +1254,9 @@ $inputs_validar_email = array();
         $(".btn-volver").mousedown(function(){
             $("#sample-form").submit();
             var r = $('#sample-form').valid();
+            
             if($('#sample-form').valid()){
+                
                 saveRespuestas();
                 
                 $("div.active .inputs-respuestas").find("input[type=text]").each(function(){
