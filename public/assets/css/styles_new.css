@@ -106,27 +106,29 @@ ul.wizard-steps li.active{
 .panel-heading {
     background-image: linear-gradient(to bottom, #0076c0 0%, #0076c0 100%);
     background-repeat: repeat-x;
+    margin-top: 10px !important;
 }
 #form-send-email{
     background-color: white;
     padding: 15px;
     padding-bottom: 53px;
 }
-#form_field_select_4_chzn label {
+/*#form_field_select_4_chzn label {
     float: left;
     margin-left: 8%;
     margin-right: 1%;
-}
+}*/
 .chzn-choices{
     border-radius: 5px !important;
     padding: 5px !important;
-    width: 88% !important;
+    width: 86% !important;
 }
 input#asunto{
     border:1px solid #BCBCBC;
     border-radius: 5px !important;
     padding: 5px !important;
-    width: 88% !important;
+    margin-left: 5px;
+    width: 86% !important;
 }
 .label-msg{
     margin-bottom: 25px;
@@ -174,4 +176,20 @@ ul.wizard-steps{
     padding:5px;
     border-radius:3px;
     margin:2px;
+}
+.chzn-container-active .chzn-choices{
+    border:1px solid #bcbcbc !important;
+    display: inline-block;
+}
+#form_field_select_4_chzn label {
+    margin-right: 1%;
+    text-align: right;
+    width: 11%;
+}
+
+.label-msg{
+    text-align: left;
+}
+.panel-heading .bootstrap-admin-box-title{
+    color:white;
 }

@@ -103,8 +103,8 @@ $totalMensajes = count($mensajes);
                                         <li><a href="email-outbox.html">Enviados</a></li>
                                     </ul>
                                 </li>-->
-                                <li><a href="wizard.html"> <i class="fa fa-envelope">  <?php echo $totalMensajes ?></i></a></li>
-                                <li><a href="wizard.html"> <i class="fa fa-bell"> <?php echo $totalAlertas ?></i></a></li>
+                                <li><a href="<?php echo $this->url("usuarios",array("controller"=>"mensaje","action"=>"msgs")) ?>/"> <i class="fa fa-envelope">  <?php echo $totalMensajes ?></i></a></li>
+                                <li><a href=""> <i class="fa fa-bell"> <?php echo $totalAlertas ?></i></a></li>
                             </ul>
                         </div>
                     </div>
