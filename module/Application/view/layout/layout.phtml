@@ -1,5 +1,5 @@
 <?php echo $this->doctype(); ?>
-<html lang="en">
+<html lang="en" class="csstransforms no-csstransforms3d csstransitions">
     <head>
         <meta charset="utf-8" />
         <?php echo $this->headTitle(); ?>
@@ -19,15 +19,25 @@
         <!-- Le styles -->
         <?php
         echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                ->prependStylesheet($this->basePath() . '/assets/css/tutesis.css')
                 ->prependStylesheet($this->basePath() . '/assets/css/styles_new.css')
+                
+                /*Inicio maqutado 2*/
+                
+                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-new.css')
+                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap.css')
+                ->prependStylesheet($this->basePath() . '/assets/css/animate.css')
+                ->prependStylesheet($this->basePath() . '/assets/css/style.css')
+                /* Fin maquetado 2*/
+                
                 /**/
                 ->prependStylesheet($this->basePath() . '/assets/css/bootstrap.css')
-                ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-theme.css')
+                //->prependStylesheet($this->basePath() . '/assets/css/bootstrap-theme.css')
                 //<!-- Bootstrap Admin Theme -->
                 ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-admin-theme.css')
                 ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-admin-theme-change-size.css')
                 //<!-- Custom  -->
-                ->prependStylesheet($this->basePath() . '/assets/css/tutesis.css')
+                
                 //<!-- Vendors -->
                 //->prependStylesheet($this->basePath() . '/assets/vendors/easypiechart/jquery.easy-pie-chart.css')
                 //->prependStylesheet($this->basePath() . '/assets/vendors/easypiechart/jquery.easy-pie-chart_custom.css')
@@ -45,6 +55,7 @@
                 ->prependStylesheet($this->basePath() . '/assets/css/daterangepicker.css')
                 ->prependStylesheet($this->basePath() . '/assets/css/font-awesome.min.css')
                 ->prependStylesheet($this->basePath() . '/assets/css/bootstrap-responsive.min.css')
+                ->prependStylesheet($this->basePath() . '/assets/css/font-awesome.min.css')
                 //->prependStylesheet($this->basePath() . '/assets/css/bootstrap.min.css')
         ?>
 
@@ -91,7 +102,10 @@
                 ->prependFile($this->basePath() . '/assets/js/jquery.alerts.js')
                 
                 ->prependFile($this->basePath() . '/assets/js/x-editable/ace-editable.min.js')
+                //->prependFile($this->basePath() . '/assets/js/x-editable/xeditable.min.js')
                 ->prependFile($this->basePath() . '/assets/js/x-editable/bootstrap-editable.min.js')
+                ->prependFile($this->basePath() . '/assets/js/jonathan_main.js')
+                ->prependFile($this->basePath() . '/assets/js/xeditable.min.js')
                 
                 ->prependFile($this->basePath() . '/assets/js/flot/jquery.flot.resize.min.js')
                 ->prependFile($this->basePath() . '/assets/js/flot/jquery.flot.categories.js')
@@ -105,12 +119,19 @@
                 ->prependFile($this->basePath() . '/assets/js/jquery.slimscroll.min.js')
                 ->prependFile($this->basePath() . '/assets/js/jquery.ui.touch-punch.min.js')
                 ->prependFile($this->basePath() . '/assets/js/jquery-ui-1.10.3.custom.min.js')
-                ->prependFile($this->basePath() . '/assets/js/bootstrap.min.js')
+                //->prependFile($this->basePath() . '/assets/js/bootstrap.min.js')
                 ->prependFile($this->basePath() . '/assets/js/additional-methods.min.js')
                 ->prependFile($this->basePath() . '/assets/js/jquery.validate.min.js')
                 ->prependFile($this->basePath() . '/js/excanvas.min.js', 'text/javascript', array('conditional' => 'lte IE 8',))
                 
                 ->prependFile($this->basePath() . '/assets/js/main.js')
+                ->prependFile($this->basePath() . '/assets/js/jquery.isotope.min.js')
+                ->prependFile($this->basePath() . '/assets/js/drive-me-plugin.js')
+                ->prependFile($this->basePath() . '/assets/js/jquery.flexslider-min.js')
+                ->prependFile($this->basePath() . '/assets/js/mapmaker.js')
+                ->prependFile($this->basePath() . '/assets/js/wow.min.js')
+                ->prependFile($this->basePath() . '/assets/js/jquery.magnific-popup.min.js')
+                
                 ->prependFile($this->basePath() . '/assets/js/ace.min.js')
                 ->prependFile($this->basePath() . '/assets/js/ace-elements.min.js')
                 ->prependFile($this->basePath() . '/assets/js/bootstrap-tag.min.js')
@@ -132,6 +153,7 @@
                 ->prependFile($this->basePath() . '/assets/js/bootstrap.min.js')
                 
                 ->prependFile($this->basePath() . '/assets/js/chosen.jquery.min.js')
+                ->prependFile($this->basePath() . '/assets/js/typehead.js')
                 ->prependFile($this->basePath() . '/assets/js/jquery.min.2.0.3.js');
         ?>
 
@@ -144,25 +166,26 @@
         </script>
         
     </head>
-    <body class="bootstrap-admin-with-small-navbar">
+    <body class="">
         <input type="hidden" name="txtactivestep">
+        <div id="wrap">
 <?php echo $this->partial('layout/navbar'); ?>
-        <div class="main-container container-fluid">
+        <!--<div class="main-container container-fluid">
             <a href="#" id="menu-toggler" class="menu-toggler">
                 <span class="menu-text"></span>
-            </a>
+            </a>-->
 <?php //echo $this->partial('layout/sidebar'); ?>
-            <div class="col-lg-12">
+            
             <?php //echo $this->partial('layout/breadcrumb'); ?>
             <?php echo $this->partial('layout/modal'); ?>
                 
-                <div class="page-content">
+                <div class="container">
                     
                 <?php echo $this->content; ?>
                 </div>
                     <?php echo $this->partial('layout/footer'); ?>
             </div>
-        </div> <!-- /container -->
+        <!--</div> <!-- /container -->
 <?php echo $this->inlineScript() ?>
         <div id='ajax_loader' style="position: fixed; left: 50%; top: 50%; display: none;">
             <img src="<?php echo $this->basePath() ?>/assets/images/ajax-loader.gif"></img>

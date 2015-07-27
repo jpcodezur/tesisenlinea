@@ -1,3 +1,7 @@
+body,html{
+    padding:0 !important;
+    margin: 0 !important;
+}
 .bootstrap-admin-navbar-sm {
     background-image: none;
     border: 0 none;
@@ -22,11 +26,11 @@
     z-index: 1020;
 }
 body {
-    background-color: #dadada;
-    padding-top: 70px;
+    background: none repeat scroll 0 0 #f2f2f2;
+    padding-top: 0px !important;
 }
 .page-content{
-    background-color: #dadada;
+    background: none repeat scroll 0 0 #f2f2f2;
 }
 .page-header h1{
     font-size: 30px !important;
@@ -87,8 +91,7 @@ ul.wizard-steps li{
     margin-top:10px !important;
 }
 ul.wizard-steps li.active{
-    margin-left:-153px !important;
-    
+    /*margin-left:-153px !important;*/
 }
 .chzn-container, .chzn-container-multi{
     width:100% !important;
@@ -143,4 +146,32 @@ input#asunto{
 .pagination-centered li{
     float: left;
     list-style: outside none none;
+}
+ul.wizard-steps{
+  display: block;
+  padding: 0 !important;
+  margin: 0 !important;
+  float: left;
+}
+.dropdown-usuario li a{
+    color:#262626 !important;
+}
+.dropdown-usuario li.divider{
+    display: block !important;
+}
+.tel-home-form{
+    position: relative;
+    z-index: 9999999;
+}
+.error-label{
+    background-color:red;
+} 
+.success-label{
+    background-color:green;
+} 
+.mensaje-label{
+    color:white;
+    padding:5px;
+    border-radius:3px;
+    margin:2px;
 }

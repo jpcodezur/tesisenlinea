@@ -1,4 +1,4 @@
-﻿﻿<?php $inputs_ayuda = array();?>
+<?php $inputs_ayuda = array();?>
 <?php 
 $inputs_validar_numerico = array();
 $inputs_validar_email = array();
@@ -225,22 +225,24 @@ $inputs_validar_email = array();
 
                                     <hr />
                                     <div class="row-fluid wizard-actions">
-                                        <button class="btn-volver btn btn-danger " data-last="Finish">
-                                            Volver
-                                            <i class="icon-backward icon-on-right"></i>
-                                        </button>
-                                        
-                                        <button class="btn btn-prev">
-                                            <i class="icon-arrow-left"></i>
-                                            <!--Volver (cancelar)-->
-                                            Cancelar
-                                        </button>
-
-                                        <button class="btn btn-success btn-next btn-next-wizard" data-last="Finish ">
-                                            Guardar
+                                        <button class="btn btn-success btn-next btn-next-wizard btn-yellow pull-right" data-last="Finish ">
+                                            Siguiente (Guardar)
                                             <!--Siguiente (Guardar)-->
                                             <i class="icon-arrow-right icon-on-right"></i>
                                         </button>
+                                        
+                                        <button class="btn btn-cancel pull-right btn-volver " data-last="Finish">
+                                            Volver (Cancelar)
+                                            <i class="icon-backward icon-on-right"></i>
+                                        </button>
+                                        
+                                        <!--<button class="btn btn-prev">
+                                            <i class="icon-arrow-left"></i>
+                                            <!--Volver (cancelar)-->
+                                            <!--Cancelar-->
+                                        <!--</button>-->
+
+                                        
                                         
                                         
                                     </div>
