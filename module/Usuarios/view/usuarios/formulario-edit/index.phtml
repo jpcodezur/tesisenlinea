@@ -1,3 +1,4 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 <div class="page-content">
     <div class="page-header position-relative">
         <h1>
@@ -17,13 +18,13 @@
                             <h4 class="lighter h4-action-paginas">Pasos
                                 <div class="action-paginas hidden-phone visible-desktop action-buttons">
                                     <a id="edit-pagina" href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "update")) ?>/id_pagina" class="green">
-                                        <i class="icon-pencil bigger-130"></i>
+                                        <i class="glyphicon-pencil bigger-130"></i>
                                     </a>
                                     <a id="del-pagina" href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>/id_pagina" class="red remove">
-                                        <i class="icon-trash bigger-130"></i>
+                                        <i class="glyphicon glyphicon-remove"></i>
                                     </a>
                                     <a id="add-pagina" href="<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "add")) ?>/id_pagina" class="red remove">
-                                        <i class="icon-plus-sign bigger-130"></i>
+                                        <i class="glyphicon glyphicon-plus"></i>
                                     </a>
                                 </div>
                             </h4>
@@ -33,7 +34,7 @@
                         <div class="widget-body">
                             <div class="widget-main">
                                 <div class="row-fluid">
-                                    <div id="fuelux-wizard" class="row-fluid hide" data-target="#step-container">
+                                    <div id="fuelux-wizard" class="row-fluid" data-target="#step-container">
                                         <ul class="wizard-steps">
                                             <?php $count = 1; ?>
                                             <?php foreach ($this->formulario->getPaginas() as $pagina): ?>
@@ -44,26 +45,26 @@
                                                 <?php $count++; ?>
                                             <?php endforeach; ?>
                                         </ul>
-                                        <div class="row-fluid wizard-actions wizard-actions-top">
+                                        <!--<div class="row-fluid wizard-actions wizard-actions-top">
                                             <a class="btn-prev">
                                                 <i class="icon-arrow-left"></i>
                                                 Prev
                                             </a>
 
-                                            <a class="btn-next" data-last="Finish ">
+                                            <a class="btn-next " data-last="Finish ">
                                                 Next
                                                 <i class="icon-arrow-right icon-on-right"></i>
                                             </a>
-                                        </div>
+                                        </div>-->
                                     </div>
 
                                     <div class="step-content row-fluid position-relative" id="step-container">
 
-                                        <div class="widget-header widget-header-blue widget-header-flat">
+                                        <div class="widget-header-inputs widget-header widget-header-blue widget-header-flat">
                                             <h4 class="lighter h4-action-paginas">Controles 
                                                 <div class="action-paginas hidden-phone visible-desktop action-buttons">
                                                     <a id="add-input" class="red remove">
-                                                        <i class="icon-plus-sign bigger-130"></i>
+                                                        <i class="glyphicon glyphicon-plus"></i>
                                                     </a>
                                                 </div>
                                             </h4>
@@ -78,18 +79,18 @@
                                                     <?php foreach ($pagina->getInputs() as $input): ?>
                                                         <div class="control-group item-input">
                                                             <div class="alert alert-info" id_input="<?php echo $input->getId() ?>">
-                                                                <i class="icon-move bigger-130"></i>
-                                                                <button data-dismiss="alert" class="close" type="button">
+                                                                
+                                                                <!--<button data-dismiss="alert" class="close" type="button">
                                                                     <i class="ace-icon fa fa-times"></i>
-                                                                </button>
+                                                                </button>-->
                                                                 <strong>[<?php echo $input->getNombre() ?>]</strong>
                                                                 <?php echo $input->getLabel() ?>
                                                                 <div class="action-paginas hidden-phone visible-desktop action-buttons">
                                                                     <a href="#" class="green edit-input">
-                                                                        <i class="icon-pencil bigger-130"></i>
+                                                                        <i class="glyphicon-pencil bigger-130"></i>
                                                                     </a>
                                                                     <a href="#" class="red remove del-item">
-                                                                        <i class="icon-trash bigger-130"></i>
+                                                                        <i class="glyphicon glyphicon-remove"></i>
                                                                     </a>
                                                                 </div>
                                                                 <br>
@@ -106,11 +107,11 @@
                                     <div class="row-fluid wizard-actions">
                                         <button class="btn btn-prev">
                                             <i class="icon-arrow-left"></i>
-                                            Prev
+                                            Anterior
                                         </button>
 
-                                        <button class="btn btn-success btn-next" data-last="Finish ">
-                                            Next
+                                        <button class="btn btn-success btn-next btn-yellow" data-last="Finish ">
+                                            Siguiente
                                             <i class="icon-arrow-right icon-on-right"></i>
                                         </button>
                                     </div>
@@ -224,7 +225,7 @@
     }
     .tab-content {
         border: 1px solid #c5d0dc;
-        padding: 19px 12px;
+        padding: 27px 12px;
         position: relative;
         z-index: 11;
     }
@@ -312,8 +313,137 @@
 
 </style>
 <script>
+    function addControlHtml(id, nombre, label) {
+        var s =
+                '<div class="control-group item-input">' +
+                '<div class="alert alert-info" id_input="' + id + '">' +
+                '' +
+                '<button data-dismiss="alert" class="close" type="button">' +
+                '<i class="ace-icon fa fa-times"></i>' +
+                '</button>' +
+                '<strong>[' + nombre + ']</strong>' + label +
+                '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
+                '<a href="#" class="green edit-input">' +
+                '<i class="icon-pencil bigger-130"></i>' +
+                '</a>' +
+                '<a href="#" class="red remove del-item">' +
+                '<i class="icon-trash bigger-130"></i>' +
+                '</a>' +
+                '</div>' +
+                '<br>' +
+                '</div>' +
+                '</div>';
+
+        $("#step-container .active #inputs-collections").append(s);
+    }
+    
+    function saveOrdenValue() {
+        var items = [];
+
+        $("#values-select .select-value-input").each(function (i) {
+            var unInput = {};
+            unInput.id = $(this).find(".alert-info:first").attr("id_input");
+            unInput.orden = i + 1;
+            items.push(unInput);
+        })
+
+        $.ajax({
+            url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "saveordenvalue")) ?>",
+            type: "post",
+            data: {
+                items: items
+            },
+            success: function (data) {
+
+            }
+        });
+    }
+
+    function saveOrdenItem() {
+        var items = [];
+
+        $("#step-container .item-input").each(function (i) {
+            var unInput = {};
+            unInput.id = $(this).find(".alert-info:first").attr("id_input");
+            unInput.orden = i + 1;
+            items.push(unInput);
+        })
+
+        $.ajax({
+            url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenitems")) ?>",
+            type: "post",
+            data: {
+                items: items
+            },
+            success: function (data) {
+
+            }
+        });
+    }
+
+    function saveOrden() {
+        var paginas = [];
+
+        $(".wizard-steps li").each(function (i) {
+            var unaPagina = {};
+            unaPagina.id = $(this).attr("id_page");
+            unaPagina.orden = i + 1;
+            paginas.push(unaPagina);
+        })
+
+        $.ajax({
+            url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenpaginas")) ?>",
+            type: "post",
+            data: {
+                paginas: paginas
+            },
+            success: function (data) {
+
+            }
+        });
+    }
+    
     $(document).ready(function () {
 
+        $(".wizard-steps").hide();
+
+        actualizoPaginas();
+
+        $(".wizard-steps").show();
+        
+        if ($("input[name=last_page]").val()) {
+            $(".wizard-steps li").each(function () {
+                if ($(this).attr("id_page") == $("input[name=last_page]").val()) {
+                    $(this).addClass("complete");
+                    $(this).click();
+                }
+            })
+        }
+        //$(".wizard-steps").sortable({
+        $(function () {
+            $(".wizard-steps").sortable({
+                connectWith: ".wizard-steps",
+                stop: function ( ) {
+                    $(".wizard-steps li").each(function (i) {
+                        $(this).find(".step").text(i + 1);
+                    })
+
+                    saveOrden();
+                }
+            }).disableSelection();
+        });
+        //$(".form-horizontal").sortable({
+        $(function () {
+            $(".form-horizontal").sortable({
+                connectWith: ".form-horizontal",
+                stop: function ( ) {
+                    saveOrdenItem();
+                }
+            }).disableSelection();
+        });
+        
+        //Eventos
+        
         $(document).on("click", ".wizard-actions-top a.btn-prev", function () {
             console.log("t1");
             $("button.btn-prev").trigger("click");
@@ -324,42 +454,25 @@
             $("button.btn-next").trigger("click");
         })
 
-        $(".wizard-steps").hide();
-
-        actualizoPaginas();
-
-        $(".wizard-steps").show();
-
         $(document).on("focus", ".modal-body input[type=text]", function () {
             $(".modal-body .alert-danger").remove();
         })
-
-        if ($("input[name=last_page]").val()) {
-            $(".wizard-steps li").each(function () {
-                if ($(this).attr("id_page") == $("input[name=last_page]").val()) {
-                    $(this).addClass("complete");
-                    $(this).click();
-                }
-            })
-        }
 
         $(document).on("click", ".del-input-select-value-on-edit", function (e) {
             e.preventDefault();
             inp = $(this);
             bootbox.confirm("Desea eliminar este opción?", function (result) {
-                if (result == false) {
-                    $('.bootbox').each(function () {
-                        var pos = $(this).find(".modal-body").text()
-                        pos = pos.indexOf("Desea eliminar este opci");
-                        if (pos !== -1) {
-                            $(this).modal('toggle');
-                        }
-                    })
-                } else {
+//                if (result == false) {
+//                    $('.bootbox').each(function () {
+//                        var pos = $(this).find(".modal-body").text()
+//                        pos = pos.indexOf("Desea eliminar este opci");
+//                        if (pos !== -1) {
+//                            $(this).modal('toggle');
+//                        }
+//                    })
+//                } else {
                     inp.parent().parent().parent().remove();
-
-
-                }
+                //}
             })
         });
 
@@ -403,7 +516,7 @@
 
                 s = '<div class="control-group item-input select-value-input">' +
                         '<div class="alert alert-info">' +
-                        '<i class="icon-move bigger-130"></i>' +
+                        '' +
                         '<button data-dismiss="alert" class="close" type="button">' +
                         '<i class="ace-icon fa fa-times"></i>' +
                         '</button>' +
@@ -438,7 +551,8 @@
             }
         });
 
-        $("#add-input").on(ace.click_event, function (e) {
+        $(document).on("click", "#add-input", function (e) {
+            $(".bootbox").remove();
             e.preventDefault();
             bootbox.dialog({});
 
@@ -504,6 +618,7 @@
         });
 
         $(document).on("click", ".edit-input", function (e) {
+            $(".bootbox").remove();
             e.preventDefault();
             var idinput = $(this).parent().parent().attr("id_input");
             bootbox.dialog({});
@@ -627,76 +742,7 @@
                 }
             });
         });
-
-
-        $("#edit-pagina").click(function (e) {
-            e.preventDefault();
-            var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
-            bootbox.dialog({});
-            $.ajax({
-                url: "formulario_edit/popup-edit",
-                data: {idpagina: idpagina},
-                success: function (data) {
-                    $(".bootbox .modal-body").html(data);
-                }
-            });
-        });
-
-        $("#del-pagina").click(function (e) {
-            e.preventDefault();
-            var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
-            bootbox.confirm("Desea eliminar este item?", function (result) {
-                if (result == false) {
-                    $('.bootbox').modal('toggle');
-                } else {
-                    $.ajax({
-                        url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>",
-                        type: "get",
-                        data: {
-                            idpagina: idpagina,
-                        },
-                        success: function (data) {
-                            var respuesta = data[0];
-                            var div = "danger";
-                            if (respuesta.error == false) {
-                                div = "success";
-                            }
-
-                            $(".bootbox .modal-body").prepend(
-                                    '<div class="alert alert-' + div + '">' +
-                                    '<button data-dismiss="alert" class="close" type="button">' +
-                                    '<i class="icon-remove"></i>' +
-                                    '</button>' +
-                                    respuesta.mensaje +
-                                    '<br>' +
-                                    '</div>');
-
-                            if (div == "success") {
-                                setTimeout(function () {
-                                    $('.bootbox').modal('toggle');
-                                    //window.location.reload();
-                                    $("input[name=last_page]").val($("ul.wizard-steps li.active").attr("id_page"));
-                                    $("#form_reload_page").submit();
-                                }, 2000);
-                            }
-                        }
-                    });
-                }
-            });
-        });
-
-        $("#add-pagina").click(function (e) {
-            e.preventDefault();
-            bootbox.dialog({});
-            $.ajax({
-                url: "formulario_edit/popup-pagina",
-                data: "",
-                success: function (data) {
-                    $(".bootbox .modal-body").html(data);
-                }
-            });
-        });
-
+        
         $(document).on("click", "#close-modal-pagina", function () {
             var nombre = $("input[name=nombre]").val(),
                     orden = $(".wizard-steps li").length + 1;
@@ -730,6 +776,7 @@
                             //window.location.reload();
                             $("input[name=last_page]").val($("ul.wizard-steps li.active").attr("id_page"));
                             $("#form_reload_page").submit();
+                            
                         }, 2000);
                     }
                 }
@@ -871,30 +918,6 @@
 
         });
 
-        function addControlHtml(id, nombre, label) {
-            var s =
-                    '<div class="control-group item-input">' +
-                    '<div class="alert alert-info" id_input="' + id + '">' +
-                    '<i class="icon-move bigger-130"></i>' +
-                    '<button data-dismiss="alert" class="close" type="button">' +
-                    '<i class="ace-icon fa fa-times"></i>' +
-                    '</button>' +
-                    '<strong>[' + nombre + ']</strong>' + label +
-                    '<div class="action-paginas hidden-phone visible-desktop action-buttons">' +
-                    '<a href="#" class="green edit-input">' +
-                    '<i class="icon-pencil bigger-130"></i>' +
-                    '</a>' +
-                    '<a href="#" class="red remove del-item">' +
-                    '<i class="icon-trash bigger-130"></i>' +
-                    '</a>' +
-                    '</div>' +
-                    '<br>' +
-                    '</div>' +
-                    '</div>';
-
-            $("#step-container .active #inputs-collections").append(s);
-        }
-
         $(document).on("click", "#close-modal", function () {
             var
                     id_pagina = $(".wizard-steps li.active").attr("id_page"),
@@ -975,98 +998,194 @@
                     if (div == "success") {
                         setTimeout(function () {
                             $('.bootbox').modal('toggle');
+                            
                         }, 2000);
                     }
                 }
             })
         })
 
-        $(function () {
-            $(".wizard-steps").sortable({
-                connectWith: ".wizard-steps",
-                stop: function ( ) {
-                    $(".wizard-steps li").each(function (i) {
-                        $(this).find(".step").text(i + 1);
-                    })
-
-                    saveOrden();
+        $("#edit-pagina").click(function (e) {
+            e.preventDefault();
+            var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
+            bootbox.dialog({});
+            $.ajax({
+                url: "formulario_edit/popup-edit",
+                data: {idpagina: idpagina},
+                success: function (data) {
+                    $(".bootbox .modal-body").html(data);
                 }
-            }).disableSelection();
+            });
         });
 
-        $(function () {
-            $(".form-horizontal").sortable({
-                connectWith: ".form-horizontal",
-                stop: function ( ) {
-                    saveOrdenItem();
+        $("#del-pagina").click(function (e) {
+            e.preventDefault();
+            var idpagina = $(".wizard-steps").find("li.active").attr("id_page");
+            bootbox.confirm("Desea eliminar este item?", function (result) {
+                if (result == false) {
+                    $('.bootbox').modal('hide');
+                } else {
+                    $.ajax({
+                        url: "<?php echo $this->url("usuarios", array("controller" => "pagina", "action" => "delete")) ?>",
+                        type: "get",
+                        data: {
+                            idpagina: idpagina,
+                        },
+                        success: function (data) {
+                            var respuesta = data[0];
+                            var div = "danger";
+                            if (respuesta.error == false) {
+                                div = "success";
+                            }
+
+                            $(".bootbox .modal-body").prepend(
+                                    '<div class="alert alert-' + div + '">' +
+                                    '<button data-dismiss="alert" class="close" type="button">' +
+                                    '<i class="icon-remove"></i>' +
+                                    '</button>' +
+                                    respuesta.mensaje +
+                                    '<br>' +
+                                    '</div>');
+
+                            if (div == "success") {
+                                setTimeout(function () {
+                                    $('.bootbox').modal('hide');
+                                    //window.location.reload();
+                                    $("input[name=last_page]").val($("ul.wizard-steps li.active").attr("id_page"));
+                                    $("#form_reload_page").submit();
+                                }, 2000);
+                            }
+                        }
+                    });
                 }
-            }).disableSelection();
+            });
+        });
+
+        $("#add-pagina").click(function (e) {
+            e.preventDefault();
+            bootbox.dialog({});
+            $.ajax({
+                url: "formulario_edit/popup-pagina",
+                data: "",
+                success: function (data) {
+                    $(".bootbox .modal-body").html(data);
+                }
+            });
         });
 
     });
-    function saveOrdenValue() {
-        var items = [];
-
-        $("#values-select .select-value-input").each(function (i) {
-            var unInput = {};
-            unInput.id = $(this).find(".alert-info:first").attr("id_input");
-            unInput.orden = i + 1;
-            items.push(unInput);
-        })
-
-        $.ajax({
-            url: "<?php echo $this->url("usuarios", array("controller" => "input", "action" => "saveordenvalue")) ?>",
-            type: "post",
-            data: {
-                items: items
-            },
-            success: function (data) {
-
-            }
-        });
-    }
-
-    function saveOrdenItem() {
-        var items = [];
-
-        $("#step-container .item-input").each(function (i) {
-            var unInput = {};
-            unInput.id = $(this).find(".alert-info:first").attr("id_input");
-            unInput.orden = i + 1;
-            items.push(unInput);
-        })
-
-        $.ajax({
-            url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenitems")) ?>",
-            type: "post",
-            data: {
-                items: items
-            },
-            success: function (data) {
-
-            }
-        });
-    }
-
-    function saveOrden() {
-        var paginas = [];
-
-        $(".wizard-steps li").each(function (i) {
-            var unaPagina = {};
-            unaPagina.id = $(this).attr("id_page");
-            unaPagina.orden = i + 1;
-            paginas.push(unaPagina);
-        })
-
-        $.ajax({
-            url: "<?php echo $this->url("usuarios", array("controller" => "formulario_edit", "action" => "saveordenpaginas")) ?>",
-            type: "post",
-            data: {
-                paginas: paginas
-            },
-            success: function (data) {
-
-            }
-        });
-    }
 </script>
+<style>
+.modal-body{
+    margin: 4% auto 0;
+    position: relative;
+    width: 50%;
+}
+.modal-footer{
+    margin: 0 auto !important;
+    width: 50%;
+    height: 60px;
+}
+.modal-footer .btn{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.widget-header-inputs {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: white !important;
+    background-image: none !important;
+    border-bottom: 2px solid #ffbe18 !important;
+    border-image: none;
+    border-left: medium none;
+    border-right: medium none;
+    border-top: medium none;
+    color: #ffbe18 !important;
+    padding-bottom: 24px !important;
+    padding-top: 41px !important;
+    margin-bottom: 24px;
+}
+#inputs-collections .alert-info,#profile #values-select .alert-info{
+    background-color: #f8f8f8;
+    border: 1px solid #afafaf;
+    border-radius: 0;
+    margin-bottom: 10px;
+    color: #afafaf;
+    
+}
+.item-input strong {
+    display: inline-block;
+    margin-right: 6px;
+    width: 100%;
+}
+.widget-main{
+   padding: 0 15px;
+}
+.step-content .step-pane {
+    padding: 4px 19px 12px;
+}
+.btn-yellow{
+    margin-right: 20px;
+}
+#numero-respuestas{
+    height: 27px;
+    width: 55px !important;
+}
+div.spinner-buttons{
+    float:left;
+}
+.ace-spinner #numero-respuestas{
+    float:left;
+}
+.ace-spinner{
+    float:left;
+}
+.resp-req {
+    float: left;
+    font-weight: normal;
+    margin-right: 5px;
+    color:#858585;
+}
+.form-control{
+    color:#858585;
+}
+select.form-control{
+    background: url("<?php echo $this->basePath("assets/") ?>images/select-style.png") no-repeat scroll 98% 15px;
+    border-radius: 0;
+}
+#numero-respuestas-select {
+    float: left;
+    height: 27px;
+    width: 30px;
+}
+.archivos_permitidos{
+    float: left;
+    font-weight: normal;
+    color:#858585;
+}
+.modal-body label{
+    float: left;
+    font-weight: normal;
+    color:#858585;
+}
+#profile .control-label{
+    float: left !important;
+    width: 118px !important;
+}
+.tabbable{
+    margin-bottom:5px;
+}
+#profile .action-paginas input[name=select_value],#add-select-value{
+    float:left;
+}
+#add-select-value{
+    margin-left: 8px;
+    margin-top: 7px;
+}
+div#values-select{
+    width: 88%;
+}
+</style>

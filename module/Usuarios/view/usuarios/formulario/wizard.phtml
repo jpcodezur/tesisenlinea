@@ -225,24 +225,22 @@ $inputs_validar_email = array();
 
                                     <hr />
                                     <div class="row-fluid wizard-actions">
-                                        <button class="btn btn-success btn-next btn-next-wizard btn-yellow pull-right" data-last="Finish ">
-                                            Siguiente (Guardar)
-                                            <!--Siguiente (Guardar)-->
-                                            <i class="icon-arrow-right icon-on-right"></i>
-                                        </button>
-                                        
-                                        <button class="btn btn-cancel pull-right btn-volver " data-last="Finish">
-                                            Volver (Cancelar)
+                                        <button class="btn-volver btn  " data-last="Finish">
+                                            Volver
                                             <i class="icon-backward icon-on-right"></i>
                                         </button>
                                         
                                         <!--<button class="btn btn-prev">
                                             <i class="icon-arrow-left"></i>
                                             <!--Volver (cancelar)-->
-                                            <!--Cancelar-->
-                                        <!--</button>-->
+                                            <!--Cancelar
+                                        </button>-->
 
-                                        
+                                        <button class="btn btn-success btn-next btn-next-wizard btn-yellow" data-last="Finish ">
+                                            Guardar
+                                            <!--Siguiente (Guardar)-->
+                                            <i class="icon-arrow-right icon-on-right"></i>
+                                        </button>
                                         
                                         
                                     </div>
@@ -369,11 +367,17 @@ $inputs_validar_email = array();
     #fuelux-wizard li span{
         cursor:pointer;
     }
+    .modal-body{
+    margin: 10% auto 0;
+    position: relative;
+    width: 50%;
+}
 </style>
 <script>
     var resparent = "[]";
     var inputs = [];
     var paso_html = "";
+    var respuesta_arrobaToSpan = [];
     
     
     
@@ -558,17 +562,12 @@ $inputs_validar_email = array();
         $(".wizard-steps").hide();
         
         var $ultimaPaginaCompleta = "<?php echo $ultimaPaginaCompleta ?>";
-        var $totalPasos = $("#step-container .step-pane").length;
-        
-        console.log("$totalPasos: "+$totalPasos)
         
         if($ultimaPaginaCompleta == "0"){
             $("#step1").addClass("active");
         }else{
-            for(var i = 0; i < $ultimaPaginaCompleta-1; i++){
-                if(i < $totalPasos){
-                    $('#fuelux-wizard').wizard("next");
-                }
+            for(var i = 0; i < $ultimaPaginaCompleta; i++){
+                $('#fuelux-wizard').wizard("next");
             }
         }
         
@@ -582,7 +581,10 @@ $inputs_validar_email = array();
             $(".main-container").css("opacity",0.3);
             $("#ajax_loader").show();
             setTimeout(function(){
-                arrobaToSpan();
+                //arrobaToSpan();
+                $(".main-container").css("opacity",1);
+                $("#ajax_loader").hide();
+                $("#cargando-datos-alumno").remove();
             },300);
         },300);
         
@@ -655,6 +657,7 @@ $inputs_validar_email = array();
                     for (var i = 0; i < words.length; i++) {
                     if (words[i].indexOf("@") === 0) {
                         getRespuesta(words[i]);
+                        respuesta_arrobaToSpan.push(words[i]);
                         words_res += resparent;
                     } else {
                         words_res += words[i] + " ";
@@ -664,6 +667,29 @@ $inputs_validar_email = array();
                 $(this).find("label").html(words_res);
 
             });
+            
+            respuesta_arrobaToSpan_temp = [];
+            for(var i in respuesta_arrobaToSpan){
+                if(respuesta_arrobaToSpan_temp.indexOf(respuesta_arrobaToSpan[i]) === -1){
+                    respuesta_arrobaToSpan_temp.push(respuesta_arrobaToSpan[i]);
+                }
+            }
+            
+            respuesta_arrobaToSpan_temp = JSON.stringify(respuesta_arrobaToSpan_temp);
+            
+            $.ajax({
+                async: false,
+                url: "<?php echo $this->url("usuarios", array("controller" => "formulario", "action" => "resparentall")) ?>",
+                data: {words: respuesta_arrobaToSpan_temp},
+                type: "post",
+                success: function (data) {
+                    if(data){
+                        resparent = data.join();
+                    }else{
+                        resparent = data;
+                    }
+                }
+            })
         }
         
         function saveRespuesta(obj){

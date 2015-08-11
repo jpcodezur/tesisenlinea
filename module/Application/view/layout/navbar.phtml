@@ -57,7 +57,7 @@ $totalMensajes = count($mensajes);
                         </li>
                          <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario","wizard")): ?>
                         <li>
-                            <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario","action"=>"wizard")) ?>/"> Tesis Wizard </a>
+                            <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario","action"=>"wizard")) ?>/"> Desarrollo </a>
                         </li>
                         <?php endif; ?>
                         <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario_edit","index")): ?>

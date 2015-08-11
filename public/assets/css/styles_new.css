@@ -1,3 +1,4 @@
+
 body,html{
     padding:0 !important;
     margin: 0 !important;
@@ -71,7 +72,7 @@ body {
 }
 div.controls input.control,div.controls select.control{
     margin-bottom: 10px !important;
-    min-width: 500px !important;
+    min-width: 530px !important;
     border:1px solid #BCBCBC !important;
 }
 .wizard-steps li .step{
@@ -192,4 +193,89 @@ ul.wizard-steps{
 }
 .panel-heading .bootstrap-admin-box-title{
     color:white;
+}
+.ace-file-input{
+    float:right;
+}
+select {
+    border-radius: 0;
+    font-size: 14px;
+    height: 31px;
+    padding: 1px;
+    
+}
+.chzn-container-multi .chzn-choices {
+    border-radius: 0 !important;
+    height: 28px !important;
+    padding: 0 !important;
+    width: 530px !important;
+}
+.resp-span{
+    box-sizing: border-box;
+    display: block;
+    float: none !important;
+    min-height: unset !important;
+    width: auto !important;
+    display: inline-block !important;
+    margin: 0 !important;
+}
+
+.ace-file-input label{
+    float: left !important;
+    margin: 0 !important;
+    position: unset;
+    width: 519px !important;
+}
+.controls .widget-main{
+    padding: 0 !important;
+}
+.fechadatepicker-rango{
+    padding-left: 5px !important;
+}
+.ace-file-input{
+    height: 26px;
+}
+label[data-title=Choose]{
+    margin-top: -1px !important;
+    color: transparent !important;
+    width: 530px !important;
+    height: 30px;
+}
+.imagen-control {
+    margin-top: 0 !important;
+}
+.link_ayuda{
+    float: left;
+    margin-left: 10px;
+    margin-top: 4px !important;
+}
+.modal-body{
+    background-color: white;
+    margin: 0 auto;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 2147483647;
+}
+.modal-footer{
+    height: 50px;
+    margin-top: 50px !important;
+    position: relative;
+    z-index: 2147483647;
+    width: 101%;
+}
+.modal-footer .btn-primary{
+    margin-top: -7px;
+}
+.widget-header .lighter{
+    margin-top: -10px;
+}
+.action-paginas{
+    float:right;
+}
+.h4-action-paginas{
+    width: 100%;
+}
+.h4-action-paginas #add-input{
+    float:right;
 }
