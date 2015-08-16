@@ -1,11 +1,11 @@
-<?php 
+<?php
 //$this->layout()->setTemplate('usuarios/usuario/profile.phtml');
 
 $usuario = new \Usuarios\Model\Entity\Usuario();
 $usuario = $this->usuario;
-if(!$usuario){
-    if(isset($_SESSION["miSession"]["usuario"])){
-        $usuario = $_SESSION["miSession"]["usuario"]; 
+if (!$usuario) {
+    if (isset($_SESSION["miSession"]["usuario"])) {
+        $usuario = $_SESSION["miSession"]["usuario"];
     }
 }
 
@@ -14,139 +14,107 @@ if(!$usuario){
 //$mensajes = $this->mensajes->getMensajesUsuario($usuario->getId());
 //$totalAlertas = count($alertas);
 //$totalMensajes = count($mensajes);
-
 ?>
 
-<div class="page-content">
-    <div class="page-header position-relative">
-        <h1>
-            User Profile Page
-            <small>
-                <i class="icon-double-angle-right"></i>
-                3 styles with inline editable feature
-            </small>
-        </h1>
-    </div><!--/.page-header-->
 
-    <div class="row-fluid">
-        <div class="span12">
-            <!--PAGE CONTENT BEGINS-->
-            <?php if($this->mensaje): ?>
-            <div class="clearfix">
-                <div class="pull-left alert alert-success inline no-margin">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="icon-remove"></i>
-                    </button>
-
-                    
-                    <?php echo $this->mensaje; ?>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <div class="hr dotted"></div>
-
-            <div>
-                <div id="user-profile-3" class="user-profile row-fluid">
-                    <div class="offset1 span10">
-                        
-
-                        <div class="space"></div>
-
-                        <form class="form-horizontal" action="<?php echo $this->basePath() ?>/usuarios/login/modificarusuario" method="post"/>
-                        <div class="tabbable">
-                            <!--<ul class="nav nav-tabs padding-16">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#edit-basic">
-                                        <i class="green icon-edit bigger-125"></i>
-                                        Basic Info
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a data-toggle="tab" href="#edit-settings">
-                                        <i class="purple icon-cog bigger-125"></i>
-                                        Settings
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a data-toggle="tab" href="#edit-password">
-                                        <i class="blue icon-key bigger-125"></i>
-                                        Password
-                                    </a>
-                                </li>
-                            </ul>-->
+                        <form class="form-horizontal" action="<?php echo $this->basePath() ?>/usuarios/login/modificarusuario" method="post">
+                        <!--<div class="tabbable">
 
                             <div class="tab-content profile-edit-tab-content">
-                                <div id="edit-basic" class="tab-pane in active">
-                                    <h4 class="header blue bolder smaller">General</h4>
-
-                                    <hr />
-                                     <div class="control-group">
-                                    <label class="control-label" for="form-field-pass1">Nombre</label>
-                                        <div class="widget-main">
-                                            <?php if($usuario->getAvatar()): ?>
-                                            <img class="imagen-control" src="data:image/jpeg;base64,<?php echo base64_encode($usuario->getAvatar()); ?>">
-                                            <?php endif; ?>
-                                            <input 
-                                                estado=""
-                                                type="file" 
-                                                id_input="" 
-                                                tipo="" 
-                                                id_pagina=""  
-                                                name="avatar" 
-                                                class="control id-input-file" <?php //echo ($input->getRequired()) ? "required='required'" : "" ?> 
-                                                onchange=""
-                                                />
-                                        </div>
-                                    </div>
+                                <div id="edit-basic" class="tab-pane in active">-->
                                     
-                                    <div class="control-group">
-                                        <label class="control-label" for="form-field-pass1">Nombre</label>
-
-                                        <div class="controls">
-                                            <input name="nom" value="<?php echo $usuario->getNombre() ?>" type="text" id="form-field-pass1" />
-                                        </div>
+                                <!--Nuevo-->
+                                <div class="title-wizard">
+                                    <div class="col-lg-12">
+                                        <h>Perfil del Usuario</h>
                                     </div>
-                                    
-                                    <div class="control-group">
-                                        <label class="control-label" for="form-field-pass1">Apellido</label>
-
-                                        <div class="controls">
-                                            <input name="apellido" value="<?php echo $usuario->getApellido() ?>" type="text" id="form-field-pass1" />
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="control-group">
-                                        <label class="control-label" for="form-field-pass1">E-mail</label>
-
-                                        <div class="controls">
-                                            <input name="email"  value="<?php echo $usuario->getEmail() ?>" type="email" id="form-field-pass1" />
-                                        </div>
-                                    </div>
-
-                                    <hr />
-                                    
-                                    <div class="control-group">
-                                        <label class="control-label" for="form-field-pass1">New Password</label>
-
-                                        <div class="controls">
-                                            <input name="password" type="password" id="form-field-pass1" />
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group">
-                                        <label class="control-label" for="form-field-pass2">Confirm Password</label>
-
-                                        <div class="controls">
-                                            <input name="repassword" type="password" id="form-field-pass2" />
-                                        </div>
-                                    </div>
-                                    
                                 </div>
-                                
-                            </div>
+
+                                <div class="title-bar-wizard ">
+                                    <div class="col-lg-12">
+                                        <h>General</h>
+                                    </div>
+                                </div>
+
+                                <div class= "perfil-container">
+
+
+                                    <h class="title-tesis">Datos Personales</h> 
+
+                                    <div class="col-lg-6 col-xs-12">
+
+                                        <div class="form-perfil ">
+                                            <div class="col-lg-4 text-perfil">Nombre</div>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" name="nom" value="<?php echo $usuario->getNombre() ?>" type="text" id="form-field-pass1" placeholder="Edgar">
+                                            </div>
+                                        </div>
+
+                                        <div class=" form-perfil">
+                                            <div class="col-lg-4 text-perfil">Apellido</div>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" name="apellido" value="<?php echo $usuario->getApellido() ?>" type="text" id="form-field-pass1">
+                                            </div>
+                                        </div>
+
+                                        <div class=" form-perfil">
+                                            <div class="col-lg-4 text-perfil">E-mail</div>
+                                            <div class="col-lg-8">
+                                                <input class="form-control" name="email"  value="<?php echo $usuario->getEmail() ?>" type="email" id="form-field-pass1">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-lg-5 col-xs-6 avatar">
+
+                                        <!--<div class="col-lg-7 col-xs-6 user-photo">-->
+                                            <div class="widget-main">
+                                                <?php if ($usuario->getAvatar()): ?>
+                                                    <img style="max-width:170px;" class="imagen-control" src="data:image/jpeg;base64,<?php echo base64_encode($usuario->getAvatar()); ?>">
+                                                <?php endif; ?>
+                                                <div class="col-lg-2 col-xs-6 col-photo">
+                                                    <a class="btn btn-yellow pull-right btn-photo" >Cambiar Foto</a>
+                                                </div>
+                                                <input 
+                                                    estado=""
+                                                    type="file" 
+                                                    id_input="" 
+                                                    tipo="" 
+                                                    id_pagina=""  
+                                                    name="avatar" 
+                                                    class="control id-input-file" <?php //echo ($input->getRequired()) ? "required='required'" : ""  ?> 
+                                                    onchange=""
+                                                    />
+                                            </div>
+                                        <!--</div>-->
+                                    </div>
+
+                                    </br>
+                                    </br>
+
+
+                                    <h class="title-tesis">Cambiar Contraseña</h> 
+
+                                    <div class=" form-perfil col-lg-6 ">
+                                        <div class="col-lg-4 text-perfil">Nueva Contraseña</div>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" id="form" placeholder="●●●●●●●●●●●"  name="password" type="password" id="form-field-pass1"></div>
+                                    </div>
+
+                                    <div class=" form-perfil col-lg-6 ">
+                                        <div class="col-lg-4 text-perfil">Confirmar Contraseña</div>
+                                        <div class="col-lg-8">
+                                            <input class="form-control" name="repassword" type="password" id="form-field-pass2" placeholder="●●●●●●●●●●●"  type="password"></div>
+                                    </div>                                                                                                                                                                           
+
+                                </div>
+
+                                <button id="btn-guardar" class="btn btn-yellow btn-end pull-right" >Guardar</button>
+                                <button type="reset" class="btn btn-cancel btn-end pull-right" >Resetear</button>
+                                <!-- Fin Nuevo -->
+                            <!--</div>
                         </div>
 
                         <div class="form-actions">
@@ -160,18 +128,11 @@ if(!$usuario){
                                 <i class="icon-undo bigger-110"></i>
                                 Reset
                             </button>
-                        </div>
+                        </div>-->
                         </form>
-                    </div><!--/span-->
-                </div><!--/user-profile-->
-            </div>
-
-            <!--PAGE CONTENT ENDS-->
-        </div><!--/.span-->
-    </div><!--/.row-fluid-->
-</div><!--/.page-content-->
+                    
 <script type="text/javascript">
-    $(function() {
+    $(function () {
 
         //editables on first profile page
         $.fn.editable.defaults.mode = 'inline';
@@ -186,29 +147,29 @@ if(!$usuario){
         });
 
         var countries = [];
-        $.each({"CA": "Canada", "IN": "India", "NL": "Netherlands", "TR": "Turkey", "US": "United States"}, function(k, v) {
+        $.each({"CA": "Canada", "IN": "India", "NL": "Netherlands", "TR": "Turkey", "US": "United States"}, function (k, v) {
             countries.push({id: k, text: v});
         });
 
         var cities = [];
         cities["CA"] = [];
-        $.each(["Toronto", "Ottawa", "Calgary", "Vancouver"], function(k, v) {
+        $.each(["Toronto", "Ottawa", "Calgary", "Vancouver"], function (k, v) {
             cities["CA"].push({id: v, text: v});
         });
         cities["IN"] = [];
-        $.each(["Delhi", "Mumbai", "Bangalore"], function(k, v) {
+        $.each(["Delhi", "Mumbai", "Bangalore"], function (k, v) {
             cities["IN"].push({id: v, text: v});
         });
         cities["NL"] = [];
-        $.each(["Amsterdam", "Rotterdam", "The Hague"], function(k, v) {
+        $.each(["Amsterdam", "Rotterdam", "The Hague"], function (k, v) {
             cities["NL"].push({id: v, text: v});
         });
         cities["TR"] = [];
-        $.each(["Ankara", "Istanbul", "Izmir"], function(k, v) {
+        $.each(["Ankara", "Istanbul", "Izmir"], function (k, v) {
             cities["TR"].push({id: v, text: v});
         });
         cities["US"] = [];
-        $.each(["New York", "Miami", "Los Angeles", "Chicago", "Wysconsin"], function(k, v) {
+        $.each(["New York", "Miami", "Los Angeles", "Chicago", "Wysconsin"], function (k, v) {
             cities["US"].push({id: v, text: v});
         });
 
@@ -217,7 +178,7 @@ if(!$usuario){
             type: 'select2',
             value: 'NL',
             source: countries,
-            success: function(response, newValue) {
+            success: function (response, newValue) {
                 if (currentValue == newValue)
                     return;
                 currentValue = newValue;
@@ -263,7 +224,7 @@ if(!$usuario){
             slider: {
                 min: 1, max: 50, width: 100
             },
-            success: function(response, newValue) {
+            success: function (response, newValue) {
                 if (parseInt(newValue) == 1)
                     $(this).html(newValue + " hour ago");
                 else
@@ -278,7 +239,7 @@ if(!$usuario){
             wysiwyg: {
                 //css : {'max-width':'300px'}
             },
-            success: function(response, newValue) {
+            success: function (response, newValue) {
             }
         });
 
@@ -290,7 +251,7 @@ if(!$usuario){
             //it seems that editable plugin calls appendChild, and as Image doesn't have it, it causes errors on IE at unpredicted points
             //so let's have a fake appendChild for it!
             if (/msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()))
-                Image.prototype.appendChild = function(el) {
+                Image.prototype.appendChild = function (el) {
                 }
 
             var last_gritter
@@ -312,7 +273,7 @@ if(!$usuario){
                     //and a few extra ones here
                     name: 'avatar', //put the field name here as well, will be used inside the custom plugin
                     max_size: 110000, //~100Kb
-                    on_error: function(code) {//on_error function will be called when the selected file has a problem
+                    on_error: function (code) {//on_error function will be called when the selected file has a problem
                         if (last_gritter)
                             $.gritter.remove(last_gritter);
                         if (code == 1) {//file format error
@@ -331,11 +292,11 @@ if(!$usuario){
                         else {//other error
                         }
                     },
-                    on_success: function() {
+                    on_success: function () {
                         $.gritter.removeAll();
                     }
                 },
-                url: function(params) {
+                url: function (params) {
                     // ***UPDATE AVATAR HERE*** //
                     //You can replace the contents of this function with examples/profile-avatar-update.js for actual upload
 
@@ -353,7 +314,7 @@ if(!$usuario){
 
 
                     //dummy upload
-                    setTimeout(function() {
+                    setTimeout(function () {
                         if ("FileReader" in window) {
                             //for browsers that have a thumbnail of selected image
                             var thumb = $('#avatar').next().find('img').data('thumb');
@@ -375,7 +336,7 @@ if(!$usuario){
 
                     return deferred.promise();
                 },
-                success: function(response, newValue) {
+                success: function (response, newValue) {
                 }
             })
         } catch (e) {
@@ -384,7 +345,7 @@ if(!$usuario){
 
 
         //another option is using modals
-        $('#avatar2').on('click', function() {
+        $('#avatar2').on('click', function () {
             var modal =
                     '<div class="modal hide fade">\
                                                 <div class="modal-header">\
@@ -407,7 +368,7 @@ if(!$usuario){
 
 
             var modal = $(modal);
-            modal.modal("show").on("hidden", function() {
+            modal.modal("show").on("hidden", function () {
                 modal.remove();
             });
 
@@ -421,11 +382,11 @@ if(!$usuario){
                 btn_change: null,
                 no_icon: 'icon-picture',
                 thumbnail: 'small',
-                before_remove: function() {
+                before_remove: function () {
                     //don't remove/reset files while being uploaded
                     return !working;
                 },
-                before_change: function(files, dropped) {
+                before_change: function (files, dropped) {
                     var file = files[0];
                     if (typeof file === "string") {
                         //file is just a file name here (in browsers that don't support FileReader API)
@@ -448,7 +409,7 @@ if(!$usuario){
                 }
             });
 
-            form.on('submit', function() {
+            form.on('submit', function () {
                 if (!file.data('ace_input_files'))
                     return false;
 
@@ -458,7 +419,7 @@ if(!$usuario){
 
                 var deferred = new $.Deferred;
                 working = true;
-                deferred.done(function() {
+                deferred.done(function () {
                     form.find('button').removeAttr('disabled');
                     form.find('input[type=file]').ace_file_input('enable');
                     form.find('.modal-body > :last-child').remove();
@@ -473,7 +434,7 @@ if(!$usuario){
                 });
 
 
-                setTimeout(function() {
+                setTimeout(function () {
                     deferred.resolve();
                 }, parseInt(Math.random() * 800 + 800));
 
@@ -492,7 +453,7 @@ if(!$usuario){
 
         $('.profile-social-links > a').tooltip();
 
-        $('.easy-pie-chart.percentage').each(function() {
+        $('.easy-pie-chart.percentage').each(function () {
             var barColor = $(this).data('color') || '#555';
             var trackColor = '#E2E2E2';
             var size = parseInt($(this).data('size')) || 72;
@@ -510,7 +471,7 @@ if(!$usuario){
         ///////////////////////////////////////////
 
 
-        $(".btn-info").click(function(){
+        $("#btn-guardar").click(function () {
             $("form").submit();
         })
 
@@ -523,7 +484,7 @@ if(!$usuario){
             no_icon: 'icon-picture',
             thumbnail: 'large',
             droppable: true,
-            before_change: function(files, dropped) {
+            before_change: function (files, dropped) {
                 var file = files[0];
                 if (typeof file === "string") {//files is just a file name here (in browsers that don't support FileReader API)
                     if (!(/\.(jpe?g|png|gif)$/i).test(file))
@@ -544,10 +505,10 @@ if(!$usuario){
                 return true;
             }
         })
-                .end().find('button[type=reset]').on(ace.click_event, function() {
+                .end().find('button[type=reset]').on(ace.click_event, function () {
             $('#user-profile-3 input[type=file]').ace_file_input('reset_input');
         })
-                .end().find('.date-picker').datepicker().next().on(ace.click_event, function() {
+                .end().find('.date-picker').datepicker().next().on(ace.click_event, function () {
             $(this).prev().focus();
         })
         $('.input-mask-phone').mask('(999) 999-9999');
@@ -556,11 +517,72 @@ if(!$usuario){
 
         ////////////////////
         //change profile
-        $('[data-toggle="buttons-radio"]').on('click', function(e) {
+        $('[data-toggle="buttons-radio"]').on('click', function (e) {
             var target = $(e.target);
             var which = parseInt($.trim(target.text()));
             $('.user-profile').parent().hide();
             $('#user-profile-' + which).parent().show();
         });
+        
+        $(".btn-photo").click(function(){
+           $("input[type=file]").trigger("click"); 
+        });
     });
 </script>
+<style>
+    
+.perfil-container{
+    font-size: 16px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    min-height: 550px;
+    }
+
+
+.personal{
+    padding: 40px;
+}
+
+
+.avatar{
+    padding: 15px;
+}
+
+.form-perfil {
+    height: 40px;
+    margin: 25px 10px 25px 10px;
+    padding: 10px;
+}
+
+
+.text-perfil {
+    text-align: left;
+    padding: 2px 0px 2px 25px;
+}
+
+
+.user-photo {
+    padding: 20px;
+    padding-left: 40px;
+    display: block;
+    max-width: 100%;
+    height: auto;
+
+}
+
+.btn-photo {
+    margin: 20px;
+    display: block;
+}
+.col-photo{
+    float:right;
+}
+.btn-photo{
+    margin-top:0;
+}
+input[type=file]{
+    opacity: 0;
+}
+</style>

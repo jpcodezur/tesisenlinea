@@ -340,9 +340,18 @@ class LoginController extends AbstractActionController {
         if ($usuario) {
 
             $user->setId($usuario->getId());
-            $user->setEmail($email);
-            $user->setNombre($nom);
-            $user->setApellido($apellido);
+            if($email){
+                $user->setEmail($email);
+            }
+            
+            if($nom){
+                $user->setNombre($nom);
+            }
+            
+            if($apellido){
+                $user->setApellido($apellido);
+            }
+            
 
             $user->setTipo($usuario->getTipo());
             $user->setEstado($usuario->getEstado());
@@ -379,8 +388,7 @@ class LoginController extends AbstractActionController {
 
         return $this->redirect()->toRoute('usuarios', array(
                     'controller' => 'usuario',
-                    'action' => 'profile',
-                    'param1' => $mensaje
+                    'action' => 'profile'
         ));
     }
 

@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/tutesisenlinea/public/assets/css/styles_new.css</file>
-            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/src/Usuarios/Model/Dao/FormularioDao.php</file>
-            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/view/usuarios/formulario/wizard.phtml</file>
-            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/src/Usuarios/Controller/FormularioController.php</file>
-            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Application/view/layout/navbar.phtml</file>
-            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Application/view/layout/layout.phtml</file>
+            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/view/usuarios/formulario-edit/popup-pagina.phtml</file>
+            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/view/usuarios/formulario-edit/popup-edit.phtml</file>
+            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/view/usuarios/formulario-edit/popupeditinput.phtml</file>
+            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/src/Usuarios/Controller/LoginController.php</file>
+            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/view/usuarios/formulario-edit/index.phtml</file>
+            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/src/Usuarios/MisClases/AclListener.php</file>
+            <file>file:/C:/xampp/htdocs/tutesisenlinea/module/Usuarios/view/usuarios/formulario-edit/popup.phtml</file>
         </group>
     </open-files>
 </project-private>

@@ -70,7 +70,25 @@ class AclListener implements ListenerAggregateInterface {
                 ->addResource(new Resource('usuarios:profile'))
 //            ->addResource(new Resource('usuarios:profile'))
                 //->allow('agente', 'usuarios:index', array('index'))
-                ->allow('admin')
+                //->allow('admin')
+                //->allow('admin',array('usuarios:formulario'),array('modificarusuario'))
+                ->allow('admin', array(
+                    'usuarios:index',
+                    'usuarios:formulario',
+                    'usuarios:alerta',
+                    'usuarios:mensaje',
+                    'usuarios:login',
+                    'usuarios:usuario',
+                    'usuarios:respuesta',
+                    'login:index',
+                    'login:login',
+                    'usuarios:popup',
+                    
+                    'login:logout'
+//                        ), array('index', 'wizard', 'msgs', 'resparent', 'adds', 'add', 'actualizospan', 'popup', 'settings', 'savesettings'))
+                        ), array(
+                            'username','send','msgsenviados','view','modificarusuario',
+                            'new','index', 'wizard', 'msgs', 'resparent', 'adds', 'add', 'actualizospan', 'popup', 'settings', 'savesettings', 'profile'))
                 //->allow('agente')
                 ->allow('agente', array(
                     'usuarios:index',
