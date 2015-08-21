@@ -368,8 +368,8 @@ class LoginController extends AbstractActionController {
                         $status = false;
                         $mensaje = "Passwords no coinciden";
                     } else {
-                        $user->setClave($pass);
-                        $this->updatePassword->update($user);
+                        $user->setClave(md5($pass));
+                        $this->usuarioDao->updatePassword($user);
                     }
                 }
             }

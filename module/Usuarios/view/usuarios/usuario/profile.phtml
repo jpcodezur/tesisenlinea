@@ -17,7 +17,7 @@ if (!$usuario) {
 ?>
 
 
-                        <form class="form-horizontal" action="<?php echo $this->basePath() ?>/usuarios/login/modificarusuario" method="post">
+                        <form id="update-user-form" class="form-horizontal" action="<?php echo $this->basePath() ?>/usuarios/login/modificarusuario" method="post">
                         <!--<div class="tabbable">
 
                             <div class="tab-content profile-edit-tab-content">
@@ -472,7 +472,7 @@ if (!$usuario) {
 
 
         $("#btn-guardar").click(function () {
-            $("form").submit();
+            $("form#update-user-form").submit();
         })
 
         ///////////////////////////////////////////
