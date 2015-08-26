@@ -96,7 +96,7 @@ class FormularioDao {
                 $unInput = new Input();
                 $unInput->setId($r["id"]);
                 $unInput->setIdPagina($r["id_pagina"]);
-                $unInput->setLabel($r["label"]);
+                $unInput->setLabel($this->getLabelFormateado($r["label"],$idAlumno,$r["tipo_input"]));
                 $unInput->setEstado($r["estado"]);
                 $unInput->setOrden($r["orden"]);
                 $unInput->setNombre($r["nombre"]);
@@ -308,7 +308,7 @@ class FormularioDao {
                 $unInput = new Input();
                 $unInput->setId($r["id"]);
                 $unInput->setIdPagina($r["id_pagina"]);
-                $unInput->setLabel($r["label"]);
+                $unInput->setLabel($this->getLabelFormateado($r["label"],$idAlumno,$r["tipo_input"]));
                 $unInput->setEstado($r["estado"]);
                 $unInput->setOrden($r["orden"]);
                 $unInput->setNombre($r["nombre"]);
@@ -565,9 +565,69 @@ class FormularioDao {
 
         return $nomPregunta;
     }
-
-    public function dummy() {
+    
+    public function getLabelFormateado($label, $idUsuario, $tipo) {
+        $separadores = array("?", ".", "!", ":", ";", ",");
+        $palabras = explode(" ", $label);
         
+        $palabras_tmp = "";
+
+        foreach ($palabras as $palabra){
+            if (strpos($palabra, "@") === 0) {
+                $palabra = substr($palabra, 1);
+                $separador_temp = "";
+                foreach ($separadores as $separador) {
+                    $pos = strpos($palabra, $separador);
+                    if ($pos !== false) {
+                        $separador_temp = $separador;
+                        $palabra = substr($palabra, 0, $pos);
+                    }
+                }
+                
+                $sql = "SELECT 
+                        i.id, 
+                        i.tipo_input as tipoInput, 
+                        r.id as idRespuesta , 
+                        (CASE  
+                           when i.tipo_input = 'texto' then ( 
+                               SELECT texto from respuesta_texto WHERE id_respuesta = r.id)    
+                           when i.tipo_input = 'dropdown' then ( 
+                               SELECT value FROM select_collections WHERE  
+                               id_input = r.id_input AND id_select = (SELECT 
+                              id_select as respuesta 
+                           FROM 
+                              respuesta_select  
+                           WHERE 
+                              id_respuesta = r.id))     
+                           when i.tipo_input = 'fecha' then CONCAT('fecha: ',r.id)      
+                           when i.tipo_input = 'imagen' then CONCAT('imagen: ',r.id)      
+                        END) as resp    
+                     FROM 
+                        inputs as i     
+                     INNER JOIN 
+                        respuestas as r  
+                           on r.id_input = i.id     
+                           AND r.id_usuario = $idUsuario    
+                     WHERE 
+                        i.estado=1  
+                        AND nombre = '".$palabra."' ";
+                
+                //when i.tipo_input = 'imagen' then (SELECT archivo as respuesta FROM respuesta_imagen WHERE id_respuesta = r.id)
+                
+                $res = $this->adapter->query($sql);
+
+                if ($res) {
+                    $result = $res->execute();
+                    foreach ($result as $r) {
+                        $palabra = $r["resp"];
+                    }
+                }
+            }
+            
+            $palabras_tmp .= " $palabra";
+        }        
+        
+        return trim($palabras_tmp);
     }
 
 }

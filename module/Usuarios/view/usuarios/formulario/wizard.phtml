@@ -45,17 +45,7 @@ $inputs_validar_email = array();
                                                 <?php $count++; ?>
                                             <?php endforeach; ?>
                                         </ul>
-                                            <!--<div class="row-fluid wizard-actions wizard-actions-top">
-                                                <a class="btn-prev">
-                                                    <i class="icon-arrow-left"></i>
-                                                    Volver (cancelar)
-                                                </a>
-
-                                                <a class="btn-next" data-last="Finish ">
-                                                    Siguiente (Guardar)
-                                                    <i class="icon-arrow-right icon-on-right"></i>
-                                                </a>
-                                            </div>-->
+                                            
                                     </div>
 
                                     <div class="step-content row-fluid position-relative" id="step-container">
@@ -230,11 +220,11 @@ $inputs_validar_email = array();
                                             <i class="icon-backward icon-on-right"></i>
                                         </button>
                                         
-                                        <!--<button class="btn btn-prev">
+                                        <button class="btn btn-prev" style="display:none">
                                             <i class="icon-arrow-left"></i>
                                             <!--Volver (cancelar)-->
-                                            <!--Cancelar
-                                        </button>-->
+                                            Cancelar
+                                        </button>
 
                                         <button class="btn btn-success btn-next btn-next-wizard btn-yellow" data-last="Finish ">
                                             Guardar
@@ -368,10 +358,17 @@ $inputs_validar_email = array();
         cursor:pointer;
     }
     .modal-body{
-    margin: 10% auto 0;
-    position: relative;
-    width: 50%;
-}
+        margin: 10% auto 0;
+        position: relative;
+        width: 50%;
+    }
+    .modal-footer{
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0 !important;
+        width: 50%;
+    }
 </style>
 <script>
     var resparent = "[]";
@@ -384,9 +381,6 @@ $inputs_validar_email = array();
     jQuery.extend({
     compare: function (arrayA, arrayB) {
         if (arrayA.length != arrayB.length) { return false; }
-        // sort modifies original array
-        // (which are passed by reference to our method!)
-        // so clone the arrays before sorting
         var a = jQuery.extend(true, [], arrayA);
         var b = jQuery.extend(true, [], arrayB);
         a.sort(); 
@@ -504,16 +498,6 @@ $inputs_validar_email = array();
     }
     
     function setImagenAjax(event){
-
-            /*var reader = new FileReader();
-            
-            $("input[name='"+selectedFile.name+"']").remove();
-            
-            var html = "<a  href=\"#\" class=\"remove remove-imagen\"><i class=\"icon-remove\"></i></a>";            
-                html += "<img src='"+pResult.+"' >";
-            
-            acefileinput.parent().append(html); 
-            reader.readAsDataURL(selectedFile);*/
  
             var selectedFile = event.target.files[0];
             var inputName = event.target.name;
@@ -567,11 +551,16 @@ $inputs_validar_email = array();
             $("#step1").addClass("active");
         }else{
             for(var i = 0; i < $ultimaPaginaCompleta; i++){
-                $('#fuelux-wizard').wizard("next");
+                txtBtn = $(".btn-next-wizard").text();
+                if(txtBtn.indexOf("Guardar")!=-1){
+                    $('#fuelux-wizard').wizard("next");
+                }
             }
         }
         
         actualizoPaginas();
+        
+        
         
         $(".wizard-steps").show();
         
@@ -581,7 +570,7 @@ $inputs_validar_email = array();
             $(".main-container").css("opacity",0.3);
             $("#ajax_loader").show();
             setTimeout(function(){
-                //arrobaToSpan();
+                //actualizoLabels(inputs);
                 $(".main-container").css("opacity",1);
                 $("#ajax_loader").hide();
                 $("#cargando-datos-alumno").remove();
@@ -592,6 +581,7 @@ $inputs_validar_email = array();
         
         seteoInputs();
         
+        //actualizoLabels(inputs);
         
         $(document).on("change", "#sample-form select.isMagic", function(){
             saveRespuesta($(this));
@@ -710,6 +700,8 @@ $inputs_validar_email = array();
                 data:{respuesta:respuesta},
                 success:function(data){
                     actualizoLabels([{nom:respuesta.nombre}]);
+                    $(".main-container").css("opacity",1);
+                    $("#ajax_loader").hide();
                 }
             })
             
@@ -857,11 +849,6 @@ $inputs_validar_email = array();
                 return respuesta;
                 }
         }
-        
-        /*function getHtmlPaso(){
-            //seteoHiddens();
-            
-        };*/
         
         function cancelarPaso(){
             
@@ -1017,108 +1004,6 @@ $inputs_validar_email = array();
             
             paso_html = $("div.active .inputs-respuestas").parent().html();
         });
-        
-        $(".btn-prev").mousedown(function(){
-            /*if(paso_html){
-                $("div.active .inputs-respuestas").parent().html(paso_html);
-                paso_html = "";
-                setControlesPlugin();
-            }*/
-        });
-        /*
-        function seteoHiddens(){
-            
-            
-            /*Test
-             * $("div.active .inputs-respuestas").each(function(){
-                $(this).find(".control").each(function(){
-                    a = "";
-                    if($(this).hasClass("chzn-select")){
-                        a = $(this).next().next().val();
-                    }
-                    console.log(
-                        a
-                    );
-                });
-            });*/
-            /*
-            $("div.active .inputs-respuestas").each(function(){
-                $(this).find(".control").each(function(){
-                    if($(this).hasClass("chzn-select")){
-                        var val = $(this).val();
-                        var tmp = "";
-                        for(var i=0;i<val.length;i++){
-                            tmp += val[i]+",";
-                        }
-                        
-                        if(tmp){
-                            tmp = tmp.substring(0,tmp.length-1);
-                        }
-                        
-                        var hidden = $(this).next().next();
-                        hidden.val(tmp);
-                    }else{
-                        if($(this).attr("estado")!= "undefined"){
-                            $(this).attr("estado","");
-                        }else{
-                            var val = $(this).val();
-                            var hidden = $(this).next();
-                            hidden.val(val);
-                            $(this).attr("value",val);
-                        }
-                    }
-                });
-            /*   inC = false;
-                ///texto multiple
-               $(this).find("input[type=text]").each(function(){
-                   if($(this).attr("id")=="multiselect"){
-                       inC = true;
-                        $(this).next().val() == $(this).val();
-                   }
-               });
-               
-               // si no es un campo de texto de multiples valores...
-               if(!inC){
-                    //*texto
-                    $(this).find("input[type=hidden]").val($(this).find("input[type=text]").val());
-               }
-               
-               
-               
-                ///*Select
-                if($(this).find("select").length){
-                    $(this).find("input[type=hidden]").val(
-                        $(this).find("select option:selected").val()
-                    );
-                }
-                
-                if($(this).find(".chzn-select").length){
-                    //MultiSelect
-                    stmp = "";
-                    var arr = $(this).find(".chzn-select").val();
-                    for(var i = 0;i<arr.length;i++){
-                        stmp +=arr[i]+",";
-                    }
-
-                    if(stmp){
-                        stmp = stmp.substring(0,stmp.length-1);
-                    }
-                    $(this).find("input[type=hidden]").val(
-                        stmp
-                    );
-                }
-                
-                if($(this).find(".fechadatepicker").length){
-                    //fecha
-                    $(this).find("input[type=hidden]").val(
-                        $(this).find(".fechadatepicker").val()
-                    );
-                }*/
-               
-           /* });*/
-       /* }*/
-        
-        
         
         $('#sample-form').validate({
             errorElement: 'span',
@@ -1297,15 +1182,6 @@ $inputs_validar_email = array();
                 $("button.btn-prev").trigger("click");
             }
         })
-        
-        /*$(document).find(".imagen-control").each(function(){
-            $(this).parent().find(".ace-file-input").hide();
-        });
-
-        $(document).on("mousedown","a.remove-imagen",function(){
-            $(this).parent().find(".ace-file-input").show();
-        });*/
-        
         
     });
 </script>
