@@ -291,7 +291,7 @@ class UsuarioController extends AbstractActionController {
 
         $body = "Su nueva contraseña es: " . $pass . "'";
         $to = $user->getEmail();
-        $asunto = "Tu Tesis en Linea - Contraseña cambiada";
+        $asunto = "GeoMl - Contraseña cambiada";
         $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
 //      $unEmail->sendEmail($body);
 

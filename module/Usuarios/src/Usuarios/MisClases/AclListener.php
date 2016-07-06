@@ -55,6 +55,7 @@ class AclListener implements ListenerAggregateInterface {
                 ->addResource(new Resource('usuarios:index'))
                 ->addResource(new Resource('usuarios:alerta'))
                 ->addResource(new Resource('usuarios:mensaje'))
+                ->addResource(new Resource('usuarios:publicar'))
                 ->addResource(new Resource('usuarios:login'))
                 ->addResource(new Resource('usuarios:usuario'))
                 ->addResource(new Resource('usuarios:pagina'))
@@ -68,9 +69,12 @@ class AclListener implements ListenerAggregateInterface {
                 ->addResource(new Resource('login:recuperarpass'))
                 ->addResource(new Resource('usuarios:settings'))
                 ->addResource(new Resource('usuarios:profile'))
+            ->addResource(new Resource('usuarios:mensajes'))
+            ->addResource(new Resource('usuarios:publicacion'))
+            //->addResource(new Resource('usuarios:profile'))
 //            ->addResource(new Resource('usuarios:profile'))
                 //->allow('agente', 'usuarios:index', array('index'))
-                ->allow('admin')
+                //->allow('admin')
                 //->allow('agente')
                 ->allow('agente', array(
                     'usuarios:index',
@@ -85,10 +89,13 @@ class AclListener implements ListenerAggregateInterface {
                     'usuarios:usuario',
                     'login:logout'
 //                        ), array('index', 'wizard', 'msgs', 'resparent', 'adds', 'add', 'actualizospan', 'popup', 'settings', 'savesettings'))
-                        ), array(
-                            'username','send','msgsenviados','view','modificarusuario',
-                            'new','index', 'wizard', 'msgs', 'resparent', 'adds', 'add', 'actualizospan', 'popup', 'settings', 'savesettings', 'profile'))
-                ->deny('admin', array('usuarios:index', 'usuarios:formulario'), array('list', 'add', 'wizard'));
+                ), array(
+                    'username','send','msgsenviados','view','modificarusuario',
+                    'new','index', 'wizard', 'msgs', 'resparent', 'adds', 'add', 'actualizospan', 'popup', 'settings', 'savesettings', 'profile'))
+            ->allow('admin', null)
+            ->allow('admin_sistema', null);
+
+                /*->deny('admin', array('usuarios:index', 'usuarios:formulario'), array('list', 'add', 'wizard'))*/;
 
         $application = $e->getApplication();
         $services = $application->getServiceManager();

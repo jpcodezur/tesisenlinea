@@ -56,6 +56,7 @@ class LoginController extends AbstractActionController {
     public function indexAction() {
 
         if ($this->login->isLoggedIn()) {
+
             return $this->redirect()->toRoute('usuarios', array(
                         'controller' => 'index',
                         'action' => 'index'
@@ -202,7 +203,7 @@ class LoginController extends AbstractActionController {
                 $body = "click en el link para activar";
                 $body .= "<a href='http://64.22.74.53/tutesisenlinea/public/usuarios/login/validarclave?clave=" . $user->getClaveActivacion() . "'>Activar</a>";
                 $to = $user->getEmail();
-                $asunto = "Tu Tesis en Linea - Activar cuenta";
+                $asunto = "GeoMl - Activar cuenta";
 
                 $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
                 $unEmail->sendEmail($body);
@@ -288,7 +289,7 @@ class LoginController extends AbstractActionController {
 
         $body = "Su nueva contraseña es: " . $randomPass . "'";
         $to = $email;
-        $asunto = "Tu Tesis en Linea - Recuperar contraseña";
+        $asunto = "GeoMl - Recuperar contraseña";
 
         $unEmail = new SendEmail($to, "testcodezur@gmail.com", $asunto);
         $unEmail->sendEmail($body);
@@ -330,19 +331,12 @@ class LoginController extends AbstractActionController {
 
             $status = true;
 
-            if (strlen($pass) < 4) {
+            if ($pass && strlen($pass) < 4) {
                 $mensaje = "Error: La password debe ser de almenos 4 caracteres";
             } else {
-                if (strlen($repass) > 0) {
-                    if ($pass != $repass) {
-                        $status = false;
-                        $mensaje = "Passwords no coinciden";
-                    } else {
-                        $user->setClave($pass);
-                        $this->updatePassword->update($user);
-                    }
-                }
+                $this->updateUser($_REQUEST);
             }
+
 
             if ($status) {
                 $upd = $this->usuarioDao->update($user);
@@ -361,6 +355,20 @@ class LoginController extends AbstractActionController {
                     'action' => 'profile',
                     'param1' => $mensaje
         ));
+    }
+
+    public function updateUser($params){
+        $user = new Usuario();
+        $user->setEmail($params["email"]);
+        $user->setNombre($params["nom"]);
+        $user->setApellido($params["apellido"]);
+
+        if($params["password"] && ($params["password"] == $params["repassword"])){
+            $user->setClave(($params["password"]));
+            $result = $this->usuarioDao->updatePassword($user);
+        }
+        $result = $this->usuarioDao->update($user);
+
     }
 
 }

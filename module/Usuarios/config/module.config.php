@@ -14,14 +14,15 @@ return array(
             'Usuarios\Controller\Respuesta' => 'Usuarios\Controller\RespuestaController',
             'Usuarios\Controller\Formulario' => 'Usuarios\Controller\FormularioController',
             'Usuarios\Controller\FormularioEdit' => 'Usuarios\Controller\FormularioEditController',
+            'Usuarios\Controller\Publicar' => 'Usuarios\Controller\PublicarController',
         ),
     ),
     'db' => array(
         'driver' =>'Pdo',
-        'dsn' =>'mysql:dbname=tu_tesis_en_linea;host=localhost',
+        'dsn' =>'mysql:dbname=gestion_articulos;host=localhost',
 //      'dsn' => 'mysql:dbname=tesis_en_linea;host=127.0.0.1',
         'username' => 'root',
-        'password' => 'talinaes',
+        'password' => 'geocom',
 //      'password' => 'lsnsdmsdp1',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''

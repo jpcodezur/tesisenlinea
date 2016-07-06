@@ -23,78 +23,93 @@
             </a>
         </li>
         <?php if( $this->acl->isAllowed($this->role,"usuarios:usuario","index")): ?>
-        <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario"))))?"active":"" ?>">
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-group"></i>
-                <span class="menu-text"> Users </span>
+            <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario"))))?"active":"" ?>">
+                <a class="dropdown-toggle" href="#">
+                    <i class="icon-group"></i>
+                    <span class="menu-text"> Users </span>
 
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"list"))))?"active":"" ?>">
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"list")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        List
-                    </a>
-                </li>
-                
-                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"add"))))?"active":"" ?>">
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"add")) ?>">
-                        <i class="icon-double-angle-right"></i>
-                        New
-                    </a>
-                </li>
-            </ul>
-        </li>
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"list"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"list")) ?>/">
+                            <i class="icon-double-angle-right"></i>
+                            List
+                        </a>
+                    </li>
+
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"add"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"add")) ?>">
+                            <i class="icon-double-angle-right"></i>
+                            New
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php endif; ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:publicacion","index")): ?>
+            <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario"))))?"active":"" ?>">
+                <a class="dropdown-toggle" href="#">
+                    <i class="icon-edit"></i>
+                    <span class="menu-text"> Publicaciones </span>
+
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"list"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"list")) ?>/">
+                            <i class="icon-double-angle-right"></i>
+                            Publicar Articulos
+                        </a>
+                    </li>
+
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"add"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"add")) ?>">
+                            <i class="icon-double-angle-right"></i>
+                            Articulos Publicados
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php endif; ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:mensajes","index")): ?>
+            <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario"))))?"active":"" ?>">
+                <a class="dropdown-toggle" href="#">
+                    <i class="icon-envelope"></i>
+                    <span class="menu-text"> Mensajeria </span>
+
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"add"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"add")) ?>">
+                            <i class="icon-double-angle-right"></i>
+                            Articulos Publicados
+                        </a>
+                    </li>
+
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"list"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"list")) ?>/">
+                            <i class="icon-double-angle-right"></i>
+                            Publicar Articulos
+                        </a>
+                    </li>
+
+
+                </ul>
+            </li>
         <?php endif; ?>
         
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario_edit","index")): ?>
-        <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario_edit"))))?"active":"" ?>">
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-edit"></i>
-                <span class="menu-text"> Form Tesis </span>
 
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario_edit","action"=>"index"))))?"active":"" ?>">
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario_edit","action"=>"index")) ?>">
-                        <i class="icon-edit"></i>
-                        Form
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <?php endif; ?>
-        
-        <?php if( $this->acl->isAllowed($this->role,"usuarios:formulario","wizard")): ?>
-        <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario"))))?"active":"" ?>">
-            <a class="dropdown-toggle" href="#">
-                <i class="icon-file-text"></i>
-                <span class="menu-text"> Tesis Wizard </span>
-
-                <b class="arrow icon-angle-down"></b>
-            </a>
-            
-            <ul class="submenu">
-                
-                <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"formulario","action"=>"wizard"))))?"active":"" ?>">
-                    <a href="<?php echo $this->url("usuarios",array("controller"=>"formulario","action"=>"wizard")) ?>/">
-                        <i class="icon-double-angle-right"></i>
-                        Wizard
-                    </a>
-                </li>
-            </ul>
-        
-        </li>
-        <?php endif; ?>
-        
         
         <?php if( $this->acl->isAllowed($this->role,"usuarios:mensaje","msgs")): ?>
-        <li>
+        <!--<li>
             <a class="dropdown-toggle" href="#">
                 <i class="icon-envelope"></i>
                 <span class="menu-text"> Messages </span>
@@ -127,7 +142,8 @@
                 
             </ul>
         
-        </li>
+        </li>--
+        
         <?php endif; ?>
         
     </ul><!--/.nav-list-->
