@@ -43,17 +43,46 @@ class ArticuloDao extends BaseDao implements IArticuloDao {
         return array("categorias" => $articulos, "paginator" => $paginator);
     }
 
+    public function getEstados(){
+        $estados = array();
+        $this->adapter = $this->tableGateway->getAdapter();
+
+        $sql = "SELECT DISTINCT * FROM estados_publicacion";
+
+        $res = $this->adapter->query($sql);
+
+        if($res){
+            $result = $res->execute();
+            foreach($result as $r){
+                $estados[] = $r;
+            }
+        }
+
+        return $estados;
+    }
+
     public function getTotalArticulos($filtros=null){
         $total = false;
         $this->adapter = $this->tableGateway->getAdapter();
 
         $where = "";
 
-        if($filtros){
-            $where = "WHERE categories='".$filtros."'";
+        if($filtros["categorias"]){
+            $where = "WHERE categories='".$filtros["categorias"]."'";
+        }
+
+        if($filtros["estado"]){
+            if($where){
+                $where .= " AND";
+            }else{
+                $where .= " WHERE";
+            }
+
+            $where .= " estado='".$filtros["estado"]."'";
         }
 
         $sql = "SELECT COUNT(*) as total FROM articulos $where";
+
 
         $res = $this->adapter->query($sql);
 
@@ -66,5 +95,7 @@ class ArticuloDao extends BaseDao implements IArticuloDao {
 
         return array("total" => $total);
     }
+
+
 
 }

@@ -10,12 +10,16 @@
             </select>
             <select name="opt-estado" required>
                 <option value="">Estado</option>
-                <option value="4">Finalizado</option>
-                <option value="3">Sin publicar</option>
+
+                <?php foreach($this->estados as $estado):?>
+                    <?php if(isset($estado["estado"])): ?>
+                        <option value="<?php echo $estado["id"] ?>"><?php echo $estado["estado"] ?></option>
+                    <?php endif; ?>
+                <?php endforeach;?>
             </select>
         </div>
     </div>
-    <label>25 items publicados de <span id="total-item-publicados">100</span></label>
+    <label><span id="item-publicados">10</span> items publicados de <span id="total-item-publicados">100</span></label>
     <div class="progress">
         <div
             class="progress-bar"
@@ -39,20 +43,26 @@
 </div>
 <script>
     jQuery(document).ready(function(){
-        jQuery("select[name=opt-categorias]").change(function(){
-            var filters = jQuery(this).val();
+        var filters = {};
+
+        jQuery("select[name=opt-estado],select[name=opt-categorias]").change(function(){
+            filters.estado = jQuery("select[name=opt-estado]").val();
+            filters.categorias = jQuery("select[name=opt-categorias]").val();
             jQuery.ajax({
                 url:"<?php echo $this->url("usuarios", array("controller" => "articulo", "action" => "getTotalArticulosFilter")) ?>",
                 type:"post",
                 data:{filters:filters},
                 success:function(data){
                     var total = data.total;
-                    jQuery(".progress div").attr("aria-valuemax",total);
+                    var itemsPublicados = jQuery("#item-publicados").text();
+                    var porcentaje = ((itemsPublicados/total) * 100).toFixed(3);
+
+                    jQuery(".progress div").attr("aria-valuemax",porcentaje);
                     jQuery(".progress div").text(total);
-                    jQuery(".progress div").css("width",total+"%")
+                    jQuery(".progress div").css("width",porcentaje+"%")
                     jQuery("#total-item-publicados").text(total);
                 }
             })
-        })
+        });
     })
 </script>

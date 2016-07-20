@@ -26,7 +26,8 @@ class ArticuloController extends AbstractActionController {
 
     public function publicarAction(){
         $result = $this->articuloDao->getCategorias();
-        return new ViewModel(array("categorias" => $result["categorias"]));
+        $estados = $this->articuloDao->getEstados();
+        return new ViewModel(array("categorias" => $result["categorias"],"estados" => $estados));
     }
 
     public function getTotalArticulosFilterAction(){
