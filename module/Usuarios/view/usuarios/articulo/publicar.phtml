@@ -1,0 +1,58 @@
+<div class="row-fluid">
+    <div>
+        <label>Filtros</label>
+        <div class="row-fluid">
+            <select name="opt-categorias" required>
+                <option value="">Categoria</option>
+                <?php foreach($this->categorias as $categoria):?>
+                <option value="<?php echo $categoria->getCategorias() ?>"><?php echo $categoria->getCategorias() ?></option>
+                <?php endforeach;?>
+            </select>
+            <select name="opt-estado" required>
+                <option value="">Estado</option>
+                <option value="4">Finalizado</option>
+                <option value="3">Sin publicar</option>
+            </select>
+        </div>
+    </div>
+    <label>25 items publicados de <span id="total-item-publicados">100</span></label>
+    <div class="progress">
+        <div
+            class="progress-bar"
+            role="progressbar"
+            aria-valuenow="2"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            style="min-width: 2em;
+            width: 25%;">
+            25%
+        </div>
+    </div>
+    <button name="play-publish-publicacion" type="button" class="btn btn-success btn-small btn-next" value="">
+        <i class="icon-play"></i>
+        Publicar
+    </button>
+    <button name="pause-publish-publicacion" type="button" class="btn btn-success btn-small btn-next" value="">
+        <i class="icon-stop"></i>
+        Detener
+    </button>
+</div>
+<script>
+    jQuery(document).ready(function(){
+        jQuery("select[name=opt-categorias]").change(function(){
+            var filters = jQuery(this).val();
+            jQuery.ajax({
+                url:"<?php echo $this->url("usuarios", array("controller" => "articulo", "action" => "getTotalArticulosFilter")) ?>",
+                type:"post",
+                data:{filters:filters},
+                success:function(data){
+                    var total = data.total;
+                    jQuery(".progress div").attr("aria-valuemax",total);
+                    jQuery(".progress div").text(total);
+                    jQuery(".progress div").css("width",total+"%")
+                    jQuery("#total-item-publicados").text(total);
+                }
+            })
+        })
+    })
+</script>

@@ -155,3 +155,9 @@ input:-moz-placeholder {
 .mentions-input-box .mentions {
     display:none !important;
 }
+.form-categorias{
+    width: 45%;
+}
+button[name=btn-mapeo-categoria]{
+    margin-bottom:10px;
+}

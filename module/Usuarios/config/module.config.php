@@ -15,6 +15,8 @@ return array(
             'Usuarios\Controller\Formulario' => 'Usuarios\Controller\FormularioController',
             'Usuarios\Controller\FormularioEdit' => 'Usuarios\Controller\FormularioEditController',
             'Usuarios\Controller\Publicar' => 'Usuarios\Controller\PublicarController',
+            'Usuarios\Controller\Categoria' => 'Usuarios\Controller\CategoriaController',
+            'Usuarios\Controller\Articulo' => 'Usuarios\Controller\ArticuloController',
         ),
     ),
     'db' => array(

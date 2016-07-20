@@ -21,6 +21,17 @@ class PublicarController extends AbstractActionController {
     private $key = 'ArbqnANwnlxz9W0EXwnfvb0niBAWZhGf';
     private $username = "jotapey";
     private $password = "g4cir9dx";
+    private $articuloDao;
+
+    public function __construct()
+    {
+        die("error");
+    }
+
+
+    public function setArticuloDao($dao){
+        $this->articuloDao = $dao;
+    }
 
     private function getSessionValues($meli){
 
@@ -146,12 +157,17 @@ class PublicarController extends AbstractActionController {
     }
 
     public function indexAction(){
-        $auth = $this->auth();
+
+        $articulos = array("total" => "100");
+        $categorias = $this->articuloDao->getCategorias();
+        return new ViewModel(array("articulos" => $articulos));
+
+        /*$auth = $this->auth();
         if($auth){
             foreach($this->getArticulos() as $articulo){
                 $this->publicarArticulo($articulo);
             }
-        }
+        }*/
 
     }
 }

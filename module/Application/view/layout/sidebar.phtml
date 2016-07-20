@@ -60,24 +60,37 @@
 
                 <ul class="submenu">
 
-                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"list"))))?"active":"" ?>">
-                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"list")) ?>/">
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"publicacion","action"=>"index"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"articulo","action"=>"publicar")) ?>/">
                             <i class="icon-double-angle-right"></i>
                             Publicar Articulos
                         </a>
                     </li>
+                </ul>
+            </li>
+        <?php endif; ?>
+        <?php if( $this->acl->isAllowed($this->role,"usuarios:categoria","index")): ?>
+            <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=> "categoria"))))?"active":"" ?>">
+                <a class="dropdown-toggle" href="<?php echo $this->url("usuarios",array("controller"=>"categoria","action"=>"index")) ?>">
+                    <i class="icon-align-left"></i>
+                    <span class="menu-text"> Categorias </span>
 
-                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario","action"=>"add"))))?"active":"" ?>">
-                        <a href="<?php echo $this->url("usuarios",array("controller"=>"usuario","action"=>"add")) ?>">
+                    <b class="arrow icon-angle-down"></b>
+                </a>
+
+                <ul class="submenu">
+
+                    <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"articulo","action"=>"index"))))?"active":"" ?>">
+                        <a href="<?php echo $this->url("usuarios",array("controller"=>"articulo","action"=>"index")) ?>/">
                             <i class="icon-double-angle-right"></i>
-                            Articulos Publicados
+                            Mapeo
                         </a>
                     </li>
                 </ul>
             </li>
         <?php endif; ?>
         <?php if( $this->acl->isAllowed($this->role,"usuarios:mensajes","index")): ?>
-            <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"usuario"))))?"active":"" ?>">
+            <li class="<?php echo (strpos($this->serverUrl(true),$this->url("usuarios",array("controller"=>"mensajes","action"=>"list"))))?"active":"" ?>">
                 <a class="dropdown-toggle" href="#">
                     <i class="icon-envelope"></i>
                     <span class="menu-text"> Mensajeria </span>

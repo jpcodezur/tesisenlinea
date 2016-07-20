@@ -1,0 +1,31 @@
+<div class="row-fluid">
+    <div>
+        <label>Categorias</label>
+    </div>
+
+</div>
+<script>
+
+</script>
+<div class="row-fluid">
+    <form action="" method="post">
+        <div class="row-fluid">
+            <button name="btn-mapeo-categoria" type="submit" class="btn btn-success btn-small btn-next" value="">
+            <i class="icon-save"></i>
+            Guardar
+            </button>
+        </div>
+    <?php foreach($this->categorias as $categoria):?>
+        <div class="row-fluid">
+            <input class="form-control form-categorias" type="text" value="<?php echo $categoria->getCategorias();?>" />
+            <input class="form-control form-categorias" type="text" value="" required />
+        </div>
+    <?php endforeach; ?>
+        <div class="row-fluid">
+            <button name="btn-mapeo-categoria" type="submit" class="btn btn-success btn-small btn-next" value="">
+                <i class="icon-save"></i>
+                Guardar
+            </button>
+        </div>
+    </form>
+</div>

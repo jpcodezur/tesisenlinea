@@ -128,6 +128,14 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'RespuestaDao' => function($sm) {
                     return $this->getAdapter($sm);
                 },
+                'CategoriaDao' => function($sm) {
+                    return $this->getAdapter($sm);
+                    return $this->getEntidadDao($sm, "CategoriaTableGateway", "Usuarios\Model\Dao\CategoriaDao");
+                },
+                'ArticuloDao' => function($sm) {
+                    //return $this->getAdapter($sm);
+                    return $this->getEntidadDao($sm, "ArticuloTableGateway", "Usuarios\Model\Dao\ArticuloDao");
+                },
                 #TableGAteways
                 'PreguntaTableGateway' => function ($sm) {
                     $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Pregunta");
@@ -157,6 +165,14 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 'Usuarios\Model\Login' => function ($sm) {
                     $dbAdapter = $sm->get('db');
                     return new \Usuarios\Model\Login($dbAdapter);
+                },
+                'CategoriaTableGateway' => function ($sm) {
+                    $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Categoria");
+                    return new TableGateway('categorias', $result["dbAdapter"], null, $result["resultSetPrototype"]);
+                },
+                'ArticuloTableGateway' => function ($sm) {
+                    $result = $this->getTableGateway($sm, "Usuarios\Model\Entity\Articulo");
+                    return new TableGateway('articulos', $result["dbAdapter"], null, $result["resultSetPrototype"]);
                 },
             //Plugins
             ),
@@ -240,6 +256,18 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                     if ($instance instanceof \Usuarios\Controller\Inputs\InputController) {
                         $locator = $sm->getServiceLocator();
                         $instance->setDao($locator->get('InputDao'));
+                    }
+                },
+                'Usuarios\Controller\Categoria' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\CategoriaController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setDao($locator->get('CategoriaDao'));
+                    }
+                },
+                'Usuarios\Controller\Articulo' => function ($instance, $sm) {
+                    if ($instance instanceof \Usuarios\Controller\ArticuloController) {
+                        $locator = $sm->getServiceLocator();
+                        $instance->setArticuloDao($locator->get('ArticuloDao'));
                     }
                 },
             )
