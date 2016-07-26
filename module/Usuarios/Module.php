@@ -23,6 +23,7 @@ use Zend\Mvc\MvcEvent;
 use Usuarios\MisClases\ShowAlertas;
 use Usuarios\MisClases\ShowMensajes;
 use Usuarios\MisClases\AclListener;
+use Usuarios\Model\Dao\ArticuloDao;
 
 class Module implements AutoloaderProviderInterface, ServiceProviderInterface, ConfigProviderInterface, ControllerProviderInterface {
 
@@ -44,15 +45,32 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
         $matches = $e->getRouteMatch();
         $controller = $matches->getParam("controller");
         $action = $matches->getParam("action");
-        
+
         if ($controller === "Usuarios\Controller\Login" && in_array($action, array('index', 'autenticar', 'registrarse', 'recuperarpass','validarclave'))) {
             return;
         }
+
+        if ($controller === "Usuarios\Controller\Index" && in_array($action, array('mlLogin','mlAuth','mlNotify'))) {
+            return;
+        }
+
         $sm = $application->getServiceManager();
         $auth = $sm->get('Usuarios\Model\Login');
         if (!$auth->isLoggedIn()) {
             $controller = $e->getTarget();
             return $controller->redirect()->toRoute('usuarios', array('controller' => 'login'));
+        }
+		
+		$config = $sm->get("config");
+		$config = $config["ml"];
+        $respMl = $auth->isLoggedInMl($config);
+        if(!$respMl["succes"]){
+            $controller = $e->getTarget();
+            return $controller->redirect()->toRoute('usuarios', array(
+                'controller' => 'index',
+                'action' => 'mlLogin',
+                'param1' => $respMl["callback"]
+            ));
         }
     }
 
@@ -100,6 +118,13 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                     $dbAdapter = new Adapter($config);
                     return $dbAdapter;
                 },
+				'AuthService' => function($sm) {
+					$config = $sm->get('config');
+
+					$auth = new Auth($config);
+
+					return $auth;
+				},
                 #EntidadDao
                 'AlertaDao' => function($sm) {
                     return $this->getEntidadDao($sm, "AlertaTableGateway", "Usuarios\Model\Dao\AlertaDao");
@@ -134,7 +159,9 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
                 },
                 'ArticuloDao' => function($sm) {
                     //return $this->getAdapter($sm);
-                    return $this->getEntidadDao($sm, "ArticuloTableGateway", "Usuarios\Model\Dao\ArticuloDao");
+					$config = $sm->get("config");
+                    $config = $config["ml"];
+                    return $this->getEntidadDao($sm, "ArticuloTableGateway", "Usuarios\Model\Dao\ArticuloDao",$config);
                 },
                 #TableGAteways
                 'PreguntaTableGateway' => function ($sm) {
@@ -298,9 +325,14 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface, C
         return $dbAdapter = $sm->get('db');
     }
 
-    public function getEntidadDao($sm, $tableGateway, $entidadDao) {
+    public function getEntidadDao($sm, $tableGateway, $entidadDao,$config = null) {
         $tableGateway = $sm->get($tableGateway);
-        $dao = new $entidadDao($tableGateway);
+		if($entidadDao == 'Usuarios\Model\Dao\ArticuloDao'){
+			$dao = new $entidadDao($tableGateway,null,$config);
+		}else{
+			$dao = new $entidadDao($tableGateway);
+		}
+        
         return $dao;
     }
 

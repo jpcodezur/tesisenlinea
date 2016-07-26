@@ -2,6 +2,10 @@
 
 namespace Usuarios\Controller;
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start('teste');
+}
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Usuarios\Form\Login\Login;
@@ -15,6 +19,7 @@ use Usuarios\Model\Dao\UsuarioDao;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mail;
 use Usuarios\MisClases\SendEmail;
+use Usuarios\MisClases\Auth;
 
 class LoginController extends AbstractActionController {
 
@@ -112,11 +117,25 @@ class LoginController extends AbstractActionController {
 
             $this->layout()->mensaje = "LoginCorrecto!!!";
             $this->layout()->colorMensaje = "green";
+			$sm = $this->getServiceLocator();
+			
+			$config = $sm->get("config");
+			
+            $mlAuth = new Auth($config["ml"]);
+            $respMl = $mlAuth->autenticarMl();
 
-            return $this->redirect()->toRoute('usuarios', array(
-                        'controller' => 'index',
-                        'action' => 'index'
-            ));
+            if($respMl["success"]){
+                return $this->redirect()->toRoute('usuarios', array(
+                            'controller' => 'index',
+                            'action' => 'index'
+                ));
+            }else{
+                return $this->redirect()->toRoute('usuarios', array(
+                    'controller' => 'index',
+                    'action' => 'mlLogin',
+                    'param1' => $respMl['callback']
+                ));
+            }
         } else {
 //            $mensaje = "<p style='color:red'>Datos incorrectos.</p>";
 //                    $this->layout()->setTemplate('usuarios/login/login.phtml');

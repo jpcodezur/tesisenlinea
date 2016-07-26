@@ -1,8 +1,11 @@
 <div class="row-fluid">
     <div>
-        <label>Categorias</label>
+        <h2>Mapeo Categorias</h2>
     </div>
-
+	<div>
+		<input class="form-control form-filtrar-categorias" placeholder="Filtrar" type="text" value="" />
+	</div>
+	<hr>
 </div>
 <script>
 
@@ -18,7 +21,11 @@
     <?php foreach($this->categorias as $categoria):?>
         <div class="row-fluid">
             <input class="form-control form-categorias" type="text" value="<?php echo $categoria->getCategorias();?>" />
-            <input class="form-control form-categorias" type="text" value="" required />
+            <input style="width: 25%;" class="form-control form-categorias" type="text" value="" required />
+			<select>
+				<option value="">Template</option>
+				<option value="DEFAULT">Default</option>
+			</select>
         </div>
     <?php endforeach; ?>
         <div class="row-fluid">

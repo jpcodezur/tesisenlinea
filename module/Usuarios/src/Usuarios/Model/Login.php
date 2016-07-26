@@ -2,11 +2,17 @@
 
 namespace Usuarios\Model;
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start('teste');
+}
+
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable as AuthAdapter;
 use Zend\Authentication\Result;
 use Zend\Db\Adapter\Adapter;
 use Zend\Session\Container;
+use Usuarios\MisClases\Auth;
+
 /**
  * Description of Login
  *
@@ -102,6 +108,16 @@ class Login {
     public function isLoggedIn() {
         $identity = $this->auth->hasIdentity();
         return $identity;
+    }
+
+    public function isLoggedInMl($config) {
+        $mlAuth = new Auth($config);
+        $respMl = $mlAuth->autenticarMl();
+        if($_GET['code'] || $_SESSION['access_token']) {
+            return array("succes" => true);
+        }
+
+        return array("succes" => false,"callback" => $respMl['callback']);
     }
 
     /**

@@ -36,4 +36,10 @@ class ArticuloController extends AbstractActionController {
         return new JsonModel(array("total" => $result["total"]));
     }
 
+	public function publicarArticuloAction(){
+		$filters = $this->getRequest()->getPost("filters", null);
+		$result = $this->articuloDao->publicarArticulo($filters);
+		return new JsonModel($result);
+	}
+
 }

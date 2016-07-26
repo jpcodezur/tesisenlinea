@@ -161,3 +161,9 @@ input:-moz-placeholder {
 button[name=btn-mapeo-categoria]{
     margin-bottom:10px;
 }
+button[name=play-pause-publish-publicacion]{
+	margin-top: -10px;
+}
+.progress div{
+	color:white;
+}

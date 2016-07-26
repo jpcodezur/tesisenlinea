@@ -11,6 +11,7 @@ use Usuarios\Model\Dao\UsuarioDao;
 use Usuarios\Form\Usuario\UsuarioEdit;
 use Usuarios\Form\Usuario\UsuarioAdd;
 use Usuarios\Form\Usuario\UsuarioValidator;
+use Usuarios\MisClases\Auth;
 
 class IndexController extends AbstractActionController {
 
@@ -45,6 +46,35 @@ class IndexController extends AbstractActionController {
             
         ));
     }
+
+    public function mlLoginAction(){
+        $loginMlUrl = $this->params()->fromRoute("param1");
+        if($loginMlUrl){
+            $loginMlUrl = "https://auth.mercadolibre.com.uy/".$loginMlUrl;
+        }
+
+        $loginMlUrl = '<a href="' . $loginMlUrl . '">Login using MercadoLibre oAuth 2.0</a>';
+        die($loginMlUrl);
+    }
+
+	public function mlAuthAction(){
+		$config = $this->getServiceLocator()->get('config');
+		$mlAuth = new Auth($config["ml"]);
+		
+		$code = null;
+
+		if(isset($_GET["code"])){
+			$code = $_GET["code"];
+			$respMl = $mlAuth->autenticarMl($code);
+			return $this->redirect()->toRoute('usuarios', array(
+                        'controller' => 'index',
+                        'action' => 'index'
+            ));
+		}
+
+        
+		
+	}
 
 
 }
